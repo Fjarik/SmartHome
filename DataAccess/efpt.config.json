@@ -4,7 +4,7 @@
    "DefaultDacpacSchema": null,
    "DoNotCombineNamespace": false,
    "IdReplace": false,
-   "IncludeConnectionString": false,
+   "IncludeConnectionString": true,
    "ModelNamespace": null,
    "OutputContextPath": "Contexts",
    "OutputPath": "Models",
@@ -35,6 +35,10 @@
       {
          "HasPrimaryKey": true,
          "Name": "[dbo].[Relationships]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Tokens]"
       },
       {
          "HasPrimaryKey": true,

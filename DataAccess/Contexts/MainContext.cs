@@ -23,6 +23,7 @@ namespace DataAccess.Contexts
         public virtual DbSet<Meal> Meals { get; set; }
         public virtual DbSet<MealType> MealTypes { get; set; }
         public virtual DbSet<Relationship> Relationships { get; set; }
+        public virtual DbSet<Token> Tokens { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -106,6 +107,17 @@ namespace DataAccess.Contexts
                     .HasForeignKey(d => d.TargetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Relationships_Target");
+            });
+
+            modelBuilder.Entity<Token>(entity =>
+            {
+                entity.Property(e => e.Created).HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Tokens)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Tokens_Users");
             });
 
             modelBuilder.Entity<User>(entity =>
