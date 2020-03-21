@@ -3,9 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.csproj", "{AD0590FD-2ED6-46E9-843E-DF4C033C4A57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend", "Backend\Backend.csproj", "{AD0590FD-2ED6-46E9-843E-DF4C033C4A57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{43CA18AA-EE98-43EB-A3A8-0F68555E5197}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{43CA18AA-EE98-43EB-A3A8-0F68555E5197}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{E14AA7AB-A655-4CB0-9B75-3BA8CBB8840C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataService", "DataService\DataService.csproj", "{3CFCFFDD-24B5-4158-9B73-017BAFBF176B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedLibrary", "SharedLibrary\SharedLibrary.csproj", "{403D1A75-5534-4FCC-906C-389058E2C251}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +27,21 @@ Global
 		{43CA18AA-EE98-43EB-A3A8-0F68555E5197}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43CA18AA-EE98-43EB-A3A8-0F68555E5197}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43CA18AA-EE98-43EB-A3A8-0F68555E5197}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CFCFFDD-24B5-4158-9B73-017BAFBF176B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CFCFFDD-24B5-4158-9B73-017BAFBF176B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CFCFFDD-24B5-4158-9B73-017BAFBF176B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CFCFFDD-24B5-4158-9B73-017BAFBF176B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{403D1A75-5534-4FCC-906C-389058E2C251}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{403D1A75-5534-4FCC-906C-389058E2C251}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{403D1A75-5534-4FCC-906C-389058E2C251}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{403D1A75-5534-4FCC-906C-389058E2C251}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{43CA18AA-EE98-43EB-A3A8-0F68555E5197} = {E14AA7AB-A655-4CB0-9B75-3BA8CBB8840C}
+		{3CFCFFDD-24B5-4158-9B73-017BAFBF176B} = {E14AA7AB-A655-4CB0-9B75-3BA8CBB8840C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8692D810-A3B8-4CC6-9428-114A4B930DE8}
