@@ -1,0 +1,50 @@
+﻿{
+   "ContextClassName": "MainContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "DoNotCombineNamespace": false,
+   "IdReplace": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": "Contexts",
+   "OutputPath": "Models",
+   "ProjectRootNamespace": "DataAccess",
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[FoodCategories]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Foods]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[FoodTypes]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Meals]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[MealTypes]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Relationships]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Users]"
+      }
+   ],
+   "UseDatabaseNames": false,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseSpatial": false
+}
