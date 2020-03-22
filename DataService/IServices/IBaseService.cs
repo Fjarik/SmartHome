@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using DataAccess.IManagers;
+using DataAccess.IRepositories;
 using SharedLibrary.Interfaces;
 
 namespace DataService.IServices
 {
 	public interface IBaseService<TEntity, out TManager>
-		where TEntity : class, IDbEntity where TManager : IBaseManager<TEntity>
+		where TEntity : class, IDbEntity where TManager : IBaseRepository<TEntity>
 	{
 		TManager Manager { get; }
 

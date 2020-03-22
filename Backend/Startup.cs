@@ -1,16 +1,17 @@
 using System.Text;
 using Backend.GraphQL.Schemas;
+using Backend.IManagers;
+using Backend.Managers;
 using Backend.Other;
 using DataAccess.Contexts;
-using DataAccess.IManagers;
-using DataAccess.Managers;
+using DataAccess.IRepositories;
+using DataAccess.Repositories;
 using DataService.IServices;
 using DataService.Services;
 using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -64,13 +65,15 @@ namespace Backend
 
 #region Managers
 
-			services.AddScoped<IUserManager, UserManager>();
+			services.AddScoped<IAuthManager, AuthManager>();
+			services.AddScoped<IUserRepository, UserRepository>();
 
 #endregion
 
 #region Services
 
 			services.AddScoped<IUserService, UserService>();
+			services.AddScoped<IAuthService, AuthService>();
 
 #endregion
 

@@ -3,16 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.GraphQL.Types;
+using Backend.IManagers;
 using DataAccess.Models;
+using DataService.IServices;
+using GraphQL;
 using GraphQL.Types;
 
 namespace Backend.GraphQL.Mutations
 {
 	public class AppMutation : ObjectGraphType
 	{
-		public AppMutation()
+		private readonly IAuthManager _authManager;
+
+		public AppMutation(IAuthManager authManager)
 		{
-			Field<UserType>("Login", resolve: (ctx) => new User());
+			_authManager = authManager;
+			FieldAsync<UserType, User>("Login",
+									   arguments: new
+										   QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {
+											   Name = "googleToken"
+										   }),
+									   resolve: this.LoginAsync);
+		}
+
+		private async Task<User> LoginAsync(ResolveFieldContext<object> ctx)
+		{
+			var googleToken = ctx.GetArgument<string>("googleToken");
+
+			if (string.IsNullOrWhiteSpace(googleToken)) {
+				ctx.Errors.Add(new ExecutionError("Google token is empty"));
+				return null;
+			}
+			return await _authManager.LoginAsync(googleToken, ctx);
 		}
 	}
 }

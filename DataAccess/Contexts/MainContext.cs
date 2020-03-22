@@ -172,7 +172,11 @@ namespace DataAccess.Contexts
 
             modelBuilder.Entity<User>(entity =>
             {
+                entity.HasComment("");
+
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Email).IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

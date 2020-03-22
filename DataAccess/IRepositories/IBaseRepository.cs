@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using DataAccess.Contexts;
 using SharedLibrary.Interfaces;
 
-namespace DataAccess.IManagers
+namespace DataAccess.IRepositories
 {
-	public interface IBaseManager<TEntity> where TEntity : class, IDbEntity
+	public interface IBaseRepository<TEntity> where TEntity : class, IDbEntity
 	{
 		MainContext DbContext { get; }
 

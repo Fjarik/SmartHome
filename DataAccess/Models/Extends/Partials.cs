@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using SharedLibrary.Interfaces;
 
@@ -19,5 +20,9 @@ namespace DataAccess.Models
 
 	public partial class Token : IDbEntity { }
 
-	public partial class User : IDbEntity { }
+	public partial class User : IDbEntity
+	{
+		[NotMapped]
+		public string AuthToken { get; set; }
+	}
 }

@@ -11,8 +11,10 @@ namespace Backend.GraphQL.Types
 	{
 		public UserType()
 		{
-			Field(x => x.Id, type: typeof(IdGraphType)).Description("Id property.");
-			Field(x => x.Name, type: typeof(StringGraphType)).Description("Full name.");
+			Field(x => x.Id, type: typeof(IdGraphType)).Description("Id property");
+			Field(x => x.Name, type: typeof(StringGraphType)).Description("Full name");
+			Field(x => x.CreatedAt, type: typeof(DateTimeGraphType)).Description("Created at");
+			Field(x => x.AuthToken, type: typeof(StringGraphType)).Description("Token");
 		}
 	}
 }

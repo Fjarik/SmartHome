@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Contexts;
-using DataAccess.IManagers;
+using DataAccess.IRepositories;
 using DataAccess.Models;
 
-namespace DataAccess.Managers
+namespace DataAccess.Repositories
 {
-	public class UserManager : BaseManager<User>, IUserManager
+	public class UserRepository : BaseRepository<User>, IUserRepository
 	{
-		public UserManager(MainContext dbContext) : base(dbContext) { }
+		public UserRepository(MainContext dbContext) : base(dbContext) { }
+
 		public Task<User> LoginAsync(string token)
 		{
 			throw new NotImplementedException();

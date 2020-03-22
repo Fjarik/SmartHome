@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Contexts;
-using DataAccess.IManagers;
+using DataAccess.IRepositories;
 using DataService.IServices;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Interfaces;
@@ -12,7 +12,7 @@ namespace DataService.Services
 {
 	public abstract class BaseService<TEntity, TManager> : IBaseService<TEntity, TManager>
 		where TEntity : class, IDbEntity
-		where TManager : IBaseManager<TEntity>
+		where TManager : IBaseRepository<TEntity>
 	{
 		public TManager Manager { get; }
 

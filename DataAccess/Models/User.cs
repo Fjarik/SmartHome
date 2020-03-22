@@ -20,14 +20,20 @@ namespace DataAccess.Models
         [Column("ID")]
         public int Id { get; set; }
         [Required]
+        [Column("GoogleID")]
+        [StringLength(100)]
+        public string GoogleId { get; set; }
+        [Required]
+        [StringLength(200)]
+        public string Email { get; set; }
+        [Required]
         [StringLength(50)]
-        public string Name { get; set; }
+        public string Firstname { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string Lastname { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreatedAt { get; set; }
-        [Required]
-        [Column("GoogleID")]
-        [StringLength(1000)]
-        public string GoogleId { get; set; }
 
         [InverseProperty(nameof(Meal.CookedBy))]
         public virtual ICollection<Meal> Meals { get; set; }
