@@ -341,3 +341,5 @@ healthchecksdb
 *.DotSettings
 
 Backend/appsettings.json
+
+Frontend/yarn.lock
