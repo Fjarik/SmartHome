@@ -8,6 +8,11 @@ namespace DataAccess.Models
 {
     public partial class Meal
     {
+        public Meal()
+        {
+            MealSides = new HashSet<MealSide>();
+        }
+
         [Key]
         [Column("ID")]
         public int Id { get; set; }
@@ -29,5 +34,7 @@ namespace DataAccess.Models
         [ForeignKey(nameof(TypeId))]
         [InverseProperty(nameof(MealType.Meals))]
         public virtual MealType Type { get; set; }
+        [InverseProperty(nameof(MealSide.Meal))]
+        public virtual ICollection<MealSide> MealSides { get; set; }
     }
 }

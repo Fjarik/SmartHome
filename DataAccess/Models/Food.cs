@@ -10,6 +10,7 @@ namespace DataAccess.Models
     {
         public Food()
         {
+            FoodSides = new HashSet<FoodSide>();
             Meals = new HashSet<Meal>();
         }
 
@@ -30,6 +31,8 @@ namespace DataAccess.Models
         [ForeignKey(nameof(TypeId))]
         [InverseProperty(nameof(FoodType.Foods))]
         public virtual FoodType Type { get; set; }
+        [InverseProperty(nameof(FoodSide.Food))]
+        public virtual ICollection<FoodSide> FoodSides { get; set; }
         [InverseProperty(nameof(Meal.Food))]
         public virtual ICollection<Meal> Meals { get; set; }
     }

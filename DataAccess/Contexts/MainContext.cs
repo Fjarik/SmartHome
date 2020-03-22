@@ -10,19 +10,24 @@ namespace DataAccess.Contexts
     {
         public MainContext()
         {
+			this.Database.EnsureCreated();
         }
 
         public MainContext(DbContextOptions<MainContext> options)
             : base(options)
         {
+			this.Database.EnsureCreated();
         }
 
         public virtual DbSet<Food> Foods { get; set; }
         public virtual DbSet<FoodCategory> FoodCategories { get; set; }
+        public virtual DbSet<FoodSide> FoodSides { get; set; }
         public virtual DbSet<FoodType> FoodTypes { get; set; }
         public virtual DbSet<Meal> Meals { get; set; }
+        public virtual DbSet<MealSide> MealSides { get; set; }
         public virtual DbSet<MealType> MealTypes { get; set; }
         public virtual DbSet<Relationship> Relationships { get; set; }
+        public virtual DbSet<SideDish> SideDishes { get; set; }
         public virtual DbSet<Token> Tokens { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
@@ -59,6 +64,25 @@ namespace DataAccess.Contexts
                 entity.HasComment("Sladká, Bezmassá, s masem...");
             });
 
+            modelBuilder.Entity<FoodSide>(entity =>
+            {
+                entity.HasKey(e => new { e.FoodId, e.SideId });
+
+                entity.HasComment("Defaultní přílohy k jídlům");
+
+                entity.HasOne(d => d.Food)
+                    .WithMany(p => p.FoodSides)
+                    .HasForeignKey(d => d.FoodId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_FoodSides_Foods");
+
+                entity.HasOne(d => d.Side)
+                    .WithMany(p => p.FoodSides)
+                    .HasForeignKey(d => d.SideId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_FoodSides_SideDishes");
+            });
+
             modelBuilder.Entity<FoodType>(entity =>
             {
                 entity.HasComment("Polévka, hlavní jídla...");
@@ -85,6 +109,23 @@ namespace DataAccess.Contexts
                     .HasConstraintName("FK_Meals_MealTypes");
             });
 
+            modelBuilder.Entity<MealSide>(entity =>
+            {
+                entity.HasKey(e => new { e.MealId, e.SideDishesId });
+
+                entity.HasOne(d => d.Meal)
+                    .WithMany(p => p.MealSides)
+                    .HasForeignKey(d => d.MealId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MealSides_Meals");
+
+                entity.HasOne(d => d.SideDishes)
+                    .WithMany(p => p.MealSides)
+                    .HasForeignKey(d => d.SideDishesId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MealSides_SideDishes");
+            });
+
             modelBuilder.Entity<MealType>(entity =>
             {
                 entity.HasComment("Hlavní jídlo, krabička, ...");
@@ -107,6 +148,15 @@ namespace DataAccess.Contexts
                     .HasForeignKey(d => d.TargetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Relationships_Target");
+            });
+
+            modelBuilder.Entity<SideDish>(entity =>
+            {
+                entity.HasComment("Přilohy");
+
+                entity.Property(e => e.GlutenFree)
+                    .HasDefaultValueSql("((1))")
+                    .HasComment("Bez lepku");
             });
 
             modelBuilder.Entity<Token>(entity =>

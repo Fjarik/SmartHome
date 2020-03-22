@@ -10,6 +10,7 @@ using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -48,6 +49,17 @@ namespace Backend
 			services.AddDbContext<MainContext>(opt =>
 												   opt.UseSqlServer(Configuration.GetConnectionString("MainDatabase")));
 
+			//services.AddAuthentication(opt => {
+			//			opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+			//			opt.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+			//		})
+			//		.AddCookie()
+			//		.AddGoogle(opt => {
+			//			var googleSection = Configuration.GetSection("Authentication:Google");
+			//			opt.ClientId = googleSection["ClientId"];
+			//			opt.ClientSecret = googleSection["ClientSecret"];
+			//		});
+
 			services.AddHttpContextAccessor();
 
 #region Managers
@@ -81,6 +93,7 @@ namespace Backend
 			services.Configure<IISServerOptions>(options => { options.AllowSynchronousIO = true; });
 
 			services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = long.MaxValue; });
+
 			// MVC
 			services.AddRazorPages().AddNewtonsoftJson();
 			services.AddControllers();

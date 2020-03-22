@@ -4,7 +4,7 @@
    "DefaultDacpacSchema": null,
    "DoNotCombineNamespace": false,
    "IdReplace": false,
-   "IncludeConnectionString": true,
+   "IncludeConnectionString": false,
    "ModelNamespace": null,
    "OutputContextPath": "Contexts",
    "OutputPath": "Models",
@@ -22,6 +22,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "[dbo].[FoodSides]"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "[dbo].[FoodTypes]"
       },
       {
@@ -30,11 +34,19 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "[dbo].[MealSides]"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "[dbo].[MealTypes]"
       },
       {
          "HasPrimaryKey": true,
          "Name": "[dbo].[Relationships]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[SideDishes]"
       },
       {
          "HasPrimaryKey": true,
