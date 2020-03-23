@@ -10,6 +10,5 @@ namespace Backend.IManagers
 	public interface IAuthManager
 	{
 		Task<User> LoginAsync(string googleToken, ResolveFieldContext<object> ctx);
-		string GetToken(User u);
 	}
 }

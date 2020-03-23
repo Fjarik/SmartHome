@@ -14,6 +14,7 @@ namespace DataService.IServices
 		Task<bool> ExistsAsync(string googleId);
 		Task<HomeResult<User>> RegisterAsync(string googleId, string email, string firstname, string lastname);
 
-		Task<bool> SaveUserAsync(User u);
+		Task<int> SaveUserAsync(User u);
+		string NormalizeGoogleId(string googleId);
 	}
 }

@@ -6,11 +6,13 @@ using Backend.Other;
 using DataAccess.Contexts;
 using DataAccess.IRepositories;
 using DataAccess.Repositories;
+using DataService;
 using DataService.IServices;
 using DataService.Services;
 using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
+using GraphQL.Validation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -22,6 +24,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Backend
@@ -65,22 +68,31 @@ namespace Backend
 
 #region Managers
 
-			services.AddScoped<IAuthManager, AuthManager>();
 			services.AddScoped<IUserRepository, UserRepository>();
+			services.AddScoped<ITokenRepository, TokenRepository>();
 
 #endregion
 
 #region Services
 
 			services.AddScoped<IUserService, UserService>();
+			services.AddScoped<ITokenService, TokenService>();
 			services.AddScoped<IAuthService, AuthService>();
 
 #endregion
 
+			services.AddScoped<IAuthManager, AuthManager>();
 
 			// GraphQL
 			services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
 			services.AddScoped<AppSchema>();
+
+			//services.AddGraphQL(options => {
+			//			options.EnableMetrics = true;
+			//			options.ExposeExceptions = true;
+			//		}).AddGraphTypes(ServiceLifetime.Scoped)
+			//		.AddUserContextBuilder(ctx => ctx.User)
+			//		.AddDataLoader();
 
 			services.AddGraphQL(options => {
 						options.EnableMetrics = true;

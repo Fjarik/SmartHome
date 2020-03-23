@@ -8,17 +8,6 @@ namespace DataAccess.Contexts
 {
     public partial class MainContext : DbContext
     {
-        public MainContext()
-        {
-			this.Database.EnsureCreated();
-        }
-
-        public MainContext(DbContextOptions<MainContext> options)
-            : base(options)
-        {
-			this.Database.EnsureCreated();
-        }
-
         public virtual DbSet<Food> Foods { get; set; }
         public virtual DbSet<FoodCategory> FoodCategories { get; set; }
         public virtual DbSet<FoodSide> FoodSides { get; set; }
@@ -173,6 +162,10 @@ namespace DataAccess.Contexts
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasComment("");
+
+                entity.HasIndex(e => e.GoogleId)
+                    .HasName("UK_Users_Google")
+                    .IsUnique();
 
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
 

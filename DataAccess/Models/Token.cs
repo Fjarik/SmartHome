@@ -14,8 +14,8 @@ namespace DataAccess.Models
         [Column("UserID")]
         public int UserId { get; set; }
         [Required]
-        [Column("Token")]
-        public string Token1 { get; set; }
+        [StringLength(500)]
+        public string TokenString { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime Created { get; set; }
         [Column(TypeName = "datetime")]

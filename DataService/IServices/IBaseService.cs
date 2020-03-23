@@ -4,14 +4,16 @@ using System.Text;
 using System.Threading.Tasks;
 using DataAccess.IRepositories;
 using SharedLibrary.Interfaces;
+using SharedLibrary.Objects;
 
 namespace DataService.IServices
 {
-	public interface IBaseService<TEntity, out TManager>
-		where TEntity : class, IDbEntity where TManager : IBaseRepository<TEntity>
+	public interface IBaseService<TEntity, out TRepository>
+		where TEntity : class, IDbEntity where TRepository : IBaseRepository<TEntity>
 	{
-		TManager Manager { get; }
+		TRepository Repository { get; }
 
+		Task<HomeResult<TEntity>> GetByIdAsync(int id);
 		Task<List<TEntity>> GetAllAsync();
 	}
 }

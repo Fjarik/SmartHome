@@ -15,12 +15,14 @@ namespace Backend.Managers
 	{
 		private readonly IAuthService _authService;
 		private readonly IUserService _userService;
+		private readonly ITokenService _tokenService;
 
 		public AuthManager(IAuthService authService,
-						   IUserService userService)
+						   IUserService userService, ITokenService tokenService)
 		{
 			_authService = authService;
 			_userService = userService;
+			_tokenService = tokenService;
 		}
 
 		public async Task<User> LoginAsync(string googleToken, ResolveFieldContext<object> ctx)
@@ -41,11 +43,6 @@ namespace Backend.Managers
 			var lastname = userInfo.FamilyName;
 
 			return await this.LoginAsync(email, googleId, firstname, lastname, ctx);
-		}
-
-		public string GetToken(User u)
-		{
-			throw new NotImplementedException();
 		}
 
 		private async Task<User> LoginAsync(string email, string googleId, string firstname, string lastname,
@@ -76,7 +73,25 @@ namespace Backend.Managers
 				await _userService.SaveUserAsync(u);
 			}
 
-			u.AuthToken = this.GetToken(u);
+			return await this.LoginAsync(u, ctx);
+		}
+
+		private async Task<User> LoginAsync(User u, ResolveFieldContext<object> ctx)
+		{
+			var token = _tokenService.GetToken(u);
+			if (string.IsNullOrWhiteSpace(token.TokenString)) {
+				return null;
+			}
+
+			token = await _tokenService.RegisterTokenAsync(token);
+			if (token == null) {
+				return null;
+			}
+			if (string.IsNullOrWhiteSpace(token.TokenString)) {
+				return null;
+			}
+
+			u.AuthToken = token.TokenString;
 
 			return u;
 		}

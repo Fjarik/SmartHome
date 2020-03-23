@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace Backend.Other
+namespace DataService
 {
 	public class AppSettings
 	{
 		public string Issuer { get; set; }
 		public string Audience { get; set; }
 		public string Secret { get; set; }
+		public int ExpirationHours { get; set; }
 	}
 }
