@@ -55,22 +55,10 @@ namespace Backend
 			services.AddDbContext<MainContext>(opt =>
 												   opt.UseSqlServer(Configuration.GetConnectionString("MainDatabase")));
 
-			//services.AddAuthentication(opt => {
-			//			opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-			//			opt.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-			//		})
-			//		.AddCookie()
-			//		.AddGoogle(opt => {
-			//			var googleSection = Configuration.GetSection("Authentication:Google");
-			//			opt.ClientId = googleSection["ClientId"];
-			//			opt.ClientSecret = googleSection["ClientSecret"];
-			//		});
-
 			services.AddHttpContextAccessor()
 					.AddRepositories()
 					.AddServices()
 					.AddManagers();
-
 
 			// GraphQL
 			services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService))

@@ -18,6 +18,7 @@ namespace Backend.Other
 		{
 			return services
 				   .AddScoped<IUserRepository, UserRepository>()
+				   .AddScoped<IFoodRepository, FoodRepository>()
 				   .AddScoped<ITokenRepository, TokenRepository>();
 		}
 
@@ -26,6 +27,7 @@ namespace Backend.Other
 			return services
 				   .AddScoped<IUserService, UserService>()
 				   .AddScoped<ITokenService, TokenService>()
+				   .AddScoped<IFoodService, FoodService>()
 				   .AddScoped<IAuthService, AuthService>();
 		}
 

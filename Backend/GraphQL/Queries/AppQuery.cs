@@ -10,22 +10,29 @@ using DataService.IServices;
 using GraphQL;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Http;
+using FoodType = Backend.GraphQL.Types.FoodType;
 
 namespace Backend.GraphQL.Queries
 {
 	public class AppQuery : ObjectGraphType
 	{
 		private readonly IUserService _userService;
+		private readonly IFoodService _foodService;
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly IAuthManager _authManager;
 
-		public AppQuery(IUserService userService, IHttpContextAccessor httpContextAccessor, IAuthManager authManager)
+		public AppQuery(IUserService userService,
+						IHttpContextAccessor httpContextAccessor,
+						IAuthManager authManager,
+						IFoodService foodService)
 		{
 			_userService = userService;
 			_httpContextAccessor = httpContextAccessor;
 			_authManager = authManager;
+			_foodService = foodService;
 			FieldAsync<UserType, User>("logged", resolve: GetLogged);
-			FieldAsync<ListGraphType<UserType>, List<User>>("Users", resolve: GetUsers);
+			FieldAsync<ListGraphType<UserType>, List<User>>("users", resolve: GetUsers);
+			FieldAsync<ListGraphType<FoodType>, List<Food>>("foods", resolve: ctx => this._foodService.GetAllAsync());
 		}
 
 		private async Task<User> GetLogged(ResolveFieldContext<object> ctx)
