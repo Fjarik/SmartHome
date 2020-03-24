@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Contexts;
 using DataAccess.IRepositories;
 using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace DataAccess.Repositories
@@ -12,6 +14,16 @@ namespace DataAccess.Repositories
 	public class TokenRepository : BaseRepository<Token>, ITokenRepository
 	{
 		public TokenRepository(MainContext dbContext) : base(dbContext) { }
+
+		public Task<int> GetUserIdAsync(string token)
+		{
+			return this.DbSet.Where(x => x.TokenString == token).Select(x => x.UserId).FirstOrDefaultAsync();
+		}
+
+		public Task<Token> GetByTokenAsync(string token)
+		{
+			return this.DbSet.FirstOrDefaultAsync(x => x.TokenString == token);
+		}
 
 		public async ValueTask<EntityEntry<Token>> CreateAsync(string token, int userId, DateTime expiration)
 		{

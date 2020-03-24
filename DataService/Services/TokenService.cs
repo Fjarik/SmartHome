@@ -89,14 +89,21 @@ namespace DataService.Services
 			return true;
 		}
 
-		public Task<bool> IsValidAsync(string token)
+		public async Task<bool> IsValidAsync(string token)
 		{
-			throw new NotImplementedException();
+			if (string.IsNullOrWhiteSpace(token)) {
+				return false;
+			}
+			var t = await this.Repository.GetByTokenAsync(token);
+			if (t == null) {
+				return false;
+			}
+			return t.IsValid;
 		}
 
 		public Task<int> GetUserIdAsync(string token)
 		{
-			throw new NotImplementedException();
+			return this.Repository.GetUserIdAsync(token);
 		}
 
 		public async Task<Token> RegisterTokenAsync(Token t)

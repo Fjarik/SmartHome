@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.IManagers;
+using Backend.Other;
 using DataAccess.Models;
 using DataService.IServices;
 using Google.Apis.Oauth2.v2.Data;
+using GraphQL;
 using GraphQL.Types;
+using Microsoft.AspNetCore.Http;
 using SharedLibrary.Objects;
 
 namespace Backend.Managers
@@ -18,11 +21,27 @@ namespace Backend.Managers
 		private readonly ITokenService _tokenService;
 
 		public AuthManager(IAuthService authService,
-						   IUserService userService, ITokenService tokenService)
+						   IUserService userService,
+						   ITokenService tokenService)
 		{
 			_authService = authService;
 			_userService = userService;
 			_tokenService = tokenService;
+		}
+
+		public async Task<bool> AuthorizeAsync(IHttpContextAccessor httpContext, ResolveFieldContext<object> ctx)
+		{
+			var token = httpContext.GetToken();
+			if (string.IsNullOrWhiteSpace(token)) {
+				ctx.Errors.Add(new ExecutionError("You are not logged"));
+				return false;
+			}
+			var isValid = await this.VerifyTokenAsync(token);
+			if (!isValid) {
+				ctx.Errors.Add(new ExecutionError("Token is not valid"));
+				return false;
+			}
+			return true;
 		}
 
 		public async Task<User> LoginAsync(string googleToken, ResolveFieldContext<object> ctx)
@@ -43,6 +62,27 @@ namespace Backend.Managers
 			var lastname = userInfo.FamilyName;
 
 			return await this.LoginAsync(email, googleId, firstname, lastname, ctx);
+		}
+
+		public async Task<HomeResult<User>> GetLoggedAsync(string token, ResolveFieldContext<object> ctx)
+		{
+			if (string.IsNullOrWhiteSpace(token)) {
+				return null;
+			}
+			var id = await this._tokenService.GetUserIdAsync(token);
+			if (id < 1) {
+				return null;
+			}
+			return await this._userService.GetByIdAsync(id);
+		}
+
+		public async Task<bool> VerifyTokenAsync(string token)
+		{
+			var res = this._tokenService.ValidateToken(token);
+			if (!res) {
+				return false;
+			}
+			return await this._tokenService.IsValidAsync(token);
 		}
 
 		private async Task<User> LoginAsync(string email, string googleId, string firstname, string lastname,

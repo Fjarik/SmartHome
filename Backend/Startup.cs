@@ -31,12 +31,14 @@ namespace Backend
 {
 	public class Startup
 	{
-		public Startup(IConfiguration configuration)
+		public Startup(IConfiguration configuration, IWebHostEnvironment environment)
 		{
 			Configuration = configuration;
+			Environment = environment;
 		}
 
-		public IConfiguration Configuration { get; }
+		private IConfiguration Configuration { get; }
+		private IWebHostEnvironment Environment { get; }
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
@@ -64,55 +66,30 @@ namespace Backend
 			//			opt.ClientSecret = googleSection["ClientSecret"];
 			//		});
 
-			services.AddHttpContextAccessor();
+			services.AddHttpContextAccessor()
+					.AddRepositories()
+					.AddServices()
+					.AddManagers();
 
-#region Managers
-
-			services.AddScoped<IUserRepository, UserRepository>();
-			services.AddScoped<ITokenRepository, TokenRepository>();
-
-#endregion
-
-#region Services
-
-			services.AddScoped<IUserService, UserService>();
-			services.AddScoped<ITokenService, TokenService>();
-			services.AddScoped<IAuthService, AuthService>();
-
-#endregion
-
-			services.AddScoped<IAuthManager, AuthManager>();
 
 			// GraphQL
-			services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
-			services.AddScoped<AppSchema>();
-
-			//services.AddGraphQL(options => {
-			//			options.EnableMetrics = true;
-			//			options.ExposeExceptions = true;
-			//		}).AddGraphTypes(ServiceLifetime.Scoped)
-			//		.AddUserContextBuilder(ctx => ctx.User)
-			//		.AddDataLoader();
-
-			services.AddGraphQL(options => {
+			services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService))
+					.AddScoped<AppSchema>()
+					.AddGraphQL(options => {
 						options.EnableMetrics = true;
-						options.ExposeExceptions = true;
+						options.ExposeExceptions = this.Environment.IsDevelopment();
 					}).AddGraphTypes(ServiceLifetime.Scoped)
 					.AddUserContextBuilder(ctx => ctx.User)
+					.AddGraphTypes()
+					.AddRelayGraphTypes()
 					.AddDataLoader();
 
-			// kestrel
-			services.Configure<KestrelServerOptions>(options => { options.AllowSynchronousIO = true; });
-
-			// IIS
-			services.Configure<IISServerOptions>(options => { options.AllowSynchronousIO = true; });
-
-			services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = long.MaxValue; });
-
-			// MVC
-			services.AddRazorPages().AddNewtonsoftJson();
-			services.AddControllers();
-
+			services.Configure<KestrelServerOptions>(options => { options.AllowSynchronousIO = true; })
+					.Configure<IISServerOptions>(options => { options.AllowSynchronousIO = true; })
+					.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = long.MaxValue; })
+					.AddRazorPages().AddNewtonsoftJson()
+					.Services.AddControllers()
+					.Services.AddMvc();
 
 			// JWT
 			var appSettings = appSettingsSection.Get<AppSettings>();
@@ -135,12 +112,11 @@ namespace Backend
 				};
 			});
 
+			// Auth
 			services.AddAuthentication(options => {
 				options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 				options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 			});
-
-			services.AddMvc();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -155,20 +131,16 @@ namespace Backend
 
 			//app.UseHttpsRedirection();
 
-			app.UseGraphQL<AppSchema>();
-			app.UseGraphQLPlayground(options: new GraphQLPlaygroundOptions());
-
-			app.UseWebSockets();
-
-			app.UseRouting();
-
-			app.UseAuthentication();
-			app.UseAuthorization();
-
-			app.UseEndpoints(endpoints => {
-				endpoints.MapControllers();
-				endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-			});
+			app.UseGraphQL<AppSchema>()
+			   .UseGraphQLPlayground(options: new GraphQLPlaygroundOptions())
+			   .UseWebSockets()
+			   .UseRouting()
+			   .UseAuthentication()
+			   .UseAuthorization()
+			   .UseEndpoints(endpoints => {
+				   endpoints.MapControllers();
+				   endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+			   });
 		}
 	}
 }

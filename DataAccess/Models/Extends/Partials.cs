@@ -18,7 +18,11 @@ namespace DataAccess.Models
 
 	public partial class Relationship : IDbEntity { }
 
-	public partial class Token : IDbEntity { }
+	public partial class Token : IDbEntity
+	{
+		[NotMapped]
+		public bool IsValid => this.Expiration > DateTime.Now;
+	}
 
 	public partial class User : IDbEntity
 	{
