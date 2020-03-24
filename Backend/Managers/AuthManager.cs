@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Backend.IManagers;
 using Backend.Other;
 using DataAccess.Models;
+using DataAccess.Other;
 using DataService.IServices;
 using Google.Apis.Oauth2.v2.Data;
 using GraphQL;
@@ -44,7 +45,7 @@ namespace Backend.Managers
 			return true;
 		}
 
-		public async Task<User> LoginAsync(string googleToken, ResolveFieldContext<object> ctx)
+		public async Task<AuthUser> LoginAsync(string googleToken, ResolveFieldContext<object> ctx)
 		{
 			Userinfoplus userInfo;
 			try {
@@ -85,8 +86,8 @@ namespace Backend.Managers
 			return await this._tokenService.IsValidAsync(token);
 		}
 
-		private async Task<User> LoginAsync(string email, string googleId, string firstname, string lastname,
-											ResolveFieldContext<object> ctx)
+		private async Task<AuthUser> LoginAsync(string email, string googleId, string firstname, string lastname,
+												ResolveFieldContext<object> ctx)
 		{
 			if (string.IsNullOrWhiteSpace(email) ||
 				string.IsNullOrWhiteSpace(googleId) ||
@@ -116,7 +117,7 @@ namespace Backend.Managers
 			return await this.LoginAsync(u, ctx);
 		}
 
-		private async Task<User> LoginAsync(User u, ResolveFieldContext<object> ctx)
+		private async Task<AuthUser> LoginAsync(User u, ResolveFieldContext<object> ctx)
 		{
 			var token = _tokenService.GetToken(u);
 			if (string.IsNullOrWhiteSpace(token.TokenString)) {
@@ -130,10 +131,12 @@ namespace Backend.Managers
 			if (string.IsNullOrWhiteSpace(token.TokenString)) {
 				return null;
 			}
+			var authUser = new AuthUser(u) {
+				AuthToken = token.TokenString
+			};
 
-			u.AuthToken = token.TokenString;
 
-			return u;
+			return authUser;
 		}
 	}
 }

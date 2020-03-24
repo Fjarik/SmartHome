@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Backend.GraphQL.Types;
 using Backend.IManagers;
 using DataAccess.Models;
+using DataAccess.Other;
 using DataService.IServices;
 using GraphQL;
 using GraphQL.Types;
@@ -18,15 +19,15 @@ namespace Backend.GraphQL.Mutations
 		public AppMutation(IAuthManager authManager)
 		{
 			_authManager = authManager;
-			FieldAsync<UserType, User>("Login",
-									   arguments: new
-										   QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {
-											   Name = "googleToken"
-										   }),
-									   resolve: this.LoginAsync);
+			FieldAsync<AuthUserType, AuthUser>("Login",
+											   arguments: new
+												   QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {
+													   Name = "googleToken"
+												   }),
+											   resolve: this.LoginAsync);
 		}
 
-		private async Task<User> LoginAsync(ResolveFieldContext<object> ctx)
+		private async Task<AuthUser> LoginAsync(ResolveFieldContext<object> ctx)
 		{
 			var googleToken = ctx.GetArgument<string>("googleToken");
 

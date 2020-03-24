@@ -2,22 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Backend.GraphQL.Types.Interfaces;
 using DataAccess.Models;
 using GraphQL.Types;
 
-namespace Backend.GraphQL.Types
+namespace Backend.GraphQL.Types.Interfaces
 {
-	public class UserType : ObjectGraphType<User>
+	public class UserInterface : InterfaceGraphType<User>
 	{
-		public UserType()
+		public UserInterface()
 		{
 			Field(x => x.Id, type: typeof(IdGraphType)).Description("Id property");
 			Field(x => x.Firstname, type: typeof(StringGraphType)).Description("Firstname");
 			Field(x => x.Lastname, type: typeof(StringGraphType)).Description("Lastname");
 			Field(x => x.CreatedAt, type: typeof(DateTimeGraphType)).Description("Created at");
-
-			this.Interface<UserInterface>();
 		}
 	}
 }

@@ -24,9 +24,5 @@ namespace DataAccess.Models
 		public bool IsValid => this.Expiration > DateTime.Now;
 	}
 
-	public partial class User : IDbEntity
-	{
-		[NotMapped]
-		public string AuthToken { get; set; }
-	}
+	public partial class User : IDbEntity { }
 }
