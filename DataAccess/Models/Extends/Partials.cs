@@ -6,9 +6,9 @@ using SharedLibrary.Interfaces;
 
 namespace DataAccess.Models
 {
-	public partial class Food : IDbEntity { }
+	public partial class Category : IDbEntity { }
 
-	public partial class FoodCategory : IDbEntity { }
+	public partial class Food : IDbEntity { }
 
 	public partial class FoodType : IDbEntity { }
 

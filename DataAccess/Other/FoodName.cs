@@ -9,8 +9,8 @@ namespace DataAccess.Other
 	{
 		public string Name { get; set; }
 		public int Type { get; set; }
-		public int Category { get; set; }
 
+		public IEnumerable<int> Categories { get; set; } = new List<int>();
 		public List<int> FoodSides { get; } = new List<int>();
 
 		public FoodName() { }

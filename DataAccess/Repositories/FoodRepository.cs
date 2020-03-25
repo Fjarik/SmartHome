@@ -22,17 +22,16 @@ namespace DataAccess.Repositories
 			return await this.DbSet.AnyAsync(x => x.Name == name);
 		}
 
-		public async ValueTask<EntityEntry<Food>> CreateAsync(string name, int categoryId, int typeId)
+		public async ValueTask<EntityEntry<Food>> CreateAsync(string name, int typeId, bool glutenFree = true)
 		{
 			if (string.IsNullOrEmpty(name) ||
-				categoryId < 1 ||
 				typeId < 1) {
 				return null;
 			}
 			var f = new Food() {
 				Name = name,
-				CategoryId = categoryId,
 				TypeId = typeId,
+				GlutenFree = glutenFree,
 			};
 
 			return await CreateAsync(f);

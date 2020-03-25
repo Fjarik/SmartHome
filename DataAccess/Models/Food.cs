@@ -10,6 +10,7 @@ namespace DataAccess.Models
     {
         public Food()
         {
+            FoodCategories = new HashSet<FoodCategory>();
             FoodSides = new HashSet<FoodSide>();
             Meals = new HashSet<Meal>();
         }
@@ -17,20 +18,19 @@ namespace DataAccess.Models
         [Key]
         [Column("ID")]
         public int Id { get; set; }
-        [Column("CategoryID")]
-        public int CategoryId { get; set; }
         [Column("TypeID")]
         public int TypeId { get; set; }
         [Required]
         [StringLength(200)]
         public string Name { get; set; }
+        [Required]
+        public bool GlutenFree { get; set; }
 
-        [ForeignKey(nameof(CategoryId))]
-        [InverseProperty(nameof(FoodCategory.Foods))]
-        public virtual FoodCategory Category { get; set; }
         [ForeignKey(nameof(TypeId))]
         [InverseProperty(nameof(FoodType.Foods))]
         public virtual FoodType Type { get; set; }
+        [InverseProperty(nameof(FoodCategory.Food))]
+        public virtual ICollection<FoodCategory> FoodCategories { get; set; }
         [InverseProperty(nameof(FoodSide.Food))]
         public virtual ICollection<FoodSide> FoodSides { get; set; }
         [InverseProperty(nameof(Meal.Food))]

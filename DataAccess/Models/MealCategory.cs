@@ -6,20 +6,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccess.Models
 {
-    public partial class FoodCategory
+    public partial class MealCategory
     {
         [Key]
-        [Column("FoodID")]
-        public int FoodId { get; set; }
+        [Column("MealID")]
+        public int MealId { get; set; }
         [Key]
         [Column("CategoryID")]
         public int CategoryId { get; set; }
 
         [ForeignKey(nameof(CategoryId))]
-        [InverseProperty("FoodCategories")]
+        [InverseProperty("MealCategories")]
         public virtual Category Category { get; set; }
-        [ForeignKey(nameof(FoodId))]
-        [InverseProperty("FoodCategories")]
-        public virtual Food Food { get; set; }
+        [ForeignKey(nameof(MealId))]
+        [InverseProperty("MealCategories")]
+        public virtual Meal Meal { get; set; }
     }
 }

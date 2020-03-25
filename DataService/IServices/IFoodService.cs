@@ -11,6 +11,8 @@ namespace DataService.IServices
 	public interface IFoodService : IBaseService<Food, IFoodRepository>
 	{
 		Task<bool> ExistsAsync(string name);
-		Task<HomeResult<Food>> CreateAsync(string name, int categoryId, int typeId);
+
+		Task<HomeResult<Food>> CreateAsync(string name, int typeId, IList<int> categories,
+										   bool glutenFree = true);
 	}
 }

@@ -10,6 +10,6 @@ namespace DataAccess.IRepositories
 	public interface IFoodRepository : IBaseRepository<Food>
 	{
 		Task<bool> ExistsAsync(string name);
-		ValueTask<EntityEntry<Food>> CreateAsync(string name, int categoryId, int typeId);
+		ValueTask<EntityEntry<Food>> CreateAsync(string name, int typeId, bool glutenFree = true);
 	}
 }

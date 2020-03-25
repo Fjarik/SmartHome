@@ -14,6 +14,10 @@
    "Tables": [
       {
          "HasPrimaryKey": true,
+         "Name": "[dbo].[Categories]"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "[dbo].[FoodCategories]"
       },
       {
@@ -27,6 +31,10 @@
       {
          "HasPrimaryKey": true,
          "Name": "[dbo].[FoodTypes]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[MealCategories]"
       },
       {
          "HasPrimaryKey": true,
