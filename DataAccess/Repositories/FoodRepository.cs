@@ -14,6 +14,15 @@ namespace DataAccess.Repositories
 	{
 		public FoodRepository(MainContext dbContext) : base(dbContext) { }
 
+		public override Task<List<Food>> GetAllAsync()
+		{
+			return this.DbSet
+					   .Include(x => x.Type) // TODO: Edit
+					   .Include(x => x.FoodCategories)
+					   .ThenInclude(x => x.Category)
+					   .ToListAsync();
+		}
+
 		public async Task<bool> ExistsAsync(string name)
 		{
 			if (string.IsNullOrWhiteSpace(name)) {
