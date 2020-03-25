@@ -53,7 +53,10 @@ namespace Backend
 			});
 
 			services.AddDbContext<MainContext>(opt =>
-												   opt.UseSqlServer(Configuration.GetConnectionString("MainDatabase")));
+												   opt.UseSqlServer(Configuration.GetConnectionString("MainDatabase"))
+											   //.EnableSensitiveDataLogging()
+											   //.EnableDetailedErrors()
+											  );
 
 			services.AddHttpContextAccessor()
 					.AddRepositories()

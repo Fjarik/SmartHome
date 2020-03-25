@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 namespace DataAccess.Contexts
 {
     public partial class MainContext : DbContext
-    {
-        public virtual DbSet<Food> Foods { get; set; }
+    { 
+		public virtual DbSet<Food> Foods { get; set; }
         public virtual DbSet<FoodCategory> FoodCategories { get; set; }
         public virtual DbSet<FoodSide> FoodSides { get; set; }
-        public virtual DbSet<FoodType> FoodTypes { get; set; }
+		public virtual DbSet<FoodType> FoodTypes { get; set; }
         public virtual DbSet<Meal> Meals { get; set; }
         public virtual DbSet<MealSide> MealSides { get; set; }
         public virtual DbSet<MealType> MealTypes { get; set; }
