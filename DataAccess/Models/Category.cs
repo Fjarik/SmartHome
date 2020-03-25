@@ -23,7 +23,7 @@ namespace DataAccess.Models
         [Required]
         [StringLength(500)]
         public string Description { get; set; }
-        public bool IsHealthy { get; set; }
+        public bool? IsHealthy { get; set; }
 
         [InverseProperty(nameof(FoodCategory.Category))]
         public virtual ICollection<FoodCategory> FoodCategories { get; set; }

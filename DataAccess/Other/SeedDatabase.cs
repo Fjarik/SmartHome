@@ -106,21 +106,60 @@ namespace DataAccess.Other
 		{
 			var types = new[] {
 				new Category {
-					Id = 1,
 					Name = "Sladké",
-					Description = "",
+					Description = "Všechna sladká jídla",
+					IsHealthy = false,
 				},
 				new Category {
-					Id = 2,
 					Name = "Bezmasé",
-					Description = "",
+					Description = "Jídla, která neobsahují maso",
+					IsHealthy = true,
 				},
 				new Category {
-					Id = 3,
 					Name = "S masem",
-					Description = "",
-				}
+					Description = "Jídla s libovolným obsahem jakéhokoliv masa",
+					IsHealthy = null,
+				},
+				new Category {
+					Name = "Smažené",
+					Description = "Jídla, která byla upravena procesem smažením",
+					IsHealthy = false,
+				},
+				new Category {
+					Name = "Pečené",
+					Description = "Jídla, která byla upravena procesem upečením",
+					IsHealthy = null,
+				},
+				new Category {
+					Name = "Vařené",
+					Description = "Jídla, která byla upravena procesem vařením",
+					IsHealthy = null,
+				},
+				new Category {
+					Name = "Grilované",
+					Description = "Jídla, která byla upravena procesem grilováním",
+					IsHealthy = false,
+				},
+				new Category {
+					Name = "Dušené",
+					Description = "Jídla, která byla upravena procesem dušením",
+					IsHealthy = true,
+				},
+				new Category {
+					Name = "S omáčkou",
+					Description = "Jídla, která jsou servírována s omáčkou",
+					IsHealthy = null,
+				},
+				new Category {
+					Name = "Se sosem",
+					Description = "Jídla, která jsou servírována se sosem",
+					IsHealthy = null,
+				},
 			};
+
+			for (var i = 0; i < types.Length; i++) {
+				types[i].Id = i + 1;
+			}
 
 			builder.HasData(types);
 		}
