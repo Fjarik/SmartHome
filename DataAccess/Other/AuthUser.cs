@@ -20,8 +20,6 @@ namespace DataAccess.Other
 			this.Lastname = u.Lastname;
 			this.CreatedAt = u.CreatedAt;
 			this.Meals = u.Meals;
-			this.RelationshipSources = u.RelationshipSources;
-			this.RelationshipTargets = u.RelationshipTargets;
 			this.Tokens = u.Tokens;
 		}
 	}
