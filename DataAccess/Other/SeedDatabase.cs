@@ -13,17 +13,17 @@ namespace DataAccess.Other
 		{
 			var types = new[] {
 				new FoodType {
-					Id = 60,
+					Id = 1,
 					Name = "Hlavní jídlo",
 					Description = "",
 				},
 				new FoodType {
-					Id = 70,
+					Id = 2,
 					Name = "Polévka",
 					Description = "",
 				},
 				new FoodType {
-					Id = 80,
+					Id = 3,
 					Name = "Zákusek",
 					Description = "",
 				}

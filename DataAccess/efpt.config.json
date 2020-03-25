@@ -42,10 +42,6 @@
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[Relationships]"
-      },
-      {
-         "HasPrimaryKey": true,
          "Name": "[dbo].[SideDishes]"
       },
       {

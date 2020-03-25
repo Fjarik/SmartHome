@@ -11,8 +11,6 @@ namespace DataAccess.Models
         public User()
         {
             Meals = new HashSet<Meal>();
-            RelationshipSources = new HashSet<Relationship>();
-            RelationshipTargets = new HashSet<Relationship>();
             Tokens = new HashSet<Token>();
         }
 
@@ -37,10 +35,6 @@ namespace DataAccess.Models
 
         [InverseProperty(nameof(Meal.CookedBy))]
         public virtual ICollection<Meal> Meals { get; set; }
-        [InverseProperty(nameof(Relationship.Source))]
-        public virtual ICollection<Relationship> RelationshipSources { get; set; }
-        [InverseProperty(nameof(Relationship.Target))]
-        public virtual ICollection<Relationship> RelationshipTargets { get; set; }
         [InverseProperty(nameof(Token.User))]
         public virtual ICollection<Token> Tokens { get; set; }
     }

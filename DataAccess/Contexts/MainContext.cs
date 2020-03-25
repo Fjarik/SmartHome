@@ -7,15 +7,14 @@ using Microsoft.EntityFrameworkCore.Metadata;
 namespace DataAccess.Contexts
 {
     public partial class MainContext : DbContext
-    { 
-		public virtual DbSet<Food> Foods { get; set; }
+    {
+        public virtual DbSet<Food> Foods { get; set; }
         public virtual DbSet<FoodCategory> FoodCategories { get; set; }
         public virtual DbSet<FoodSide> FoodSides { get; set; }
-		public virtual DbSet<FoodType> FoodTypes { get; set; }
+        public virtual DbSet<FoodType> FoodTypes { get; set; }
         public virtual DbSet<Meal> Meals { get; set; }
         public virtual DbSet<MealSide> MealSides { get; set; }
         public virtual DbSet<MealType> MealTypes { get; set; }
-        public virtual DbSet<Relationship> Relationships { get; set; }
         public virtual DbSet<SideDish> SideDishes { get; set; }
         public virtual DbSet<Token> Tokens { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -118,25 +117,6 @@ namespace DataAccess.Contexts
             modelBuilder.Entity<MealType>(entity =>
             {
                 entity.HasComment("Hlavní jídlo, krabička, ...");
-            });
-
-            modelBuilder.Entity<Relationship>(entity =>
-            {
-                entity.HasComment("Otec, Matka...");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.HasOne(d => d.Source)
-                    .WithMany(p => p.RelationshipSources)
-                    .HasForeignKey(d => d.SourceId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Relationships_Source");
-
-                entity.HasOne(d => d.Target)
-                    .WithMany(p => p.RelationshipTargets)
-                    .HasForeignKey(d => d.TargetId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Relationships_Target");
             });
 
             modelBuilder.Entity<SideDish>(entity =>

@@ -16,8 +16,6 @@ namespace DataAccess.Models
 
 	public partial class MealType : IDbEntity { }
 
-	public partial class Relationship : IDbEntity { }
-
 	public partial class Token : IDbEntity
 	{
 		[NotMapped]

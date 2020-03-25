@@ -55,7 +55,7 @@ namespace Backend
 			services.AddDbContext<MainContext>(opt =>
 												   opt.UseSqlServer(Configuration.GetConnectionString("MainDatabase"))
 											   //.EnableSensitiveDataLogging()
-											   //.EnableDetailedErrors()
+											  //.EnableDetailedErrors()
 											  );
 
 			services.AddHttpContextAccessor()
