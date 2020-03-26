@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Backend.IManagers;
 using Backend.Other;
@@ -37,7 +38,7 @@ namespace Backend.Managers
 				ctx.Errors.Add(new ExecutionError("You are not logged"));
 				return false;
 			}
-			var isValid = await this.VerifyTokenAsync(token);
+			var isValid = await this.VerifyTokenAsync(token, ctx.CancellationToken);
 			if (!isValid) {
 				ctx.Errors.Add(new ExecutionError("Token is not valid"));
 				return false;
@@ -49,7 +50,7 @@ namespace Backend.Managers
 		{
 			Userinfoplus userInfo;
 			try {
-				userInfo = await _authService.GetGoogleUserAsync(googleToken);
+				userInfo = await _authService.GetGoogleUserAsync(googleToken, ctx.CancellationToken);
 			} catch (Exception e) {
 				Console.WriteLine(e);
 				throw;
@@ -70,20 +71,20 @@ namespace Backend.Managers
 			if (string.IsNullOrWhiteSpace(token)) {
 				return null;
 			}
-			var id = await this._tokenService.GetUserIdAsync(token);
+			var id = await this._tokenService.GetUserIdAsync(token, ctx.CancellationToken);
 			if (id < 1) {
 				return null;
 			}
-			return await this._userService.GetByIdAsync(id);
+			return await this._userService.GetByIdAsync(id, ctx.CancellationToken);
 		}
 
-		public async Task<bool> VerifyTokenAsync(string token)
+		public async Task<bool> VerifyTokenAsync(string token, CancellationToken cancellationToken)
 		{
 			var res = this._tokenService.ValidateToken(token);
 			if (!res) {
 				return false;
 			}
-			return await this._tokenService.IsValidAsync(token);
+			return await this._tokenService.IsValidAsync(token, cancellationToken);
 		}
 
 		private async Task<AuthUser> LoginAsync(string email, string googleId, string firstname, string lastname,
@@ -96,12 +97,12 @@ namespace Backend.Managers
 				return null;
 			}
 
-			var exists = await _userService.ExistsAsync(googleId);
+			var exists = await _userService.ExistsAsync(googleId, ctx.CancellationToken);
 			HomeResult<User> res;
 			if (exists) {
-				res = await _userService.GetByGoogleIdAsync(googleId);
+				res = await _userService.GetByGoogleIdAsync(googleId, ctx.CancellationToken);
 			} else {
-				res = await _userService.RegisterAsync(googleId, email, firstname, lastname);
+				res = await _userService.RegisterAsync(googleId, email, firstname, lastname, ctx.CancellationToken);
 			}
 
 			if (!res.IsSuccess) {
@@ -111,7 +112,7 @@ namespace Backend.Managers
 			var u = res.Content;
 			if (u.Email != email) {
 				u.Email = email;
-				await _userService.SaveUserAsync(u);
+				await _userService.SaveUserAsync(u, ctx.CancellationToken);
 			}
 
 			return await this.LoginAsync(u, ctx);
@@ -124,7 +125,7 @@ namespace Backend.Managers
 				return null;
 			}
 
-			token = await _tokenService.RegisterTokenAsync(token);
+			token = await _tokenService.RegisterTokenAsync(token, ctx.CancellationToken);
 			if (token == null) {
 				return null;
 			}

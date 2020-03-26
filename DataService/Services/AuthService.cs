@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using DataAccess.Models;
 using DataService.IServices;
@@ -20,18 +21,13 @@ namespace DataService.Services
 			_userService = userService;
 		}
 
-		public Task<Userinfoplus> GetGoogleUserAsync(string googleToken)
+		public Task<Userinfoplus> GetGoogleUserAsync(string googleToken, CancellationToken cancellationToken)
 		{
 			var service = new Oauth2Service(new BaseClientService.Initializer {
 				HttpClientInitializer = GoogleCredential.FromAccessToken(googleToken),
 				ApplicationName = "Domov",
 			});
-			return service.Userinfo.Get().ExecuteAsync();
-		}
-
-		public Task<User> LoginOrRegisterAsync(string googleId, string email)
-		{
-			throw new NotImplementedException();
+			return service.Userinfo.Get().ExecuteAsync(cancellationToken);
 		}
 	}
 }

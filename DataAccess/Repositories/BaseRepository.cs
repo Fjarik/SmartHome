@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using DataAccess.Contexts;
 using DataAccess.IRepositories;
@@ -21,45 +22,46 @@ namespace DataAccess.Repositories
 			DbContext = dbContext;
 		}
 
-		public virtual Task<List<TEntity>> GetAllAsync()
+		public virtual Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken)
 		{
-			return this.DbSet.ToListAsync();
+			return this.DbSet.ToListAsync(cancellationToken);
 		}
 
-		public virtual Task<TEntity> GetByIdAsync(int id)
+		public virtual Task<TEntity> GetByIdAsync(int id, CancellationToken cancellationToken)
 		{
-			return this.DbSet.FirstOrDefaultAsync(x => x.Id == id);
+			return this.DbSet.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 		}
 
-		public virtual async ValueTask<EntityEntry<TEntity>> CreateAsync(TEntity entity)
+		public virtual async ValueTask<EntityEntry<TEntity>> CreateAsync(
+			TEntity entity, CancellationToken cancellationToken)
 		{
-			var ent = await this.DbSet.AddAsync(entity);
-			await this.SaveAsync();
+			var ent = await this.DbSet.AddAsync(entity, cancellationToken);
+			await this.SaveAsync(cancellationToken);
 			return ent;
 		}
 
-		public virtual async Task<bool> DeleteAsync(TEntity entity)
+		public virtual async Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken)
 		{
 			try {
 				this.DbSet.Remove(entity);
-				await this.DbContext.SaveChangesAsync();
+				await this.DbContext.SaveChangesAsync(cancellationToken);
 			} catch {
 				return false;
 			}
 			return true;
 		}
 
-		public virtual Task<int> SaveAsync(TEntity entity)
+		public virtual Task<int> SaveAsync(TEntity entity, CancellationToken cancellationToken)
 		{
 			if (entity != null) {
 				this.DbSet.Update(entity);
 			}
-			return this.SaveAsync();
+			return this.SaveAsync(cancellationToken);
 		}
 
-		public virtual Task<int> SaveAsync()
+		public virtual Task<int> SaveAsync(CancellationToken cancellationToken)
 		{
-			return this.DbContext.SaveChangesAsync();
+			return this.DbContext.SaveChangesAsync(cancellationToken);
 		}
 	}
 }

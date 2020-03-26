@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using DataAccess.IRepositories;
 using SharedLibrary.Interfaces;
@@ -13,7 +14,7 @@ namespace DataService.IServices
 	{
 		TRepository Repository { get; }
 
-		Task<HomeResult<TEntity>> GetByIdAsync(int id);
-		Task<List<TEntity>> GetAllAsync();
+		Task<HomeResult<TEntity>> GetByIdAsync(int id, CancellationToken cancellationToken);
+		Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken);
 	}
 }

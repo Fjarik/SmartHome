@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using DataAccess.Contexts;
 using DataAccess.IRepositories;
@@ -15,17 +16,21 @@ namespace DataAccess.Repositories
 	{
 		public TokenRepository(MainContext dbContext) : base(dbContext) { }
 
-		public Task<int> GetUserIdAsync(string token)
+		public Task<int> GetUserIdAsync(string token, CancellationToken cancellationToken)
 		{
-			return this.DbSet.Where(x => x.TokenString == token).Select(x => x.UserId).FirstOrDefaultAsync();
+			return this.DbSet
+					   .Where(x => x.TokenString == token)
+					   .Select(x => x.UserId)
+					   .FirstOrDefaultAsync(cancellationToken);
 		}
 
-		public Task<Token> GetByTokenAsync(string token)
+		public Task<Token> GetByTokenAsync(string token, CancellationToken cancellationToken)
 		{
-			return this.DbSet.FirstOrDefaultAsync(x => x.TokenString == token);
+			return this.DbSet.FirstOrDefaultAsync(x => x.TokenString == token, cancellationToken);
 		}
 
-		public async ValueTask<EntityEntry<Token>> CreateAsync(string token, int userId, DateTime expiration)
+		public async ValueTask<EntityEntry<Token>> CreateAsync(string token, int userId, DateTime expiration,
+															   CancellationToken cancellationToken)
 		{
 			if (string.IsNullOrWhiteSpace(token) ||
 				userId < 1 ||
@@ -40,7 +45,7 @@ namespace DataAccess.Repositories
 				Created = DateTime.Now,
 			};
 
-			return await this.CreateAsync(t);
+			return await this.CreateAsync(t, cancellationToken);
 		}
 	}
 }

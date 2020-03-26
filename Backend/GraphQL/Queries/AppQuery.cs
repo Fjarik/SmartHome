@@ -32,7 +32,8 @@ namespace Backend.GraphQL.Queries
 			_foodService = foodService;
 			FieldAsync<UserType, User>("logged", resolve: GetLogged);
 			FieldAsync<ListGraphType<UserType>, List<User>>("users", resolve: GetUsers);
-			FieldAsync<ListGraphType<FoodType>, List<Food>>("foods", resolve: ctx => this._foodService.GetAllAsync());
+			FieldAsync<ListGraphType<FoodType>, List<Food>>(
+				"foods", resolve: ctx => this._foodService.GetAllAsync(ctx.CancellationToken));
 		}
 
 		private async Task<User> GetLogged(ResolveFieldContext<object> ctx)
@@ -55,7 +56,7 @@ namespace Backend.GraphQL.Queries
 			if (!(await this._authManager.AuthorizeAsync(_httpContextAccessor, ctx))) {
 				return null;
 			}
-			return await this._userService.GetAllAsync();
+			return await this._userService.GetAllAsync(ctx.CancellationToken);
 		}
 	}
 }

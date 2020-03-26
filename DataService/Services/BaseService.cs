@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using DataAccess.Contexts;
 using DataAccess.IRepositories;
@@ -23,18 +24,18 @@ namespace DataService.Services
 			this.Repository = repository;
 		}
 
-		public async Task<HomeResult<TEntity>> GetByIdAsync(int id)
+		public async Task<HomeResult<TEntity>> GetByIdAsync(int id, CancellationToken cancellationToken)
 		{
 			if (id < 1) {
 				return new HomeResult<TEntity>(StatusCode.NotValidId);
 			}
-			var ent = await this.Repository.GetByIdAsync(id);
+			var ent = await this.Repository.GetByIdAsync(id, cancellationToken);
 			return new HomeResult<TEntity>(StatusCode.OK, ent);
 		}
 
-		public virtual Task<List<TEntity>> GetAllAsync()
+		public virtual Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken)
 		{
-			return this.Repository.GetAllAsync();
+			return this.Repository.GetAllAsync(cancellationToken);
 		}
 	}
 }

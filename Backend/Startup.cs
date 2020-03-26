@@ -3,6 +3,7 @@ using Backend.GraphQL.Schemas;
 using Backend.IManagers;
 using Backend.Managers;
 using Backend.Other;
+using Backend.Other.Auth;
 using DataAccess.Contexts;
 using DataAccess.IRepositories;
 using DataAccess.Repositories;
@@ -45,6 +46,7 @@ namespace Backend
 		{
 			var appSettingsSection = Configuration.GetSection(nameof(AppSettings));
 			services.Configure<AppSettings>(appSettingsSection);
+			services.Configure<GraphQLOptions>(this.Configuration.GetSection("GraphQL"));
 
 			services.Configure<CookiePolicyOptions>(options => {
 				// This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -54,9 +56,9 @@ namespace Backend
 
 			services.AddDbContext<MainContext>(opt =>
 												   opt.UseSqlServer(Configuration.GetConnectionString("MainDatabase"))
-											   //.EnableSensitiveDataLogging()
-											  //.EnableDetailedErrors()
-											  );
+				//.EnableSensitiveDataLogging()
+				//.EnableDetailedErrors()
+			);
 
 			services.AddHttpContextAccessor()
 					.AddRepositories()
@@ -67,12 +69,20 @@ namespace Backend
 			services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService))
 					.AddScoped<AppSchema>()
 					.AddGraphQL(options => {
-						options.EnableMetrics = true;
+						var graphQLopts = this.Configuration
+											  .GetSection("GraphQL")
+											  .Get<GraphQLOptions>();
+						// Set some limits for security, read from configuration.
+						options.ComplexityConfiguration = graphQLopts.ComplexityConfiguration;
+						// Enable GraphQL metrics to be output in the response, read from configuration.
+						options.EnableMetrics = graphQLopts.EnableMetrics;
+						// Show stack traces in exceptions. Don't turn this on in production.
 						options.ExposeExceptions = this.Environment.IsDevelopment();
-					}).AddGraphTypes(ServiceLifetime.Scoped)
-					.AddUserContextBuilder(ctx => ctx.User)
-					.AddGraphTypes()
+					})
+					.AddGraphTypes(ServiceLifetime.Scoped)
 					.AddRelayGraphTypes()
+					.AddRelayGraphTypes()
+					.AddUserContextBuilder<GraphQLUserContextBuilder>()
 					.AddDataLoader();
 
 			services.Configure<KestrelServerOptions>(options => { options.AllowSynchronousIO = true; })

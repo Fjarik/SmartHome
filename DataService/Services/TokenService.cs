@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using DataAccess.IRepositories;
 using DataAccess.Models;
@@ -89,34 +90,35 @@ namespace DataService.Services
 			return true;
 		}
 
-		public async Task<bool> IsValidAsync(string token)
+		public async Task<bool> IsValidAsync(string token, CancellationToken cancellationToken)
 		{
 			if (string.IsNullOrWhiteSpace(token)) {
 				return false;
 			}
-			var t = await this.Repository.GetByTokenAsync(token);
+			var t = await this.Repository.GetByTokenAsync(token, cancellationToken);
 			if (t == null) {
 				return false;
 			}
 			return t.IsValid;
 		}
 
-		public Task<int> GetUserIdAsync(string token)
+		public Task<int> GetUserIdAsync(string token, CancellationToken cancellationToken)
 		{
-			return this.Repository.GetUserIdAsync(token);
+			return this.Repository.GetUserIdAsync(token, cancellationToken);
 		}
 
-		public async Task<Token> RegisterTokenAsync(Token t)
+		public async Task<Token> RegisterTokenAsync(Token t, CancellationToken cancellationToken)
 		{
 			if (t == null || string.IsNullOrWhiteSpace(t.TokenString) || t.UserId < 1 || t.Expiration < DateTime.Now) {
 				return null;
 			}
-			return await RegisterTokenAsync(t.TokenString, t.UserId, t.Expiration);
+			return await RegisterTokenAsync(t.TokenString, t.UserId, t.Expiration, cancellationToken);
 		}
 
-		public async Task<Token> RegisterTokenAsync(string token, int userId, DateTime expiration)
+		public async Task<Token> RegisterTokenAsync(string token, int userId, DateTime expiration,
+													CancellationToken cancellationToken)
 		{
-			var t = await this.Repository.CreateAsync(token, userId, expiration);
+			var t = await this.Repository.CreateAsync(token, userId, expiration, cancellationToken);
 			return t?.Entity;
 		}
 	}
