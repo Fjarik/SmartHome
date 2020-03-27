@@ -55,6 +55,7 @@ namespace DataAccess.Other
 			new FoodName(1, 2, 6) {Name = "Johančino tajemství", Type = 1, Categories = new[] {3, 5},},
 			new FoodName(7) {Name = "Čočka na kyselo", Type = 1, Categories = new[] {3, 6},},
 			new FoodName(1, 7) {Name = "Míchaná zelenina", Type = 1, Categories = new[] {2, 5},},
+			new FoodName(1, 7) {Name = "Pečené maso", Type = 1, Categories = new[] {3, 5},},
 		};
 
 		public static void Seed(this EntityTypeBuilder<Category> builder)
@@ -115,29 +116,6 @@ namespace DataAccess.Other
 			for (var i = 0; i < types.Length; i++) {
 				types[i].Id = i + 1;
 			}
-
-			builder.HasData(types);
-		}
-
-		public static void Seed(this EntityTypeBuilder<FoodType> builder)
-		{
-			var types = new[] {
-				new FoodType {
-					Id = 1,
-					Name = "Hlavní jídlo",
-					Description = "",
-				},
-				new FoodType {
-					Id = 2,
-					Name = "Polévka",
-					Description = "",
-				},
-				new FoodType {
-					Id = 3,
-					Name = "Zákusek",
-					Description = "",
-				}
-			};
 
 			builder.HasData(types);
 		}

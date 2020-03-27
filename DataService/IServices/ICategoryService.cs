@@ -13,7 +13,7 @@ namespace DataService.IServices
 	public interface ICategoryService : IBaseService<Category, ICategoryRepository>
 	{
 		bool Exists(string name);
-		List<Category> GetByIds(IList<int> ids);
+		List<Category> GetByIds(IEnumerable<int> ids);
 
 		HomeResult<Category> Create(string name, string description,
 									bool isHealthy = false);

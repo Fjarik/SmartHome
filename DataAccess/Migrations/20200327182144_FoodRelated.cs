@@ -12,17 +12,19 @@ namespace DataAccess.Migrations
                 values: new object[,]
                 {
                     { 1, 3 },
+                    { 33, 6 },
+                    { 33, 3 },
                     { 32, 6 },
                     { 32, 3 },
                     { 31, 5 },
                     { 31, 3 },
-                    { 30, 5 },
+                    { 30, 3 },
                     { 29, 4 },
                     { 29, 2 },
                     { 28, 5 },
                     { 28, 4 },
-                    { 33, 3 },
                     { 28, 2 },
+                    { 27, 4 },
                     { 27, 3 },
                     { 26, 5 },
                     { 26, 3 },
@@ -31,11 +33,12 @@ namespace DataAccess.Migrations
                     { 25, 3 },
                     { 24, 5 },
                     { 24, 3 },
-                    { 23, 5 },
-                    { 27, 4 },
-                    { 33, 6 },
                     { 34, 2 },
+                    { 23, 5 },
                     { 34, 4 },
+                    { 35, 5 },
+                    { 45, 5 },
+                    { 45, 3 },
                     { 44, 5 },
                     { 44, 2 },
                     { 43, 6 },
@@ -55,12 +58,11 @@ namespace DataAccess.Migrations
                     { 37, 3 },
                     { 36, 5 },
                     { 36, 3 },
-                    { 35, 5 },
                     { 35, 3 },
                     { 23, 3 },
-                    { 22, 9 },
-                    { 30, 3 },
-                    { 22, 3 },
+                    { 30, 5 },
+                    { 22, 5 },
+                    { 12, 3 },
                     { 11, 5 },
                     { 11, 3 },
                     { 10, 5 },
@@ -70,44 +72,44 @@ namespace DataAccess.Migrations
                     { 8, 4 },
                     { 8, 3 },
                     { 7, 5 },
+                    { 12, 5 },
                     { 7, 2 },
-                    { 6, 5 },
                     { 6, 3 },
                     { 5, 5 },
                     { 5, 3 },
-                    { 22, 5 },
+                    { 22, 9 },
                     { 4, 3 },
                     { 3, 5 },
                     { 3, 3 },
                     { 2, 5 },
                     { 2, 3 },
                     { 1, 5 },
-                    { 12, 3 },
-                    { 12, 5 },
-                    { 4, 5 },
-                    { 13, 5 },
+                    { 6, 5 },
                     { 13, 3 },
+                    { 4, 5 },
+                    { 13, 9 },
+                    { 13, 5 },
+                    { 22, 3 },
                     { 21, 5 },
                     { 21, 3 },
-                    { 20, 5 },
+                    { 20, 3 },
                     { 19, 6 },
                     { 19, 2 },
                     { 18, 9 },
                     { 18, 6 },
                     { 18, 3 },
                     { 17, 5 },
-                    { 17, 3 },
-                    { 20, 3 },
-                    { 16, 6 },
+                    { 20, 5 },
                     { 16, 9 },
-                    { 14, 3 },
-                    { 14, 9 },
-                    { 15, 3 },
+                    { 17, 3 },
                     { 14, 5 },
+                    { 15, 3 },
                     { 15, 6 },
+                    { 14, 9 },
                     { 15, 9 },
                     { 16, 3 },
-                    { 13, 9 }
+                    { 16, 6 },
+                    { 14, 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -115,31 +117,33 @@ namespace DataAccess.Migrations
                 columns: new[] { "FoodID", "SideID" },
                 values: new object[,]
                 {
+                    { 35, 6 },
+                    { 30, 1 },
                     { 35, 4 },
-                    { 29, 6 },
                     { 35, 2 },
                     { 35, 1 },
                     { 30, 2 },
-                    { 30, 1 },
-                    { 35, 6 },
-                    { 27, 6 },
-                    { 28, 6 },
+                    { 36, 1 },
                     { 28, 1 },
+                    { 29, 1 },
+                    { 28, 6 },
+                    { 27, 6 },
                     { 27, 1 },
                     { 26, 6 },
-                    { 26, 2 },
-                    { 36, 1 },
-                    { 26, 1 },
-                    { 29, 1 },
                     { 36, 2 },
-                    { 41, 6 },
-                    { 36, 6 },
-                    { 25, 8 },
+                    { 26, 2 },
+                    { 29, 6 },
+                    { 36, 4 },
+                    { 42, 2 },
+                    { 37, 1 },
+                    { 26, 1 },
+                    { 45, 7 },
+                    { 45, 1 },
                     { 44, 7 },
                     { 44, 1 },
                     { 43, 7 },
                     { 42, 6 },
-                    { 42, 2 },
+                    { 36, 6 },
                     { 42, 1 },
                     { 41, 4 },
                     { 41, 2 },
@@ -148,17 +152,16 @@ namespace DataAccess.Migrations
                     { 40, 1 },
                     { 39, 2 },
                     { 39, 1 },
-                    { 37, 1 },
-                    { 36, 4 },
-                    { 25, 7 },
-                    { 7, 1 },
-                    { 25, 1 },
+                    { 41, 6 },
+                    { 25, 8 },
+                    { 8, 1 },
+                    { 25, 2 },
                     { 9, 2 },
                     { 9, 1 },
                     { 8, 6 },
                     { 8, 2 },
-                    { 8, 1 },
-                    { 25, 2 },
+                    { 25, 7 },
+                    { 7, 1 },
                     { 6, 3 },
                     { 5, 3 },
                     { 4, 6 },
@@ -169,17 +172,18 @@ namespace DataAccess.Migrations
                     { 1, 2 },
                     { 1, 1 },
                     { 10, 1 },
-                    { 13, 1 },
                     { 10, 2 },
-                    { 18, 1 },
+                    { 13, 1 },
+                    { 19, 1 },
+                    { 24, 1 },
                     { 23, 6 },
                     { 23, 1 },
                     { 22, 6 },
                     { 22, 1 },
                     { 19, 3 },
-                    { 19, 1 },
                     { 13, 3 },
-                    { 17, 4 },
+                    { 25, 1 },
+                    { 18, 1 },
                     { 17, 2 },
                     { 17, 1 },
                     { 16, 1 },
@@ -187,7 +191,7 @@ namespace DataAccess.Migrations
                     { 15, 1 },
                     { 14, 3 },
                     { 14, 1 },
-                    { 24, 1 }
+                    { 17, 4 }
                 });
 
             migrationBuilder.UpdateData(
@@ -495,6 +499,13 @@ namespace DataAccess.Migrations
                 table: "Foods",
                 keyColumn: "ID",
                 keyValue: 44,
+                column: "GlutenFree",
+                value: true);
+
+            migrationBuilder.UpdateData(
+                table: "Foods",
+                keyColumn: "ID",
+                keyValue: 45,
                 column: "GlutenFree",
                 value: true);
         }
@@ -987,6 +998,16 @@ namespace DataAccess.Migrations
                 keyValues: new object[] { 44, 5 });
 
             migrationBuilder.DeleteData(
+                table: "FoodCategories",
+                keyColumns: new[] { "FoodID", "CategoryID" },
+                keyValues: new object[] { 45, 3 });
+
+            migrationBuilder.DeleteData(
+                table: "FoodCategories",
+                keyColumns: new[] { "FoodID", "CategoryID" },
+                keyValues: new object[] { 45, 5 });
+
+            migrationBuilder.DeleteData(
                 table: "FoodSides",
                 keyColumns: new[] { "FoodID", "SideID" },
                 keyValues: new object[] { 1, 1 });
@@ -1351,6 +1372,16 @@ namespace DataAccess.Migrations
                 keyColumns: new[] { "FoodID", "SideID" },
                 keyValues: new object[] { 44, 7 });
 
+            migrationBuilder.DeleteData(
+                table: "FoodSides",
+                keyColumns: new[] { "FoodID", "SideID" },
+                keyValues: new object[] { 45, 1 });
+
+            migrationBuilder.DeleteData(
+                table: "FoodSides",
+                keyColumns: new[] { "FoodID", "SideID" },
+                keyValues: new object[] { 45, 7 });
+
             migrationBuilder.UpdateData(
                 table: "Foods",
                 keyColumn: "ID",
@@ -1656,6 +1687,13 @@ namespace DataAccess.Migrations
                 table: "Foods",
                 keyColumn: "ID",
                 keyValue: 44,
+                column: "GlutenFree",
+                value: true);
+
+            migrationBuilder.UpdateData(
+                table: "Foods",
+                keyColumn: "ID",
+                keyValue: 45,
                 column: "GlutenFree",
                 value: true);
         }

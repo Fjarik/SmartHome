@@ -24,12 +24,13 @@ namespace DataService.Services
 			return this.Repository.Exists(name);
 		}
 
-		public List<Category> GetByIds(IList<int> ids)
+		public List<Category> GetByIds(IEnumerable<int> ids)
 		{
-			if (!ids.Any()) {
+			var list = ids.ToList();
+			if (!list.Any()) {
 				return new List<Category>();
 			}
-			return this.Repository.GetByIds(ids);
+			return this.Repository.GetByIds(list);
 		}
 
 		public HomeResult<Category> Create(string name, string description, bool isHealthy = false)

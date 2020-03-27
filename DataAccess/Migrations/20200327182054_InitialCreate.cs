@@ -24,34 +24,19 @@ namespace DataAccess.Migrations
                 comment: "Smažené, dušení, s masem, bez masa");
 
             migrationBuilder.CreateTable(
-                name: "FoodTypes",
+                name: "Foods",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Description = table.Column<string>(maxLength: 500, nullable: false)
+                    TypeID = table.Column<int>(nullable: false, comment: "Hlavní jídlo, polévka..."),
+                    Name = table.Column<string>(maxLength: 200, nullable: false),
+                    GlutenFree = table.Column<bool>(nullable: false, defaultValueSql: "((1))")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FoodTypes", x => x.ID);
-                },
-                comment: "Polévka, hlavní jídla...");
-
-            migrationBuilder.CreateTable(
-                name: "MealTypes",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Description = table.Column<string>(maxLength: 500, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MealTypes", x => x.ID);
-                },
-                comment: "Hlavní jídlo, krabička, ...");
+                    table.PrimaryKey("PK_Foods", x => x.ID);
+                });
 
             migrationBuilder.CreateTable(
                 name: "SideDishes",
@@ -86,49 +71,6 @@ namespace DataAccess.Migrations
                     table.PrimaryKey("PK_Users", x => x.ID);
                 },
                 comment: "");
-
-            migrationBuilder.CreateTable(
-                name: "Foods",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TypeID = table.Column<int>(nullable: false, comment: "Hlavní jídlo, polévka..."),
-                    Name = table.Column<string>(maxLength: 200, nullable: false),
-                    GlutenFree = table.Column<bool>(nullable: false, defaultValueSql: "((1))")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Foods", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Foods_FoodTypes",
-                        column: x => x.TypeID,
-                        principalTable: "FoodTypes",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Tokens",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserID = table.Column<int>(nullable: false),
-                    TokenString = table.Column<string>(maxLength: 500, nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
-                    Expiration = table.Column<DateTime>(type: "datetime", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tokens", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Tokens_Users",
-                        column: x => x.UserID,
-                        principalTable: "Users",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
 
             migrationBuilder.CreateTable(
                 name: "FoodCategories",
@@ -206,10 +148,26 @@ namespace DataAccess.Migrations
                         principalTable: "Foods",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tokens",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserID = table.Column<int>(nullable: false),
+                    TokenString = table.Column<string>(maxLength: 500, nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
+                    Expiration = table.Column<DateTime>(type: "datetime", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tokens", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Meals_MealTypes",
-                        column: x => x.TypeID,
-                        principalTable: "MealTypes",
+                        name: "FK_Tokens_Users",
+                        column: x => x.UserID,
+                        principalTable: "Users",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -281,20 +239,9 @@ namespace DataAccess.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Foods_TypeID",
-                table: "Foods",
-                column: "TypeID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_FoodSides_SideID",
                 table: "FoodSides",
                 column: "SideID");
-
-            migrationBuilder.CreateIndex(
-                name: "UK_FoodTypes_Name",
-                table: "FoodTypes",
-                column: "Name",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_MealCategories_CategoryID",
@@ -312,20 +259,9 @@ namespace DataAccess.Migrations
                 column: "FoodID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Meals_TypeID",
-                table: "Meals",
-                column: "TypeID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MealSides_SideDishesID",
                 table: "MealSides",
                 column: "SideDishesID");
-
-            migrationBuilder.CreateIndex(
-                name: "UK_MealTypes_Name",
-                table: "MealTypes",
-                column: "Name",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "UK_SideDishes_Name",
@@ -382,12 +318,6 @@ namespace DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Foods");
-
-            migrationBuilder.DropTable(
-                name: "MealTypes");
-
-            migrationBuilder.DropTable(
-                name: "FoodTypes");
         }
     }
 }

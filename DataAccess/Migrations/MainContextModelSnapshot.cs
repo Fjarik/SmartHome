@@ -126,7 +126,8 @@ namespace DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("GlutenFree")
+                    b.Property<bool?>("GlutenFree")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValueSql("((1))");
@@ -146,8 +147,6 @@ namespace DataAccess.Migrations
                     b.HasIndex("Name")
                         .IsUnique()
                         .HasName("UK_Foods_Name");
-
-                    b.HasIndex("TypeId");
 
                     b.ToTable("Foods");
 
@@ -458,6 +457,13 @@ namespace DataAccess.Migrations
                             Id = 44,
                             GlutenFree = true,
                             Name = "Míchaná zelenina",
+                            TypeId = 1
+                        },
+                        new
+                        {
+                            Id = 45,
+                            GlutenFree = true,
+                            Name = "Pečené maso",
                             TypeId = 1
                         });
                 });
@@ -966,6 +972,16 @@ namespace DataAccess.Migrations
                         {
                             FoodId = 44,
                             CategoryId = 5
+                        },
+                        new
+                        {
+                            FoodId = 45,
+                            CategoryId = 3
+                        },
+                        new
+                        {
+                            FoodId = 45,
+                            CategoryId = 5
                         });
                 });
 
@@ -1352,55 +1368,16 @@ namespace DataAccess.Migrations
                         {
                             FoodId = 44,
                             SideId = 7
-                        });
-                });
-
-            modelBuilder.Entity("DataAccess.Models.FoodType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasName("UK_FoodTypes_Name");
-
-                    b.ToTable("FoodTypes");
-
-                    b.HasComment("Polévka, hlavní jídla...");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "",
-                            Name = "Hlavní jídlo"
                         },
                         new
                         {
-                            Id = 2,
-                            Description = "",
-                            Name = "Polévka"
+                            FoodId = 45,
+                            SideId = 1
                         },
                         new
                         {
-                            Id = 3,
-                            Description = "",
-                            Name = "Zákusek"
+                            FoodId = 45,
+                            SideId = 7
                         });
                 });
 
@@ -1432,8 +1409,6 @@ namespace DataAccess.Migrations
                     b.HasIndex("CookedById");
 
                     b.HasIndex("FoodId");
-
-                    b.HasIndex("TypeId");
 
                     b.ToTable("Meals");
                 });
@@ -1473,35 +1448,6 @@ namespace DataAccess.Migrations
                     b.HasIndex("SideDishesId");
 
                     b.ToTable("MealSides");
-                });
-
-            modelBuilder.Entity("DataAccess.Models.MealType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasName("UK_MealTypes_Name");
-
-                    b.ToTable("MealTypes");
-
-                    b.HasComment("Hlavní jídlo, krabička, ...");
                 });
 
             modelBuilder.Entity("DataAccess.Models.SideDish", b =>
@@ -1672,15 +1618,6 @@ namespace DataAccess.Migrations
                     b.HasComment("");
                 });
 
-            modelBuilder.Entity("DataAccess.Models.Food", b =>
-                {
-                    b.HasOne("DataAccess.Models.FoodType", "Type")
-                        .WithMany("Foods")
-                        .HasForeignKey("TypeId")
-                        .HasConstraintName("FK_Foods_FoodTypes")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DataAccess.Models.FoodCategory", b =>
                 {
                     b.HasOne("DataAccess.Models.Category", "Category")
@@ -1723,12 +1660,6 @@ namespace DataAccess.Migrations
                         .WithMany("Meals")
                         .HasForeignKey("FoodId")
                         .HasConstraintName("FK_Meals_Foods")
-                        .IsRequired();
-
-                    b.HasOne("DataAccess.Models.MealType", "Type")
-                        .WithMany("Meals")
-                        .HasForeignKey("TypeId")
-                        .HasConstraintName("FK_Meals_MealTypes")
                         .IsRequired();
                 });
 

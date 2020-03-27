@@ -20,8 +20,8 @@ namespace DataAccess.Migrations
                     { 30, true, "Holandký řízek", 1 },
                     { 31, true, "Halušky", 1 },
                     { 32, true, "Špagety", 1 },
-                    { 24, true, "Kuře s nádivkou", 1 },
                     { 33, true, "Těstoviny stuňákem", 1 },
+                    { 34, true, "Bramboráky", 1 },
                     { 35, true, "Roláda kuřecí", 1 },
                     { 36, true, "Roláda vepřová", 1 },
                     { 37, true, "Dušení mrkev + maso", 1 },
@@ -30,9 +30,10 @@ namespace DataAccess.Migrations
                     { 40, true, "Čevabčiči", 1 },
                     { 41, true, "Kuřecí plátek v alobalu", 1 },
                     { 42, true, "Johančino tajemství", 1 },
-                    { 34, true, "Bramboráky", 1 },
+                    { 43, true, "Čočka na kyselo", 1 },
+                    { 24, true, "Kuře s nádivkou", 1 },
+                    { 44, true, "Míchaná zelenina", 1 },
                     { 23, true, "Maso zapečené s kečupem", 1 },
-                    { 22, true, "Maso ve smetanové omáčce", 1 },
                     { 21, true, "Zapečné brambory", 1 },
                     { 2, true, "Ražniči", 1 },
                     { 3, true, "Naložené kuřecí plátky", 1 },
@@ -53,8 +54,8 @@ namespace DataAccess.Migrations
                     { 18, true, "Houbová omáčka", 1 },
                     { 19, true, "Koprovka", 1 },
                     { 20, true, "Šunkafleky", 1 },
-                    { 43, true, "Čočka na kyselo", 1 },
-                    { 44, true, "Míchaná zelenina", 1 }
+                    { 22, true, "Maso ve smetanové omáčce", 1 },
+                    { 45, true, "Pečené maso", 1 }
                 });
         }
 
@@ -279,6 +280,11 @@ namespace DataAccess.Migrations
                 table: "Foods",
                 keyColumn: "ID",
                 keyValue: 44);
+
+            migrationBuilder.DeleteData(
+                table: "Foods",
+                keyColumn: "ID",
+                keyValue: 45);
         }
     }
 }

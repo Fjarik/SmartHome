@@ -19,7 +19,6 @@ namespace DataAccess.Repositories
 		public override List<Food> GetAll()
 		{
 			return this.DbSet
-					   .Include(x => x.Type) // TODO: Edit
 					   .Include(x => x.FoodCategories)
 					   .ToList();
 		}

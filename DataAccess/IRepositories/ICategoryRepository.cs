@@ -12,7 +12,7 @@ namespace DataAccess.IRepositories
 	public interface ICategoryRepository : IBaseRepository<Category>
 	{
 		bool Exists(string name);
-		List<Category> GetByIds(IList<int> ids);
+		List<Category> GetByIds(IEnumerable<int> ids);
 		EntityEntry<Category> Create(string name, string description, bool isHealthy = false);
 	}
 }

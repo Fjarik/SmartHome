@@ -30,10 +30,6 @@
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[FoodTypes]"
-      },
-      {
-         "HasPrimaryKey": true,
          "Name": "[dbo].[MealCategories]"
       },
       {
@@ -43,10 +39,6 @@
       {
          "HasPrimaryKey": true,
          "Name": "[dbo].[MealSides]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[dbo].[MealTypes]"
       },
       {
          "HasPrimaryKey": true,

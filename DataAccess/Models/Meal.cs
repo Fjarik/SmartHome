@@ -32,9 +32,6 @@ namespace DataAccess.Models
         [ForeignKey(nameof(FoodId))]
         [InverseProperty("Meals")]
         public virtual Food Food { get; set; }
-        [ForeignKey(nameof(TypeId))]
-        [InverseProperty(nameof(MealType.Meals))]
-        public virtual MealType Type { get; set; }
         [InverseProperty(nameof(MealCategory.Meal))]
         public virtual ICollection<MealCategory> MealCategories { get; set; }
         [InverseProperty(nameof(MealSide.Meal))]

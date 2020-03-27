@@ -12,25 +12,15 @@ namespace DataAccess.Migrations
                 values: new object[,]
                 {
                     { 1, "Všechna sladká jídla", false, "Sladké" },
-                    { 2, "Jídla, která neobsahují maso", true, "Bezmasé" },
-                    { 3, "Jídla s libovolným obsahem jakéhokoliv masa", null, "S masem" },
-                    { 4, "Jídla, která byla upravena procesem smažením", false, "Smažené" },
-                    { 5, "Jídla, která byla upravena procesem upečením", null, "Pečené" },
-                    { 6, "Jídla, která byla upravena procesem vařením", null, "Vařené" },
-                    { 7, "Jídla, která byla upravena procesem grilováním", false, "Grilované" },
+                    { 10, "Jídla, která jsou servírována se sosem", null, "Se sosem" },
                     { 8, "Jídla, která byla upravena procesem dušením", true, "Dušené" },
+                    { 7, "Jídla, která byla upravena procesem grilováním", false, "Grilované" },
+                    { 6, "Jídla, která byla upravena procesem vařením", null, "Vařené" },
                     { 9, "Jídla, která jsou servírována s omáčkou", null, "S omáčkou" },
-                    { 10, "Jídla, která jsou servírována se sosem", null, "Se sosem" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "FoodTypes",
-                columns: new[] { "ID", "Description", "Name" },
-                values: new object[,]
-                {
-                    { 3, "", "Zákusek" },
-                    { 1, "", "Hlavní jídlo" },
-                    { 2, "", "Polévka" }
+                    { 4, "Jídla, která byla upravena procesem smažením", false, "Smažené" },
+                    { 3, "Jídla s libovolným obsahem jakéhokoliv masa", null, "S masem" },
+                    { 2, "Jídla, která neobsahují maso", true, "Bezmasé" },
+                    { 5, "Jídla, která byla upravena procesem upečením", null, "Pečené" }
                 });
 
             migrationBuilder.InsertData(
@@ -100,21 +90,6 @@ namespace DataAccess.Migrations
                 table: "Categories",
                 keyColumn: "ID",
                 keyValue: 10);
-
-            migrationBuilder.DeleteData(
-                table: "FoodTypes",
-                keyColumn: "ID",
-                keyValue: 1);
-
-            migrationBuilder.DeleteData(
-                table: "FoodTypes",
-                keyColumn: "ID",
-                keyValue: 2);
-
-            migrationBuilder.DeleteData(
-                table: "FoodTypes",
-                keyColumn: "ID",
-                keyValue: 3);
 
             migrationBuilder.DeleteData(
                 table: "SideDishes",
