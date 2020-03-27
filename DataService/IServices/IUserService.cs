@@ -11,13 +11,12 @@ namespace DataService.IServices
 {
 	public interface IUserService : IBaseService<User, IUserRepository>
 	{
-		Task<HomeResult<User>> GetByGoogleIdAsync(string googleId, CancellationToken cancellationToken);
-		Task<bool> ExistsAsync(string googleId, CancellationToken cancellationToken);
+		HomeResult<User> GetByGoogleId(string googleId);
+		bool Exists(string googleId);
 
-		Task<HomeResult<User>> RegisterAsync(string googleId, string email, string firstname, string lastname,
-											 CancellationToken cancellationToken);
+		HomeResult<User> Register(string googleId, string email, string firstname, string lastname);
 
-		Task<int> SaveUserAsync(User u, CancellationToken cancellationToken);
+		int SaveUser(User u);
 		string NormalizeGoogleId(string googleId);
 	}
 }

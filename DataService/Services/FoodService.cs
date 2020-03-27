@@ -21,26 +21,25 @@ namespace DataService.Services
 			_categoryService = categoryService;
 		}
 
-		public async Task<bool> ExistsAsync(string name, CancellationToken cancellationToken)
+		public bool Exists(string name)
 		{
 			if (string.IsNullOrWhiteSpace(name)) {
 				return false;
 			}
-			return await this.Repository.ExistsAsync(name, cancellationToken);
+			return this.Repository.Exists(name);
 		}
 
-		public async Task<List<Category>> GetCategoriesAsync(int foodId, CancellationToken cancellationToken)
+		public List<Category> GetCategories(int foodId)
 		{
-			var ids = await this.Repository.GetCategoryIdsAsync(foodId, cancellationToken);
+			var ids = this.Repository.GetCategoryIds(foodId);
 			if (!ids.Any()) {
 				return new List<Category>();
 			}
-			return await this._categoryService.GetByIdsAsync(ids, cancellationToken);
+			return this._categoryService.GetByIds(ids);
 		}
 
-		public async Task<HomeResult<Food>> CreateAsync(string name, int typeId, IList<int> categories,
-														CancellationToken cancellationToken,
-														bool glutenFree = true)
+		public HomeResult<Food> Create(string name, int typeId, IList<int> categories,
+									   bool glutenFree = true)
 		{
 			if (string.IsNullOrEmpty(name) ||
 				!categories.Any() ||
@@ -50,11 +49,11 @@ namespace DataService.Services
 			}
 
 
-			if (await this.ExistsAsync(name, cancellationToken)) {
+			if (this.Exists(name)) {
 				return new HomeResult<Food>(StatusCode.AlreadyExists);
 			}
 
-			var u = await this.Repository.CreateAsync(name, typeId, cancellationToken, glutenFree);
+			var u = this.Repository.Create(name, typeId, glutenFree);
 			if (u?.Entity == null) {
 				return new HomeResult<Food>(StatusCode.InternalError);
 			}

@@ -10,10 +10,8 @@ namespace DataAccess.IRepositories
 {
 	public interface IUserRepository : IBaseRepository<User>
 	{
-		Task<bool> ExistsAsync(string googleId, CancellationToken cancellationToken);
-		Task<User> GetByGoogleIdAsync(string googleId, CancellationToken cancellationToken);
-
-		ValueTask<EntityEntry<User>> CreateAsync(string email, string firstname, string lastname, string googleId,
-												 CancellationToken cancellationToken);
+		bool Exists(string googleId);
+		User GetByGoogleId(string googleId);
+		EntityEntry<User> Create(string email, string firstname, string lastname, string googleId);
 	}
 }

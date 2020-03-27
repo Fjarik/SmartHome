@@ -20,30 +20,37 @@ namespace Backend.GraphQL.Queries
 		private readonly IFoodService _foodService;
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly IAuthManager _authManager;
+		private readonly ICategoryService _categoryService;
 
 		public AppQuery(IUserService userService,
 						IHttpContextAccessor httpContextAccessor,
 						IAuthManager authManager,
-						IFoodService foodService)
+						IFoodService foodService,
+						ICategoryService categoryService)
 		{
 			_userService = userService;
 			_httpContextAccessor = httpContextAccessor;
 			_authManager = authManager;
 			_foodService = foodService;
-			FieldAsync<UserType, User>("logged", resolve: GetLogged);
-			FieldAsync<ListGraphType<UserType>, List<User>>("users", resolve: GetUsers);
-			FieldAsync<ListGraphType<FoodType>, List<Food>>(
-				"foods", resolve: ctx => this._foodService.GetAllAsync(ctx.CancellationToken));
+			_categoryService = categoryService;
+			Field<UserType, User>("logged")
+				.Resolve(GetLogged);
+			Field<ListGraphType<UserType>, List<User>>("users")
+				.Resolve(GetUsers);
+			Field<ListGraphType<FoodType>, List<Food>>("foods")
+				.Resolve(ctx => this._foodService.GetAll());
+			Field<ListGraphType<CategoryType>, List<Category>>("categories")
+				.Resolve(ctx => this._categoryService.GetAll());
 		}
 
-		private async Task<User> GetLogged(ResolveFieldContext<object> ctx)
+		private User GetLogged(ResolveFieldContext<object> ctx)
 		{
-			if (!(await this._authManager.AuthorizeAsync(_httpContextAccessor, ctx))) {
+			if (!(this._authManager.Authorize(_httpContextAccessor, ctx))) {
 				return null;
 			}
 
 			var token = this._httpContextAccessor.GetToken();
-			var res = await this._authManager.GetLoggedAsync(token, ctx);
+			var res = this._authManager.GetLogged(token, ctx);
 			if (!res.IsSuccess) {
 				return null;
 			}
@@ -51,12 +58,12 @@ namespace Backend.GraphQL.Queries
 			return res.Content;
 		}
 
-		private async Task<List<User>> GetUsers(ResolveFieldContext<object> ctx)
+		private List<User> GetUsers(ResolveFieldContext<object> ctx)
 		{
-			if (!(await this._authManager.AuthorizeAsync(_httpContextAccessor, ctx))) {
+			if (!(this._authManager.Authorize(_httpContextAccessor, ctx))) {
 				return null;
 			}
-			return await this._userService.GetAllAsync(ctx.CancellationToken);
+			return this._userService.GetAll();
 		}
 	}
 }

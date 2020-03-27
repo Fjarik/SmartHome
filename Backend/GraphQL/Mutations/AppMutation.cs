@@ -19,15 +19,12 @@ namespace Backend.GraphQL.Mutations
 		public AppMutation(IAuthManager authManager)
 		{
 			_authManager = authManager;
-			FieldAsync<AuthUserType, AuthUser>("Login",
-											   arguments: new
-												   QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {
-													   Name = "googleToken"
-												   }),
-											   resolve: this.LoginAsync);
+			Field<AuthUserType, AuthUser>("Login")
+				.Argument<NonNullGraphType<StringGraphType>>("googleToken", "")
+				.Resolve(this.Login);
 		}
 
-		private async Task<AuthUser> LoginAsync(ResolveFieldContext<object> ctx)
+		private AuthUser Login(ResolveFieldContext<object> ctx)
 		{
 			var googleToken = ctx.GetArgument<string>("googleToken");
 
@@ -35,7 +32,7 @@ namespace Backend.GraphQL.Mutations
 				ctx.Errors.Add(new ExecutionError("Google token is empty"));
 				return null;
 			}
-			return await _authManager.LoginAsync(googleToken, ctx);
+			return _authManager.Login(googleToken, ctx);
 		}
 	}
 }

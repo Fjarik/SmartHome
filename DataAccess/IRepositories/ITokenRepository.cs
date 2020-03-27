@@ -10,10 +10,8 @@ namespace DataAccess.IRepositories
 {
 	public interface ITokenRepository : IBaseRepository<Token>
 	{
-		Task<int> GetUserIdAsync(string token, CancellationToken cancellationToken);
-		Task<Token> GetByTokenAsync(string token, CancellationToken cancellationToken);
-
-		ValueTask<EntityEntry<Token>> CreateAsync(string token, int userId, DateTime expiration,
-												  CancellationToken cancellationToken);
+		int GetUserId(string token);
+		Token GetByToken(string token);
+		EntityEntry<Token> Create(string token, int userId, DateTime expiration);
 	}
 }

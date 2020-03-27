@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,53 +16,52 @@ namespace DataAccess.Repositories
 	{
 		protected MainContext DbContext { get; }
 
-		protected DbSet<TEntity> DbSet => this.DbContext.Set<TEntity>();
+		protected virtual DbSet<TEntity> DbSet => this.DbContext.Set<TEntity>();
 
 		protected BaseRepository(MainContext dbContext)
 		{
 			DbContext = dbContext;
 		}
 
-		public virtual Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken)
+		public virtual List<TEntity> GetAll()
 		{
-			return this.DbSet.ToListAsync(cancellationToken);
+			return this.DbSet.ToList();
 		}
 
-		public virtual Task<TEntity> GetByIdAsync(int id, CancellationToken cancellationToken)
+		public virtual TEntity GetById(int id)
 		{
-			return this.DbSet.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+			return this.DbSet.FirstOrDefault(x => x.Id == id);
 		}
 
-		public virtual async ValueTask<EntityEntry<TEntity>> CreateAsync(
-			TEntity entity, CancellationToken cancellationToken)
+		public virtual EntityEntry<TEntity> Create(TEntity entity)
 		{
-			var ent = await this.DbSet.AddAsync(entity, cancellationToken);
-			await this.SaveAsync(cancellationToken);
+			var ent = this.DbSet.Add(entity);
+			this.Save();
 			return ent;
 		}
 
-		public virtual async Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken)
+		public virtual bool Delete(TEntity entity)
 		{
 			try {
 				this.DbSet.Remove(entity);
-				await this.DbContext.SaveChangesAsync(cancellationToken);
+				this.Save();
 			} catch {
 				return false;
 			}
 			return true;
 		}
 
-		public virtual Task<int> SaveAsync(TEntity entity, CancellationToken cancellationToken)
+		public virtual int Save(TEntity entity)
 		{
 			if (entity != null) {
 				this.DbSet.Update(entity);
 			}
-			return this.SaveAsync(cancellationToken);
+			return this.Save();
 		}
 
-		public virtual Task<int> SaveAsync(CancellationToken cancellationToken)
+		public virtual int Save()
 		{
-			return this.DbContext.SaveChangesAsync(cancellationToken);
+			return this.DbContext.SaveChanges();
 		}
 	}
 }

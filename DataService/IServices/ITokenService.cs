@@ -16,12 +16,11 @@ namespace DataService.IServices
 		ClaimsIdentity GetClaimsIdentity(User u);
 		Token GetToken(User u);
 		bool ValidateToken(string token);
-		Task<bool> IsValidAsync(string token, CancellationToken cancellationToken);
+		bool IsValid(string token);
 
-		Task<int> GetUserIdAsync(string token, CancellationToken cancellationToken);
-		Task<Token> RegisterTokenAsync(Token t, CancellationToken cancellationToken);
+		int GetUserId(string token);
+		Token RegisterToken(Token t);
 
-		Task<Token> RegisterTokenAsync(string token, int userId, DateTime expiration,
-									   CancellationToken cancellationToken);
+		Token RegisterToken(string token, int userId, DateTime expiration);
 	}
 }

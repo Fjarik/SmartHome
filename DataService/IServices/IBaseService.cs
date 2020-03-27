@@ -14,7 +14,7 @@ namespace DataService.IServices
 	{
 		TRepository Repository { get; }
 
-		Task<HomeResult<TEntity>> GetByIdAsync(int id, CancellationToken cancellationToken);
-		Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken);
+		HomeResult<TEntity> GetById(int id);
+		List<TEntity> GetAll();
 	}
 }

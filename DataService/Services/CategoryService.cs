@@ -16,35 +16,34 @@ namespace DataService.Services
 	{
 		public CategoryService(ICategoryRepository repository) : base(repository) { }
 
-		public async Task<bool> ExistsAsync(string name, CancellationToken cancellationToken)
+		public bool Exists(string name)
 		{
 			if (string.IsNullOrWhiteSpace(name)) {
 				return false;
 			}
-			return await this.Repository.ExistsAsync(name, cancellationToken);
+			return this.Repository.Exists(name);
 		}
 
-		public async Task<List<Category>> GetByIdsAsync(IList<int> ids, CancellationToken cancellationToken)
+		public List<Category> GetByIds(IList<int> ids)
 		{
 			if (!ids.Any()) {
 				return new List<Category>();
 			}
-			return await this.Repository.GetByIdsAsync(ids, cancellationToken);
+			return this.Repository.GetByIds(ids);
 		}
 
-		public async Task<HomeResult<Category>> CreateAsync(string name, string description,
-															CancellationToken cancellationToken, bool isHealthy = false)
+		public HomeResult<Category> Create(string name, string description, bool isHealthy = false)
 		{
 			if (string.IsNullOrEmpty(name) ||
 				string.IsNullOrEmpty(description)) {
 				return new HomeResult<Category>(StatusCode.InvalidInput);
 			}
 
-			if (await this.ExistsAsync(name, cancellationToken)) {
+			if (this.Exists(name)) {
 				return new HomeResult<Category>(StatusCode.AlreadyExists);
 			}
 
-			var u = await this.Repository.CreateAsync(name, description, cancellationToken, isHealthy);
+			var u = this.Repository.Create(name, description, isHealthy);
 			if (u?.Entity == null) {
 				return new HomeResult<Category>(StatusCode.InternalError);
 			}

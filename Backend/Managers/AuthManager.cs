@@ -31,14 +31,14 @@ namespace Backend.Managers
 			_tokenService = tokenService;
 		}
 
-		public async Task<bool> AuthorizeAsync(IHttpContextAccessor httpContext, ResolveFieldContext<object> ctx)
+		public bool Authorize(IHttpContextAccessor httpContext, ResolveFieldContext<object> ctx)
 		{
 			var token = httpContext.GetToken();
 			if (string.IsNullOrWhiteSpace(token)) {
 				ctx.Errors.Add(new ExecutionError("You are not logged"));
 				return false;
 			}
-			var isValid = await this.VerifyTokenAsync(token, ctx.CancellationToken);
+			var isValid = this.VerifyToken(token);
 			if (!isValid) {
 				ctx.Errors.Add(new ExecutionError("Token is not valid"));
 				return false;
@@ -46,11 +46,11 @@ namespace Backend.Managers
 			return true;
 		}
 
-		public async Task<AuthUser> LoginAsync(string googleToken, ResolveFieldContext<object> ctx)
+		public AuthUser Login(string googleToken, ResolveFieldContext<object> ctx)
 		{
 			Userinfoplus userInfo;
 			try {
-				userInfo = await _authService.GetGoogleUserAsync(googleToken, ctx.CancellationToken);
+				userInfo = _authService.GetGoogleUser(googleToken);
 			} catch (Exception e) {
 				Console.WriteLine(e);
 				throw;
@@ -63,32 +63,32 @@ namespace Backend.Managers
 			var firstname = userInfo.GivenName;
 			var lastname = userInfo.FamilyName;
 
-			return await this.LoginAsync(email, googleId, firstname, lastname, ctx);
+			return this.Login(email, googleId, firstname, lastname, ctx);
 		}
 
-		public async Task<HomeResult<User>> GetLoggedAsync(string token, ResolveFieldContext<object> ctx)
+		public HomeResult<User> GetLogged(string token, ResolveFieldContext<object> ctx)
 		{
 			if (string.IsNullOrWhiteSpace(token)) {
 				return null;
 			}
-			var id = await this._tokenService.GetUserIdAsync(token, ctx.CancellationToken);
+			var id = this._tokenService.GetUserId(token);
 			if (id < 1) {
 				return null;
 			}
-			return await this._userService.GetByIdAsync(id, ctx.CancellationToken);
+			return this._userService.GetById(id);
 		}
 
-		public async Task<bool> VerifyTokenAsync(string token, CancellationToken cancellationToken)
+		public bool VerifyToken(string token)
 		{
 			var res = this._tokenService.ValidateToken(token);
 			if (!res) {
 				return false;
 			}
-			return await this._tokenService.IsValidAsync(token, cancellationToken);
+			return this._tokenService.IsValid(token);
 		}
 
-		private async Task<AuthUser> LoginAsync(string email, string googleId, string firstname, string lastname,
-												ResolveFieldContext<object> ctx)
+		private AuthUser Login(string email, string googleId, string firstname, string lastname,
+							   ResolveFieldContext<object> ctx)
 		{
 			if (string.IsNullOrWhiteSpace(email) ||
 				string.IsNullOrWhiteSpace(googleId) ||
@@ -97,12 +97,12 @@ namespace Backend.Managers
 				return null;
 			}
 
-			var exists = await _userService.ExistsAsync(googleId, ctx.CancellationToken);
+			var exists = _userService.Exists(googleId);
 			HomeResult<User> res;
 			if (exists) {
-				res = await _userService.GetByGoogleIdAsync(googleId, ctx.CancellationToken);
+				res = _userService.GetByGoogleId(googleId);
 			} else {
-				res = await _userService.RegisterAsync(googleId, email, firstname, lastname, ctx.CancellationToken);
+				res = _userService.Register(googleId, email, firstname, lastname);
 			}
 
 			if (!res.IsSuccess) {
@@ -112,20 +112,20 @@ namespace Backend.Managers
 			var u = res.Content;
 			if (u.Email != email) {
 				u.Email = email;
-				await _userService.SaveUserAsync(u, ctx.CancellationToken);
+				_userService.SaveUser(u);
 			}
 
-			return await this.LoginAsync(u, ctx);
+			return this.Login(u, ctx);
 		}
 
-		private async Task<AuthUser> LoginAsync(User u, ResolveFieldContext<object> ctx)
+		private AuthUser Login(User u, ResolveFieldContext<object> ctx)
 		{
 			var token = _tokenService.GetToken(u);
 			if (string.IsNullOrWhiteSpace(token.TokenString)) {
 				return null;
 			}
 
-			token = await _tokenService.RegisterTokenAsync(token, ctx.CancellationToken);
+			token = _tokenService.RegisterToken(token);
 			if (token == null) {
 				return null;
 			}
@@ -135,7 +135,6 @@ namespace Backend.Managers
 			var authUser = new AuthUser(u) {
 				AuthToken = token.TokenString
 			};
-
 
 			return authUser;
 		}

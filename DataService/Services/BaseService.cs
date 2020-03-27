@@ -24,18 +24,18 @@ namespace DataService.Services
 			this.Repository = repository;
 		}
 
-		public async Task<HomeResult<TEntity>> GetByIdAsync(int id, CancellationToken cancellationToken)
+		public HomeResult<TEntity> GetById(int id)
 		{
 			if (id < 1) {
 				return new HomeResult<TEntity>(StatusCode.NotValidId);
 			}
-			var ent = await this.Repository.GetByIdAsync(id, cancellationToken);
+			var ent = this.Repository.GetById(id);
 			return new HomeResult<TEntity>(StatusCode.OK, ent);
 		}
 
-		public virtual Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken)
+		public virtual List<TEntity> GetAll()
 		{
-			return this.Repository.GetAllAsync(cancellationToken);
+			return this.Repository.GetAll();
 		}
 	}
 }

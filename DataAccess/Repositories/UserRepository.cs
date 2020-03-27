@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,21 +16,21 @@ namespace DataAccess.Repositories
 	{
 		public UserRepository(MainContext dbContext) : base(dbContext) { }
 
-		public async Task<bool> ExistsAsync(string googleId, CancellationToken cancellationToken)
+		public bool Exists(string googleId)
 		{
 			if (string.IsNullOrWhiteSpace(googleId)) {
 				return false;
 			}
-			return await this.DbSet.AnyAsync(x => x.GoogleId == googleId, cancellationToken);
+			return this.DbSet.Any(x => x.GoogleId == googleId);
 		}
 
-		public Task<User> GetByGoogleIdAsync(string googleId, CancellationToken cancellationToken)
+		public User GetByGoogleId(string googleId)
 		{
-			return this.DbSet.FirstOrDefaultAsync(x => x.GoogleId == googleId, cancellationToken);
+			return this.DbSet.FirstOrDefault(x => x.GoogleId == googleId);
 		}
 
-		public async ValueTask<EntityEntry<User>> CreateAsync(string email, string firstname, string lastname,
-															  string googleId, CancellationToken cancellationToken)
+		public EntityEntry<User> Create(string email, string firstname, string lastname,
+										string googleId)
 		{
 			if (string.IsNullOrEmpty(email) ||
 				string.IsNullOrEmpty(firstname) ||
@@ -45,7 +46,7 @@ namespace DataAccess.Repositories
 				GoogleId = googleId,
 			};
 
-			return await CreateAsync(u, cancellationToken);
+			return Create(u);
 		}
 	}
 }

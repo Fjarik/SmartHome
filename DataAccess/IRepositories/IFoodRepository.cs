@@ -10,10 +10,8 @@ namespace DataAccess.IRepositories
 {
 	public interface IFoodRepository : IBaseRepository<Food>
 	{
-		Task<bool> ExistsAsync(string name, CancellationToken cancellationToken);
-		Task<List<int>> GetCategoryIdsAsync(int foodId, CancellationToken cancellationToken);
-
-		ValueTask<EntityEntry<Food>> CreateAsync(string name, int typeId, CancellationToken cancellationToken,
-												 bool glutenFree = true);
+		bool Exists(string name);
+		List<int> GetCategoryIds(int foodId);
+		EntityEntry<Food> Create(string name, int typeId, bool glutenFree = true);
 	}
 }

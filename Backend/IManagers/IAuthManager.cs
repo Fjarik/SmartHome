@@ -13,9 +13,9 @@ namespace Backend.IManagers
 {
 	public interface IAuthManager
 	{
-		Task<bool> AuthorizeAsync(IHttpContextAccessor httpContext, ResolveFieldContext<object> ctx);
-		Task<AuthUser> LoginAsync(string googleToken, ResolveFieldContext<object> ctx);
-		Task<HomeResult<User>> GetLoggedAsync(string token, ResolveFieldContext<object> ctx);
-		Task<bool> VerifyTokenAsync(string token, CancellationToken cancellationToken);
+		bool Authorize(IHttpContextAccessor httpContext, ResolveFieldContext<object> ctx);
+		AuthUser Login(string googleToken, ResolveFieldContext<object> ctx);
+		HomeResult<User> GetLogged(string token, ResolveFieldContext<object> ctx);
+		bool VerifyToken(string token);
 	}
 }

@@ -11,12 +11,11 @@ namespace DataService.IServices
 {
 	public interface IFoodService : IBaseService<Food, IFoodRepository>
 	{
-		Task<bool> ExistsAsync(string name, CancellationToken cancellationToken);
+		bool Exists(string name);
 
-		Task<List<Category>> GetCategoriesAsync(int foodId, CancellationToken cancellationToken);
+		List<Category> GetCategories(int foodId);
 
-		Task<HomeResult<Food>> CreateAsync(string name, int typeId, IList<int> categories,
-										   CancellationToken cancellationToken,
-										   bool glutenFree = true);
+		HomeResult<Food> Create(string name, int typeId, IList<int> categories,
+								bool glutenFree = true);
 	}
 }

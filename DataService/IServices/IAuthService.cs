@@ -10,6 +10,6 @@ namespace DataService.IServices
 {
 	public interface IAuthService
 	{
-		Task<Userinfoplus> GetGoogleUserAsync(string googleToken, CancellationToken cancellationToken);
+		Userinfoplus GetGoogleUser(string googleToken);
 	}
 }

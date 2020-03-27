@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,10 +12,10 @@ namespace DataService.IServices
 {
 	public interface ICategoryService : IBaseService<Category, ICategoryRepository>
 	{
-		Task<bool> ExistsAsync(string name, CancellationToken cancellationToken);
-		Task<List<Category>> GetByIdsAsync(IList<int> ids, CancellationToken cancellationToken);
+		bool Exists(string name);
+		List<Category> GetByIds(IList<int> ids);
 
-		Task<HomeResult<Category>> CreateAsync(string name, string description, CancellationToken cancellationToken,
-											   bool isHealthy = false);
+		HomeResult<Category> Create(string name, string description,
+									bool isHealthy = false);
 	}
 }

@@ -21,13 +21,13 @@ namespace DataService.Services
 			_userService = userService;
 		}
 
-		public Task<Userinfoplus> GetGoogleUserAsync(string googleToken, CancellationToken cancellationToken)
+		public Userinfoplus GetGoogleUser(string googleToken)
 		{
 			var service = new Oauth2Service(new BaseClientService.Initializer {
 				HttpClientInitializer = GoogleCredential.FromAccessToken(googleToken),
 				ApplicationName = "Domov",
 			});
-			return service.Userinfo.Get().ExecuteAsync(cancellationToken);
+			return service.Userinfo.Get().Execute();
 		}
 	}
 }

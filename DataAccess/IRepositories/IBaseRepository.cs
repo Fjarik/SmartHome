@@ -11,13 +11,13 @@ namespace DataAccess.IRepositories
 {
 	public interface IBaseRepository<TEntity> where TEntity : class, IDbEntity
 	{
-		Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken);
-		Task<TEntity> GetByIdAsync(int id, CancellationToken cancellationToken);
+		List<TEntity> GetAll();
+		TEntity GetById(int id);
 
-		ValueTask<EntityEntry<TEntity>> CreateAsync(TEntity entity, CancellationToken cancellationToken);
-		Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken);
+		EntityEntry<TEntity> Create(TEntity entity);
+		bool Delete(TEntity entity);
 
-		Task<int> SaveAsync(TEntity entity, CancellationToken cancellationToken);
-		Task<int> SaveAsync(CancellationToken cancellationToken);
+		int Save(TEntity entity);
+		int Save();
 	}
 }

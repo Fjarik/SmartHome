@@ -16,21 +16,20 @@ namespace DataAccess.Repositories
 	{
 		public TokenRepository(MainContext dbContext) : base(dbContext) { }
 
-		public Task<int> GetUserIdAsync(string token, CancellationToken cancellationToken)
+		public int GetUserId(string token)
 		{
 			return this.DbSet
 					   .Where(x => x.TokenString == token)
 					   .Select(x => x.UserId)
-					   .FirstOrDefaultAsync(cancellationToken);
+					   .FirstOrDefault();
 		}
 
-		public Task<Token> GetByTokenAsync(string token, CancellationToken cancellationToken)
+		public Token GetByToken(string token)
 		{
-			return this.DbSet.FirstOrDefaultAsync(x => x.TokenString == token, cancellationToken);
+			return this.DbSet.FirstOrDefault(x => x.TokenString == token);
 		}
 
-		public async ValueTask<EntityEntry<Token>> CreateAsync(string token, int userId, DateTime expiration,
-															   CancellationToken cancellationToken)
+		public EntityEntry<Token> Create(string token, int userId, DateTime expiration)
 		{
 			if (string.IsNullOrWhiteSpace(token) ||
 				userId < 1 ||
@@ -45,7 +44,7 @@ namespace DataAccess.Repositories
 				Created = DateTime.Now,
 			};
 
-			return await this.CreateAsync(t, cancellationToken);
+			return this.Create(t);
 		}
 	}
 }

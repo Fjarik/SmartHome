@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,11 +11,8 @@ namespace DataAccess.IRepositories
 {
 	public interface ICategoryRepository : IBaseRepository<Category>
 	{
-		Task<bool> ExistsAsync(string name, CancellationToken cancellationToken);
-		Task<List<Category>> GetByIdsAsync(IList<int> ids, CancellationToken cancellationToken);
-
-		ValueTask<EntityEntry<Category>> CreateAsync(string name, string description,
-													 CancellationToken cancellationToken,
-													 bool isHealthy = false);
+		bool Exists(string name);
+		List<Category> GetByIds(IList<int> ids);
+		EntityEntry<Category> Create(string name, string description, bool isHealthy = false);
 	}
 }

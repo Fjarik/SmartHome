@@ -16,26 +16,32 @@ namespace DataAccess.Repositories
 	{
 		public CategoryRepository(MainContext dbContext) : base(dbContext) { }
 
-		public async Task<bool> ExistsAsync(string name, CancellationToken cancellationToken)
+		public override List<Category> GetAll()
+		{
+			return this.DbSet
+					   .Include(x => x.FoodCategories)
+					   .ToList();
+		}
+
+		public bool Exists(string name)
 		{
 			if (string.IsNullOrWhiteSpace(name)) {
 				return false;
 			}
-			return await this.DbSet.AnyAsync(x => x.Name == name, cancellationToken);
+			return this.DbSet.Any(x => x.Name == name);
 		}
 
-		public async Task<List<Category>> GetByIdsAsync(IList<int> ids, CancellationToken cancellationToken)
+		public List<Category> GetByIds(IList<int> ids)
 		{
 			if (!ids.Any()) {
 				return new List<Category>();
 			}
-			return await this.DbSet.Where(x => ids.Any(y => y == x.Id)).ToListAsync(cancellationToken);
+			return this.DbSet.Where(x => ids.Contains(x.Id)).ToList();
 		}
 
-		public async ValueTask<EntityEntry<Category>> CreateAsync(string name,
-																  string description,
-																  CancellationToken cancellationToken,
-																  bool isHealthy = false)
+		public EntityEntry<Category> Create(string name,
+											string description,
+											bool isHealthy = false)
 		{
 			if (string.IsNullOrEmpty(name) ||
 				string.IsNullOrEmpty(description)) {
@@ -47,7 +53,7 @@ namespace DataAccess.Repositories
 				IsHealthy = isHealthy,
 			};
 
-			return await CreateAsync(c, cancellationToken);
+			return Create(c);
 		}
 	}
 }

@@ -15,33 +15,32 @@ namespace DataService.Services
 	{
 		public UserService(IUserRepository repository) : base(repository) { }
 
-		public async Task<HomeResult<User>> GetByGoogleIdAsync(string googleId, CancellationToken cancellationToken)
+		public HomeResult<User> GetByGoogleId(string googleId)
 		{
 			if (string.IsNullOrWhiteSpace(googleId)) {
 				return new HomeResult<User>(StatusCode.NotValidId);
 			}
 			googleId = this.NormalizeGoogleId(googleId);
-			var u = await this.Repository.GetByGoogleIdAsync(googleId, cancellationToken);
+			var u = this.Repository.GetByGoogleId(googleId);
 			if (u == null) {
 				return new HomeResult<User>(StatusCode.NotFound);
 			}
 			return new HomeResult<User>(StatusCode.OK, u);
 		}
 
-		public async Task<bool> ExistsAsync(string googleId, CancellationToken cancellationToken)
+		public bool Exists(string googleId)
 		{
 			if (string.IsNullOrWhiteSpace(googleId)) {
 				return false;
 			}
 			googleId = this.NormalizeGoogleId(googleId);
-			return await this.Repository.ExistsAsync(googleId, cancellationToken);
+			return this.Repository.Exists(googleId);
 		}
 
-		public async Task<HomeResult<User>> RegisterAsync(string googleId,
-														  string email,
-														  string firstname,
-														  string lastname,
-														  CancellationToken cancellationToken)
+		public HomeResult<User> Register(string googleId,
+										 string email,
+										 string firstname,
+										 string lastname)
 		{
 			if (string.IsNullOrEmpty(email) ||
 				string.IsNullOrEmpty(firstname) ||
@@ -53,23 +52,23 @@ namespace DataService.Services
 			}
 			googleId = this.NormalizeGoogleId(googleId);
 
-			if (await this.ExistsAsync(googleId, cancellationToken)) {
+			if (this.Exists(googleId)) {
 				return new HomeResult<User>(StatusCode.AlreadyExists);
 			}
 
-			var u = await this.Repository.CreateAsync(email, firstname, lastname, googleId, cancellationToken);
+			var u = this.Repository.Create(email, firstname, lastname, googleId);
 			if (u?.Entity == null) {
 				return new HomeResult<User>(StatusCode.InternalError);
 			}
 			return new HomeResult<User>(StatusCode.OK, u.Entity);
 		}
 
-		public async Task<int> SaveUserAsync(User u, CancellationToken cancellationToken)
+		public int SaveUser(User u)
 		{
 			if (u == null) {
 				return 0;
 			}
-			return await this.Repository.SaveAsync(u, cancellationToken);
+			return this.Repository.Save(u);
 		}
 
 		public string NormalizeGoogleId(string googleId) => googleId.Trim().ToLower();

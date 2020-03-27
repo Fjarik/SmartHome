@@ -90,35 +90,34 @@ namespace DataService.Services
 			return true;
 		}
 
-		public async Task<bool> IsValidAsync(string token, CancellationToken cancellationToken)
+		public bool IsValid(string token)
 		{
 			if (string.IsNullOrWhiteSpace(token)) {
 				return false;
 			}
-			var t = await this.Repository.GetByTokenAsync(token, cancellationToken);
+			var t = this.Repository.GetByToken(token);
 			if (t == null) {
 				return false;
 			}
 			return t.IsValid;
 		}
 
-		public Task<int> GetUserIdAsync(string token, CancellationToken cancellationToken)
+		public int GetUserId(string token)
 		{
-			return this.Repository.GetUserIdAsync(token, cancellationToken);
+			return this.Repository.GetUserId(token);
 		}
 
-		public async Task<Token> RegisterTokenAsync(Token t, CancellationToken cancellationToken)
+		public Token RegisterToken(Token t)
 		{
 			if (t == null || string.IsNullOrWhiteSpace(t.TokenString) || t.UserId < 1 || t.Expiration < DateTime.Now) {
 				return null;
 			}
-			return await RegisterTokenAsync(t.TokenString, t.UserId, t.Expiration, cancellationToken);
+			return RegisterToken(t.TokenString, t.UserId, t.Expiration);
 		}
 
-		public async Task<Token> RegisterTokenAsync(string token, int userId, DateTime expiration,
-													CancellationToken cancellationToken)
+		public Token RegisterToken(string token, int userId, DateTime expiration)
 		{
-			var t = await this.Repository.CreateAsync(token, userId, expiration, cancellationToken);
+			var t = this.Repository.Create(token, userId, expiration);
 			return t?.Entity;
 		}
 	}

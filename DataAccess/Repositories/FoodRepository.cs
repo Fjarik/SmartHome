@@ -16,36 +16,36 @@ namespace DataAccess.Repositories
 	{
 		public FoodRepository(MainContext dbContext) : base(dbContext) { }
 
-		public override Task<List<Food>> GetAllAsync(CancellationToken cancellationToken)
+		public override List<Food> GetAll()
 		{
 			return this.DbSet
 					   .Include(x => x.Type) // TODO: Edit
-					   .ToListAsync(cancellationToken);
+					   .Include(x => x.FoodCategories)
+					   .ToList();
 		}
 
-		public async Task<bool> ExistsAsync(string name, CancellationToken cancellationToken)
+		public bool Exists(string name)
 		{
 			if (string.IsNullOrWhiteSpace(name)) {
 				return false;
 			}
-			return await this.DbSet.AnyAsync(x => x.Name == name, cancellationToken);
+			return this.DbSet.Any(x => x.Name == name);
 		}
 
-		public async Task<List<int>> GetCategoryIdsAsync(int foodId, CancellationToken cancellationToken)
+		public List<int> GetCategoryIds(int foodId)
 		{
 			if (foodId < 1) {
 				return new List<int>();
 			}
-			return await this.DbContext
-							 .FoodCategories
-							 .Where(x => x.FoodId == foodId)
-							 .Select(x => x.CategoryId)
-							 .ToListAsync(cancellationToken);
+			return this.DbContext
+					   .FoodCategories
+					   .Where(x => x.FoodId == foodId)
+					   .Select(x => x.CategoryId)
+					   .ToList();
 		}
 
-		public async ValueTask<EntityEntry<Food>> CreateAsync(string name, int typeId,
-															  CancellationToken cancellationToken,
-															  bool glutenFree = true)
+		public EntityEntry<Food> Create(string name, int typeId,
+										bool glutenFree = true)
 		{
 			if (string.IsNullOrEmpty(name) ||
 				typeId < 1) {
@@ -57,7 +57,7 @@ namespace DataAccess.Repositories
 				GlutenFree = glutenFree,
 			};
 
-			return await CreateAsync(f, cancellationToken);
+			return Create(f);
 		}
 	}
 }
