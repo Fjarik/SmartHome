@@ -74,6 +74,10 @@ namespace Backend.GraphQL.Queries
 
 		private List<Meal> GetMeals(ResolveFieldContext<object> ctx)
 		{
+			if (!(this._authManager.Authorize(_httpContextAccessor, ctx))) {
+				return null;
+			}
+
 			var date = ctx.GetArgument<DateTime?>("date", null);
 			if (date != null) {
 				return this._mealService.GetByDate((DateTime) date);
