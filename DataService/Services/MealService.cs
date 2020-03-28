@@ -18,6 +18,17 @@ namespace DataService.Services
 			return this.Repository.GetByDate(date);
 		}
 
+		public HomeResult<Meal> Create(MealInput input)
+		{
+			if (input == null) {
+				return new HomeResult<Meal>(StatusCode.InvalidInput);
+			}
+			if (!input.IsValid) {
+				return new HomeResult<Meal>(StatusCode.NotValidId);
+			}
+			return this.Create(input.CookedById, input.FoodId, input.Type, input.Date);
+		}
+
 		public HomeResult<Meal> Create(int cookedById, int foodId, MealTypes type, DateTime date)
 		{
 			return this.Create(cookedById, foodId, (int) type, date);
@@ -34,7 +45,7 @@ namespace DataService.Services
 			if (m?.Entity == null) {
 				return new HomeResult<Meal>(StatusCode.InternalError);
 			}
-			
+
 			return new HomeResult<Meal>(StatusCode.OK, m.Entity);
 		}
 	}

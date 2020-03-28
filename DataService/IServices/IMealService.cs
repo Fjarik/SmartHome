@@ -11,6 +11,7 @@ namespace DataService.IServices
 	public interface IMealService : IBaseService<Meal, IMealRepository>
 	{
 		List<Meal> GetByDate(DateTime date);
+		HomeResult<Meal> Create(MealInput input);
 		HomeResult<Meal> Create(int cookedById, int foodId, MealTypes type, DateTime date);
 		HomeResult<Meal> Create(int cookedById, int foodId, int typeId, DateTime date);
 	}

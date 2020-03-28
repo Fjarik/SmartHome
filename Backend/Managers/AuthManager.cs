@@ -11,7 +11,9 @@ using DataService.IServices;
 using Google.Apis.Oauth2.v2.Data;
 using GraphQL;
 using GraphQL.Types;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 using SharedLibrary.Objects;
 
 namespace Backend.Managers
@@ -21,14 +23,17 @@ namespace Backend.Managers
 		private readonly IAuthService _authService;
 		private readonly IUserService _userService;
 		private readonly ITokenService _tokenService;
+		private readonly IWebHostEnvironment _environment;
 
 		public AuthManager(IAuthService authService,
 						   IUserService userService,
-						   ITokenService tokenService)
+						   ITokenService tokenService,
+						   IWebHostEnvironment environment)
 		{
 			_authService = authService;
 			_userService = userService;
 			_tokenService = tokenService;
+			_environment = environment;
 		}
 
 		public bool Authorize(IHttpContextAccessor httpContext, ResolveFieldContext<object> ctx)
@@ -53,7 +58,11 @@ namespace Backend.Managers
 				userInfo = _authService.GetGoogleUser(googleToken);
 			} catch (Exception e) {
 				Console.WriteLine(e);
-				throw;
+				if (_environment.IsDevelopment()) {
+					throw;
+				}
+				ctx.Errors.Add(new ExecutionError("Google token is not valid"));
+				return null;
 			}
 			if (userInfo == null) {
 				return null;
