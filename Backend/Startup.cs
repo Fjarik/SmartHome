@@ -13,6 +13,7 @@ using DataService.Services;
 using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
+using GraphQL.Server.Ui.Voyager;
 using GraphQL.Validation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -134,6 +135,7 @@ namespace Backend
 
 			app.UseGraphQL<AppSchema>()
 			   .UseGraphQLPlayground(options: new GraphQLPlaygroundOptions())
+			   .UseGraphQLVoyager(new GraphQLVoyagerOptions())
 			   .UseWebSockets()
 			   .UseRouting()
 			   .UseAuthentication()

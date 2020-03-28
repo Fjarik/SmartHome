@@ -11,7 +11,7 @@ namespace DataAccess.Models
 	public partial class Category : IDbEntity
 	{
 		[NotMapped]
-		public IEnumerable<int> FoodIds => this.FoodCategories.Select(x => x.FoodId).Distinct();
+		public IEnumerable<int> FoodIds => this.FoodCategories.Select(x => x.FoodId);
 	}
 
 	public partial class Food : IDbEntity
@@ -20,11 +20,14 @@ namespace DataAccess.Models
 		public FoodTypes Type => (FoodTypes) this.TypeId;
 
 		[NotMapped]
-		public IEnumerable<int> CategoryIds => this.FoodCategories.Select(x => x.CategoryId).Distinct();
+		public IEnumerable<int> CategoryIds => this.FoodCategories.Select(x => x.CategoryId);
 	}
 
 	public partial class Meal : IDbEntity
 	{
+		[NotMapped]
+		public IEnumerable<int> CategoryIds => this.MealCategories.Select(x => x.CategoryId);
+
 		[NotMapped]
 		public MealTypes Type => (MealTypes) this.TypeId;
 	}

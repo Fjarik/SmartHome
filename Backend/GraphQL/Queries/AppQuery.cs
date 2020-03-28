@@ -21,18 +21,21 @@ namespace Backend.GraphQL.Queries
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly IAuthManager _authManager;
 		private readonly ICategoryService _categoryService;
+		private readonly IMealService _mealService;
 
 		public AppQuery(IUserService userService,
 						IHttpContextAccessor httpContextAccessor,
 						IAuthManager authManager,
 						IFoodService foodService,
-						ICategoryService categoryService)
+						ICategoryService categoryService,
+						IMealService mealService)
 		{
 			_userService = userService;
 			_httpContextAccessor = httpContextAccessor;
 			_authManager = authManager;
 			_foodService = foodService;
 			_categoryService = categoryService;
+			_mealService = mealService;
 			Field<UserType, User>("logged")
 				.Resolve(GetLogged);
 			Field<ListGraphType<UserType>, List<User>>("users")
@@ -41,6 +44,9 @@ namespace Backend.GraphQL.Queries
 				.Resolve(ctx => this._foodService.GetAll());
 			Field<ListGraphType<CategoryType>, List<Category>>("categories")
 				.Resolve(ctx => this._categoryService.GetAll());
+			Field<ListGraphType<MealType>, List<Meal>>("meals")
+				.Argument<DateGraphType>("date", "Get meals by date")
+				.Resolve(GetMeals);
 		}
 
 		private User GetLogged(ResolveFieldContext<object> ctx)
@@ -64,6 +70,15 @@ namespace Backend.GraphQL.Queries
 				return null;
 			}
 			return this._userService.GetAll();
+		}
+
+		private List<Meal> GetMeals(ResolveFieldContext<object> ctx)
+		{
+			var date = ctx.GetArgument<DateTime?>("date", null);
+			if (date != null) {
+				return this._mealService.GetByDate((DateTime) date);
+			}
+			return this._mealService.GetAll();
 		}
 	}
 }
