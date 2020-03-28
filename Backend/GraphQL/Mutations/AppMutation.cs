@@ -20,21 +20,27 @@ namespace Backend.GraphQL.Mutations
 	{
 		private readonly IAuthManager _authManager;
 		private readonly IMealService _mealService;
+		private readonly IFoodService _foodService;
 		private readonly IHttpContextAccessor _httpContextAccessor;
 
 		public AppMutation(IAuthManager authManager,
 						   IMealService mealService,
-						   IHttpContextAccessor httpContextAccessor)
+						   IHttpContextAccessor httpContextAccessor,
+						   IFoodService foodService)
 		{
 			_authManager = authManager;
 			_mealService = mealService;
 			_httpContextAccessor = httpContextAccessor;
+			_foodService = foodService;
 			Field<AuthUserType, AuthUser>("Login")
 				.Argument<NonNullGraphType<StringGraphType>>("googleToken", "")
 				.Resolve(this.Login);
 			Field<MealType, Meal>("createMeal")
 				.Argument<NonNullGraphType<MealInputType>>("meal", "")
 				.Resolve(this.CreateMeal);
+			Field<FoodType, Food>("createFood")
+				.Argument<NonNullGraphType<FoodInputType>>("food", "")
+				.Resolve(this.CreateFood);
 		}
 
 		private AuthUser Login(ResolveFieldContext<object> ctx)
@@ -62,6 +68,28 @@ namespace Backend.GraphQL.Mutations
 			}
 
 			var res = this._mealService.Create(input);
+			if (!res.IsSuccess) {
+				ctx.Errors.Add(new ExecutionError(res.GetStatusMessage()));
+				return null;
+			}
+
+			return res.Content;
+		}
+
+		private Food CreateFood(ResolveFieldContext<object> ctx)
+		{
+			if (!(this._authManager.Authorize(_httpContextAccessor, ctx))) {
+				return null;
+			}
+
+			var input = ctx.GetArgument<FoodInput>("food");
+
+			if (input == null) {
+				ctx.Errors.Add(new ExecutionError("Input is empty"));
+				return null;
+			}
+
+			var res = this._foodService.Create(input);
 			if (!res.IsSuccess) {
 				ctx.Errors.Add(new ExecutionError(res.GetStatusMessage()));
 				return null;

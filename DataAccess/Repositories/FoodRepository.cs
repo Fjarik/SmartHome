@@ -58,5 +58,26 @@ namespace DataAccess.Repositories
 
 			return Create(f);
 		}
+
+		public List<FoodCategory> CreateFoodCategories(int foodId, IEnumerable<int> categoryIds)
+		{
+			var ids = categoryIds.ToList();
+			if (!ids.Any()) {
+				return new List<FoodCategory>();
+			}
+
+			var foodCategories = ids.Select(categoryId => new FoodCategory {
+				FoodId = foodId,
+				CategoryId = categoryId
+			}).ToList();
+
+			this.DbContext.FoodCategories.AddRange(foodCategories);
+			this.Save();
+
+			return this.DbContext
+					   .FoodCategories
+					   .Where(x => x.FoodId == foodId)
+					   .ToList();
+		}
 	}
 }

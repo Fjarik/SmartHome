@@ -38,7 +38,22 @@ namespace DataService.Services
 			return this._categoryService.GetByIds(ids);
 		}
 
-		public HomeResult<Food> Create(string name, int typeId, IList<int> categories,
+		public HomeResult<Food> Create(FoodInput input)
+		{
+			if (input == null || !input.IsValid) {
+				return new HomeResult<Food>(StatusCode.InvalidInput);
+			}
+			return this.Create(input.Name, input.Type, input.Categories, input.GlutenFree);
+		}
+
+		public HomeResult<Food> Create(string name, FoodTypes type, IList<int> categories, bool glutenFree = true)
+		{
+			return this.Create(name, (int) type, categories, glutenFree);
+		}
+
+		public HomeResult<Food> Create(string name,
+									   int typeId,
+									   IList<int> categories,
 									   bool glutenFree = true)
 		{
 			if (string.IsNullOrEmpty(name) ||
@@ -48,19 +63,19 @@ namespace DataService.Services
 				return new HomeResult<Food>(StatusCode.InvalidInput);
 			}
 
-
 			if (this.Exists(name)) {
 				return new HomeResult<Food>(StatusCode.AlreadyExists);
 			}
 
-			var u = this.Repository.Create(name, typeId, glutenFree);
-			if (u?.Entity == null) {
+			var f = this.Repository.Create(name, typeId, glutenFree);
+			var food = f?.Entity;
+			if (food == null) {
 				return new HomeResult<Food>(StatusCode.InternalError);
 			}
+			var catgs = this.Repository.CreateFoodCategories(food.Id, categories);
 
-			// TODO: Create food categories
-
-			return new HomeResult<Food>(StatusCode.OK, u.Entity);
+			food.FoodCategories = catgs;
+			return new HomeResult<Food>(StatusCode.OK, food);
 		}
 	}
 }
