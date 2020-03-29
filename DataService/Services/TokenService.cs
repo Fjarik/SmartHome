@@ -120,5 +120,21 @@ namespace DataService.Services
 			var t = this.Repository.Create(token, userId, expiration);
 			return t?.Entity;
 		}
+
+		public bool Delete(string token)
+		{
+			if (string.IsNullOrWhiteSpace(token)) {
+				return false;
+			}
+			return this.Repository.Delete(token);
+		}
+
+		public bool DeleteByUserId(int userId)
+		{
+			if (userId < 1) {
+				return false;
+			}
+			return this.Repository.DeleteByUserId(userId);
+		}
 	}
 }

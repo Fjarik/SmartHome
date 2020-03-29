@@ -1,12 +1,13 @@
 import React, { createContext, FunctionComponent, useState, useEffect } from "react"
 import { login } from "./types/login";
-import { loginMutation } from "./mutations";
+import { loginMutation, logoutMutation } from "./mutations";
 import { getLogged_logged, getLogged } from "./types/getLogged";
 import { getLoggedUser } from "./queries";
 import client from "./client";
 import Cookies from "universal-cookie";
 import Router from "next/router";
 import { UserTokenCookieKey } from "../Global/Keys";
+import { logout } from "./types/logout";
 
 export const isLoggedIn = () => {
     return !!lastToken;
@@ -50,6 +51,12 @@ const AuthContextProvider: FunctionComponent<{} | IAuthContext> = (props) => {
     };
 
     const logout = async () => {
+        const { data: { logout: res } } = await client.mutate<logout>({
+            mutation: logoutMutation
+        });
+        if (!res) {
+            console.log("Logout returned: ", res);
+        }
         setToken(null);
         try {
             if (window) {

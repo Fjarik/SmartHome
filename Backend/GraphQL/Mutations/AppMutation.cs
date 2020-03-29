@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Backend.GraphQL.Types;
 using Backend.GraphQL.Types.InputTypes;
 using Backend.IManagers;
+using Backend.Other;
 using DataAccess.Models;
 using DataAccess.Other;
 using DataService.IServices;
@@ -32,9 +33,12 @@ namespace Backend.GraphQL.Mutations
 			_mealService = mealService;
 			_httpContextAccessor = httpContextAccessor;
 			_foodService = foodService;
-			Field<AuthUserType, AuthUser>("Login")
+			Field<AuthUserType, AuthUser>("login")
 				.Argument<NonNullGraphType<StringGraphType>>("googleToken", "")
 				.Resolve(this.Login);
+			Field<BooleanGraphType, bool>("logout")
+				.Argument<BooleanGraphType>("logoutAll", "Should logout from all devices")
+				.Resolve(this.Logout);
 			Field<MealType, Meal>("createMeal")
 				.Argument<NonNullGraphType<MealInputType>>("meal", "")
 				.Resolve(this.CreateMeal);
@@ -52,6 +56,18 @@ namespace Backend.GraphQL.Mutations
 				return null;
 			}
 			return _authManager.Login(googleToken, ctx);
+		}
+
+		private bool Logout(ResolveFieldContext<object> ctx)
+		{
+			if (!(this._authManager.Authorize(_httpContextAccessor, ctx))) {
+				return false;
+			}
+			var everywhere = ctx.GetArgument<bool?>("logoutAll") ?? false;
+
+			var t = this._httpContextAccessor.GetToken();
+
+			return this._authManager.Logout(t, everywhere);
 		}
 
 		private Meal CreateMeal(ResolveFieldContext<object> ctx)

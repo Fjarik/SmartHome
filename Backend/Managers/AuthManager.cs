@@ -96,6 +96,20 @@ namespace Backend.Managers
 			return this._tokenService.IsValid(token);
 		}
 
+		public bool Logout(string token, bool everywhere = false)
+		{
+			if (string.IsNullOrWhiteSpace(token)) {
+				return false;
+			}
+			if (!everywhere) {
+				return this._tokenService.Delete(token);
+			}
+
+			var userId = this._tokenService.GetUserId(token);
+
+			return this._tokenService.DeleteByUserId(userId);
+		}
+
 		private AuthUser Login(string email, string googleId, string firstname, string lastname,
 							   ResolveFieldContext<object> ctx)
 		{

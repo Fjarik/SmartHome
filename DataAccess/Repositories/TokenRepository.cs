@@ -46,5 +46,30 @@ namespace DataAccess.Repositories
 
 			return this.Create(t);
 		}
+
+		public bool Delete(string token)
+		{
+			if (string.IsNullOrWhiteSpace(token)) {
+				return false;
+			}
+			var t = this.GetByToken(token);
+			if (t == null) {
+				return false;
+			}
+			this.DbSet.Remove(t);
+			this.Save();
+			return true;
+		}
+
+		public bool DeleteByUserId(int userId)
+		{
+			if (userId < 1) {
+				return false;
+			}
+			var tokens = this.DbSet.Where(x => x.UserId == userId);
+			this.DbSet.RemoveRange(tokens);
+			this.Save();
+			return true;
+		}
 	}
 }

@@ -22,5 +22,8 @@ namespace DataService.IServices
 		Token RegisterToken(Token t);
 
 		Token RegisterToken(string token, int userId, DateTime expiration);
+
+		bool Delete(string token);
+		bool DeleteByUserId(int userId);
 	}
 }

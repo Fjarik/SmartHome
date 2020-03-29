@@ -5,14 +5,19 @@ import { ReactAuthContext } from "../../src/graphql/auth";
 
 const HomePage: FunctionComponent<{}> = () => {
 
-    const { isLoggedIn: isLog, user } = useContext(ReactAuthContext);
+    const { isLoggedIn: isLog, user, logout } = useContext(ReactAuthContext);
 
     const isLoggedIn = isLog && !!user;
 
     return (
         <div>
             {isLoggedIn ?
-                <p>Přihlšený uživatel: {user?.firstname} {user?.lastname}</p>
+                <div>
+                    <p>Přihlášený uživatel: {user?.firstname} {user?.lastname}</p>
+                    <Button onClick={async () => await logout()}>
+                        Odhlásit se
+                    </Button>
+                </div>
                 :
                 <Link href="/login">
                     <Button variant="contained" color="primary">

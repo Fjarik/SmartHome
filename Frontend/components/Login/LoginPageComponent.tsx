@@ -12,7 +12,7 @@ const LoginPageComponent: FunctionComponent = () => {
         if (isLoggedIn) {
             Router.push("/");
         }
-    }, [])
+    }, []);
 
     const googleLoginSuccess = async ({ _token }: any) => {
         const token: string = _token.accessToken;
@@ -28,6 +28,9 @@ const LoginPageComponent: FunctionComponent = () => {
         try {
             await login(googleToken);
             Router.push("/");
+            if (window) {
+                window.location.reload();
+            }
         } catch (e) {
             if (e && e.graphQLErrors && e.graphQLErrors[0]) {
                 console.log(e.graphQLErrors[0].message);

@@ -17,5 +17,6 @@ namespace Backend.IManagers
 		AuthUser Login(string googleToken, ResolveFieldContext<object> ctx);
 		HomeResult<User> GetLogged(string token, ResolveFieldContext<object> ctx);
 		bool VerifyToken(string token);
+		bool Logout(string token, bool everywhere = false);
 	}
 }

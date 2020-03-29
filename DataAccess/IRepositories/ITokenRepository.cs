@@ -13,5 +13,7 @@ namespace DataAccess.IRepositories
 		int GetUserId(string token);
 		Token GetByToken(string token);
 		EntityEntry<Token> Create(string token, int userId, DateTime expiration);
+		bool Delete(string token);
+		bool DeleteByUserId(int userId);
 	}
 }
