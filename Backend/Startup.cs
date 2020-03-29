@@ -41,6 +41,7 @@ namespace Backend
 
 		private IConfiguration Configuration { get; }
 		private IWebHostEnvironment Environment { get; }
+		private readonly string _myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
@@ -60,6 +61,17 @@ namespace Backend
 				//.EnableSensitiveDataLogging()
 				//.EnableDetailedErrors()
 			);
+
+			// CORS
+			services.AddCors(opt => {
+				opt.AddPolicy(_myAllowSpecificOrigins,
+							  builder => {
+								  builder.WithOrigins("http://localhost:3000")
+										 .AllowAnyHeader()
+										 .AllowAnyMethod()
+										 .AllowAnyOrigin();
+							  });
+			});
 
 			services.AddHttpContextAccessor()
 					.AddRepositories()
@@ -133,7 +145,8 @@ namespace Backend
 
 			//app.UseHttpsRedirection();
 
-			app.UseGraphQL<AppSchema>()
+			app.UseCors(_myAllowSpecificOrigins)
+			   .UseGraphQL<AppSchema>()
 			   .UseGraphQLPlayground(options: new GraphQLPlaygroundOptions())
 			   .UseGraphQLVoyager(new GraphQLVoyagerOptions())
 			   .UseWebSockets()
