@@ -1,7 +1,27 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect } from "react";
 import Head from "next/head";
+import Router from "next/router";
 
 const HeadComponent: FunctionComponent = ({ children }) => {
+    const syncLogout = (event: StorageEvent) => {
+        if (event.key === 'logout') {
+            console.log('logged out from storage!')
+            if (window) {
+                window.location.reload();
+            }
+            Router.push('/login')
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('storage', syncLogout);
+        return () => {
+            if (window) {
+                window.removeEventListener('storage', syncLogout);
+                window.localStorage.removeItem('logout')
+            }
+        }
+    }, []);
 
     return <>
         <Head>

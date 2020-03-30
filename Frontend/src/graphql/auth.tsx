@@ -89,7 +89,7 @@ const AuthContextProvider: FunctionComponent<{} | IAuthContext> = (props) => {
                 isLoggedIn: true,
             });
 
-            cookies.set(UserTokenCookieKey, token, { path: "/", maxAge: 60 * 60 * 24 });
+            cookies.set(UserTokenCookieKey, token, { path: "/", maxAge: 60 * 60 * 24, sameSite: "strict" });
         } else {
             lastToken = null;
             setState({

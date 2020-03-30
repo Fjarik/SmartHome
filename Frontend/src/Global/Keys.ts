@@ -1,3 +1,3 @@
-const UserTokenCookieKey: string = "UToken";
+const UserTokenCookieKey: string = "AuthToken";
 
 export { UserTokenCookieKey };

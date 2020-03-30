@@ -7,6 +7,7 @@ import { Button } from "@material-ui/core";
 const LoginPageComponent: FunctionComponent = () => {
     const { login, isLoggedIn } = useContext(ReactAuthContext);
     const [loading, setLoading] = useState<boolean>(false);
+    const [autoLogin, setAutoLogin] = useState<boolean>(false);
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -27,7 +28,7 @@ const LoginPageComponent: FunctionComponent = () => {
         setLoading(true);
         try {
             await login(googleToken);
-            Router.push("/");
+            // Router.push("/");
             if (window) {
                 window.location.reload();
             }
@@ -58,6 +59,7 @@ const LoginPageComponent: FunctionComponent = () => {
                 provider="google"
                 onLoginSuccess={googleLoginSuccess}
                 onLoginFailure={onExternalLoginFail}
+                autoLogin={autoLogin}
             >
                 <Button
                     variant="contained"
