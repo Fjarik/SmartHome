@@ -1,24 +1,67 @@
 import { createMuiTheme, Theme } from "@material-ui/core";
-import CookieHelper from "../../utils/cookieHelper";
+import { ThemeCookieKey } from "../../src/Global/Keys";
+import Cookies from "universal-cookie";
+import { PaletteOptions } from "@material-ui/core/styles/createPalette";
 
-const cookieHelper = new CookieHelper();
+const defaultTheme = "light";
+
+const setTheme = (theme: string) => {
+    new Cookies().set(ThemeCookieKey, theme, { path: "/", maxAge: 60 * 60 * 24 * 10 /* seconds -> 10 days*/ });
+};
+
+const switchTheme = () => {
+    const current = getThemeString();
+    let newTheme = "dark";
+    if (current === newTheme) {
+        newTheme = "light";
+    }
+    setTheme(newTheme);
+};
+
+const getThemeString = (): string => {
+    let theme = new Cookies().get(ThemeCookieKey);
+    // console.log(theme);
+    if (!theme) {
+        theme = defaultTheme;
+        setTheme(theme);
+    }
+    return theme;
+}
 
 const getTheme = (): Theme => {
 
-    const theme = cookieHelper.getThemeName();
-    // console.log(dark);
+    const commonPalette: PaletteOptions = {
+
+    }
+
+    const darkModePalette: PaletteOptions = {
+        type: "dark",
+        primary: {
+            main: "#fff",
+        },
+        secondary: {
+            main: "#017BFF",
+        }
+    }
+
+    const lightModePalette: PaletteOptions = {
+        type: "light",
+        primary: {
+            main: "#CF0E58",
+        },
+        secondary: {
+            main: "#017BFF",
+        }
+    }
 
     const mainTheme = createMuiTheme({
         palette: {
-            type: theme === "dark" ? "dark" : "light",
-            primary: {
-                main: "#40a351",
-            },
+            ...commonPalette,
+            ...(getThemeString() === "dark" ? darkModePalette : lightModePalette),
         },
     });
 
     return mainTheme;
-
 };
 
-export default getTheme;
+export { getTheme, setTheme, getThemeString, switchTheme };

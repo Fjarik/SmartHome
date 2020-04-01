@@ -5,7 +5,7 @@ import { ApolloProvider } from "react-apollo";
 import client from "../src/graphql/client";
 import fetch from "node-fetch";
 import { ThemeProvider, CssBaseline } from "@material-ui/core";
-import theme from "../src/theme";
+import { getTheme } from "../components/Themes/MainTheme";
 
 // eslint-disable-next-line no-unused-vars
 class DomacnostApp extends App<{}> {
@@ -21,6 +21,7 @@ class DomacnostApp extends App<{}> {
         // @ts-ignore
         global.fetch = fetch;
         const { Component, pageProps } = this.props;
+        const theme = getTheme();
         return <>
             <HeadComponent>
                 <AuthContext.Provider>

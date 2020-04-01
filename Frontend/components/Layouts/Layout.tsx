@@ -8,7 +8,7 @@ const Layout: FunctionComponent<IProps> = ({ children, title = "Stránka" }) => 
 
     return <div>
         <Head>
-            <title>Domácnost - {title}</title>
+            <title>SmartHome - {title}</title>
         </Head>
         <main >
             {children}

@@ -29,7 +29,7 @@ const HeadComponent: FunctionComponent = ({ children }) => {
             <meta charSet="utf-8" />
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-            <link rel="shortcut icon" href="/static/images/favicon/favicon.ico" />
+            <link rel="shortcut icon" href="/images/logos/MainColor.ico" />
         </Head>
         {children}
     </>;
