@@ -1,5 +1,6 @@
 import { FunctionComponent } from "react";
 import Head from "next/head";
+import Header from "./Header";
 
 interface IProps {
     title?: string;
@@ -10,6 +11,7 @@ const Layout: FunctionComponent<IProps> = ({ children, title = "Stránka" }) => 
         <Head>
             <title>SmartHome - {title}</title>
         </Head>
+        <Header />
         <main >
             {children}
         </main>

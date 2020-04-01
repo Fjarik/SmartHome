@@ -2,7 +2,7 @@ import { FunctionComponent, useEffect, useContext, useState } from "react";
 import { ReactAuthContext } from "../../src/graphql/auth";
 import Router from "next/router";
 import SocialButton from "./SocialButton";
-import { Button } from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 
 const LoginPageComponent: FunctionComponent = () => {
     const { login, isLoggedIn } = useContext(ReactAuthContext);
@@ -55,19 +55,23 @@ const LoginPageComponent: FunctionComponent = () => {
 
     return (
         <>
-            <SocialButton appId="1080634695580-t83muhrjtdvnk0jf12kuerh30l2pclpu.apps.googleusercontent.com"
-                provider="google"
-                onLoginSuccess={googleLoginSuccess}
-                onLoginFailure={onExternalLoginFail}
-                autoLogin={autoLogin}
-            >
-                <Button
-                    variant="contained"
-                    color="primary"
-                    size="large">
-                    Přihlásit se přes Google
+            <Grid container justify="center" alignItems="center" >
+                <Grid item>
+                    <SocialButton appId="1080634695580-t83muhrjtdvnk0jf12kuerh30l2pclpu.apps.googleusercontent.com"
+                        provider="google"
+                        onLoginSuccess={googleLoginSuccess}
+                        onLoginFailure={onExternalLoginFail}
+                        autoLogin={autoLogin}
+                    >
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            size="large">
+                            Přihlásit se přes Google
                 </Button>
-            </SocialButton>
+                    </SocialButton>
+                </Grid>
+            </Grid>
         </>
     );
 
