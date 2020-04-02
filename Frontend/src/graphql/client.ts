@@ -1,5 +1,5 @@
 import ApolloClient from "apollo-boost";
-import { lastToken, isLoggedIn, lastContextValue } from "./auth";
+import { lastContextValue, getToken } from "./auth";
 import { ServerError } from "apollo-link-http-common";
 
 const apiUri = "https://domov.azurewebsites.net/graphql";
@@ -8,10 +8,11 @@ const client = new ApolloClient({
     uri: apiUri,
     fetch: require("node-fetch"),
     request: async (operation) => {
-        if (isLoggedIn()) {
+        const token = getToken();
+        if (token) {
             operation.setContext({
                 headers: {
-                    Authorization: `Bearer ${lastToken}`,
+                    Authorization: `Bearer ${token}`,
                 },
             });
         }

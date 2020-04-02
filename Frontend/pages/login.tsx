@@ -4,7 +4,7 @@ import LoginPageComponent from "../components/Login/LoginPageComponent";
 
 const LoginPage: NextPage = () => {
     return (
-        <Layout title="Přihlásit se">
+        <Layout title="Přihlášení">
             <LoginPageComponent />
         </Layout>
     );

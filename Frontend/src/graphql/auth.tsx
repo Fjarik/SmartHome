@@ -9,16 +9,11 @@ import Router from "next/router";
 import { UserTokenCookieKey } from "../Global/Keys";
 import { logout } from "./types/logout";
 
-export const isLoggedIn = () => {
-    return !!lastToken;
-};
-
-export let lastToken: string | null = new Cookies().get(UserTokenCookieKey);
+export const getToken = (): string | null => new Cookies().get(UserTokenCookieKey);;
 
 export interface IAuthContext {
     token: null | string;
     user: getLogged_logged | undefined;
-    isLoggedIn: boolean;
     login: (googleToken: string) => Promise<string> | undefined;
     logout: () => Promise<void> | undefined;
 }
@@ -26,7 +21,6 @@ export interface IAuthContext {
 const defaultContext: IAuthContext = {
     token: null,
     user: undefined,
-    isLoggedIn: false,
     login: () => undefined,
     logout: () => undefined,
 }
@@ -71,31 +65,20 @@ const AuthContextProvider: FunctionComponent<{} | IAuthContext> = (props) => {
         }
     };
 
-    const getToken = (): string | null => {
-        // tslint:disable-next-line:no-shadowed-variable
-        const cookies = new Cookies();
-        const token: string | null = cookies.get(UserTokenCookieKey);
-        return token;
-    };
-
     const setToken = (token: string | undefined | null) => {
         // tslint:disable-next-line:no-shadowed-variable
         const cookies = new Cookies();
         if (token) {
-            lastToken = token;
             setState({
                 ...state,
                 token,
-                isLoggedIn: true,
             });
 
             cookies.set(UserTokenCookieKey, token, { path: "/", maxAge: 60 * 60 * 24, sameSite: "strict" });
         } else {
-            lastToken = null;
             setState({
                 ...state,
                 token: null,
-                isLoggedIn: false,
             });
             cookies.remove(UserTokenCookieKey);
         }
@@ -127,8 +110,7 @@ const AuthContextProvider: FunctionComponent<{} | IAuthContext> = (props) => {
         user: defaultContext.user,
         logout,
         login,
-        token: lastToken,
-        isLoggedIn: !!lastToken,
+        token: getToken(),
     });
 
     useEffect(() => {

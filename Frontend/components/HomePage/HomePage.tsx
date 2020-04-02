@@ -1,10 +1,10 @@
 import { FunctionComponent, useContext } from "react";
 import Link from "next/link";
 import { ReactAuthContext } from "../../src/graphql/auth";
-import { Grid, Button, makeStyles, createStyles, Theme, Typography, useTheme } from "@material-ui/core";
+import { Grid, Button, makeStyles, Theme, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
+    ({
         menuButton: {
             borderRadius: 25,
         },
@@ -17,12 +17,10 @@ const useStyles = makeStyles((theme: Theme) =>
     }));
 
 const HomePage: FunctionComponent<{}> = () => {
-    const { isLoggedIn: isLog, user } = useContext(ReactAuthContext);
+    const { user } = useContext(ReactAuthContext);
+    const isLoggedIn = () => !!user;
 
-    const theme = useTheme();
-    const c = useStyles(theme);
-
-    const isLoggedIn = (): boolean => isLog && !!user;
+    const c = useStyles();
 
     const getLink = () => {
         return isLoggedIn() ? "/app" : "/login";
@@ -43,7 +41,7 @@ const HomePage: FunctionComponent<{}> = () => {
                         className={c.menuButton}
                         size="large"
                         color="secondary">
-                        Přejít do aplikace
+                        {isLoggedIn() ? "Přejít do aplikace" : "Vyzkoušet aplikaci"}
                     </Button>
                 </Link>
             </Grid>

@@ -37,10 +37,11 @@ const getTheme = (): Theme => {
     const darkModePalette: PaletteOptions = {
         type: "dark",
         primary: {
-            main: "#fff",
+            main: "#CF0E58",
         },
         secondary: {
-            main: "#017BFF",
+            main: "#36C5F0",
+            // main: "#017BFF", // Orig
         }
     }
 
@@ -50,7 +51,7 @@ const getTheme = (): Theme => {
             main: "#CF0E58",
         },
         secondary: {
-            main: "#017BFF",
+            main: "#36C5F0",
         }
     }
 
