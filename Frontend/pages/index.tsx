@@ -1,6 +1,6 @@
-import { NextPage } from 'next';
+import { NextPage } from "next";
 import Layout from "../components/Layouts/Layout";
-import HomePage from '../components/HomePage/HomePage';
+import HomePage from "../components/HomePage/HomePage";
 
 const Index: NextPage = () => {
   return (
@@ -8,6 +8,6 @@ const Index: NextPage = () => {
       <HomePage />
     </Layout>
   );
-}
+};
 
 export default Index;

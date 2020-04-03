@@ -24,7 +24,7 @@ const LoginPageComponent: FunctionComponent = () => {
     const c = useStyles(theme);
 
     useEffect(() => {
-        if (!!user) {
+        if (user) {
             Router.push("/");
         }
     }, []);
@@ -86,7 +86,7 @@ const LoginPageComponent: FunctionComponent = () => {
                                 buttonText="Přihlásit se přes Google"
                                 onSuccess={googleLoginSuccess}
                                 onFailure={onExternalLoginFail}
-                                cookiePolicy={'single_host_origin'}
+                                cookiePolicy={"single_host_origin"}
                             />
                             <div style={{ display: "flex", marginTop: "2rem" }}>
                                 <Typography variant="body2" style={{ marginRight: "0.25em" }}>

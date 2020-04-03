@@ -1,11 +1,11 @@
-import { FunctionComponent, useState, useEffect, useContext } from 'react'
-import { Button, Toolbar, Theme, Link, IconButton, makeStyles, colors, Typography } from '@material-ui/core';
-import { ReactAuthContext } from '../../src/graphql/auth';
-import Brightness7Icon from '@material-ui/icons/Brightness7';
-import Brightness4Icon from '@material-ui/icons/Brightness4';
+import { FunctionComponent, useState, useEffect, useContext } from "react";
+import { Button, Toolbar, Theme, Link, IconButton, makeStyles, colors, Typography } from "@material-ui/core";
+import { ReactAuthContext } from "../../src/graphql/auth";
+import Brightness7Icon from "@material-ui/icons/Brightness7";
+import Brightness4Icon from "@material-ui/icons/Brightness4";
 import { switchTheme, getThemeString } from "../Themes/MainTheme";
 import { useRouter } from "next/router";
-import AuthMenu from './AuthMenu';
+import AuthMenu from "./AuthMenu";
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const Header: FunctionComponent = () => {
-    const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false)
+    const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false);
     const { user, logout } = useContext(ReactAuthContext);
 
     const router = useRouter();
@@ -66,11 +66,11 @@ const Header: FunctionComponent = () => {
         setIsDarkTheme(getThemeString() === "dark");
         return () => {
         };
-    }, [])
+    }, []);
 
     const getImgSrc = () => {
         return isDarkTheme ? "/images/logos/MainWhite.png" : "/images/logos/Main.png";
-    }
+    };
 
     const changeTheme = () => {
         switchTheme();
@@ -97,7 +97,7 @@ const Header: FunctionComponent = () => {
                             <Brightness4Icon />
                         }
                     </IconButton>
-                    {!!user ?
+                    {user ?
                         <AuthMenu user={user} logout={logout} />
                         :
                         <Link href="/login">
@@ -110,6 +110,6 @@ const Header: FunctionComponent = () => {
             </Toolbar>
         </header>
     );
-}
+};
 
 export default Header;

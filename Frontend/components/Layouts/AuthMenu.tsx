@@ -1,15 +1,15 @@
-import { FunctionComponent, useState } from 'react'
-import { Button, Menu, MenuItem, ListItemIcon, Typography, Divider } from '@material-ui/core';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import PersonIcon from '@material-ui/icons/Person';
-import SettingsIcon from '@material-ui/icons/Settings';
-import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
-import { getLogged_logged } from '../../src/graphql/types/getLogged';
+import { FunctionComponent, useState } from "react";
+import { Button, Menu, MenuItem, ListItemIcon, Typography, Divider } from "@material-ui/core";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import PersonIcon from "@material-ui/icons/Person";
+import SettingsIcon from "@material-ui/icons/Settings";
+import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
+import { getLogged_logged } from "../../src/graphql/types/getLogged";
 
 interface IAuthMenuProps {
     user: getLogged_logged;
     logout: () => Promise<void>;
-};
+}
 
 const AuthMenu: FunctionComponent<IAuthMenuProps> = ({ user, logout }) => {
     const [anchorAuthMenu, setAnchorAuthMenu] = useState<null | HTMLElement>(null);
@@ -26,7 +26,7 @@ const AuthMenu: FunctionComponent<IAuthMenuProps> = ({ user, logout }) => {
     return (
         <>
             <Button
-                color="primary"
+                color="inherit"
                 size="large"
                 onClick={handleAuthMenu}
                 startIcon={<AccountCircle />}>
@@ -44,7 +44,7 @@ const AuthMenu: FunctionComponent<IAuthMenuProps> = ({ user, logout }) => {
                     </ListItemIcon>
                     <Typography variant="inherit">
                         Profil
-                </Typography>
+                    </Typography>
                 </MenuItem>
                 <MenuItem onClick={handleClose} >
                     <ListItemIcon>
@@ -52,7 +52,7 @@ const AuthMenu: FunctionComponent<IAuthMenuProps> = ({ user, logout }) => {
                     </ListItemIcon>
                     <Typography variant="inherit">
                         Nastavení
-                </Typography>
+                    </Typography>
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={async () => await logout()}>
@@ -61,11 +61,11 @@ const AuthMenu: FunctionComponent<IAuthMenuProps> = ({ user, logout }) => {
                     </ListItemIcon>
                     <Typography variant="inherit">
                         Odhlásit se
-                </Typography>
+                    </Typography>
                 </MenuItem>
             </Menu>
         </>
     );
-}
+};
 
 export default AuthMenu;

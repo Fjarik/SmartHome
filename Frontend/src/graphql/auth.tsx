@@ -1,4 +1,4 @@
-import React, { createContext, FunctionComponent, useState, useEffect } from "react"
+import React, { createContext, FunctionComponent, useState, useEffect } from "react";
 import { login } from "./types/login";
 import { loginMutation, logoutMutation } from "./mutations";
 import { getLogged_logged, getLogged } from "./types/getLogged";
@@ -9,7 +9,7 @@ import Router from "next/router";
 import { UserTokenCookieKey } from "../Global/Keys";
 import { logout } from "./types/logout";
 
-export const getToken = (): string | null => new Cookies().get(UserTokenCookieKey);;
+export const getToken = (): string | null => new Cookies().get(UserTokenCookieKey);
 
 export interface IAuthContext {
     token: null | string;
@@ -23,7 +23,7 @@ const defaultContext: IAuthContext = {
     user: undefined,
     login: () => undefined,
     logout: () => undefined,
-}
+};
 
 export let lastContextValue: IAuthContext = defaultContext;
 
@@ -59,7 +59,7 @@ const AuthContextProvider: FunctionComponent<{} | IAuthContext> = (props) => {
             } else {
                 Router.push("/login");
             }
-            // tslint:disable-next-line:no-empty
+            // eslint-disable-next-line no-empty
         } catch {
 
         }
@@ -93,7 +93,7 @@ const AuthContextProvider: FunctionComponent<{} | IAuthContext> = (props) => {
         setState({
             ...state,
             user: logged
-        })
+        });
         return logged;
     };
 
@@ -121,7 +121,6 @@ const AuthContextProvider: FunctionComponent<{} | IAuthContext> = (props) => {
         }
         // see if session is valid and update user info every 15 mins
         setInterval(seeIfSessionIsValid, 15 * 60 * 1000);
-        // tslint:disable-next-line:no-empty
         return () => {
         };
     }, []);

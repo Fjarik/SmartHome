@@ -5,6 +5,7 @@ import Header from "./Header";
 interface IProps {
     title?: string;
 }
+
 const Layout: FunctionComponent<IProps> = ({ children, title = "Stránka" }) => {
 
     return <div>

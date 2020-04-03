@@ -26,13 +26,13 @@ const getThemeString = (): string => {
         setTheme(theme);
     }
     return theme;
-}
+};
 
 const getTheme = (): Theme => {
 
     const commonPalette: PaletteOptions = {
 
-    }
+    };
 
     const darkModePalette: PaletteOptions = {
         type: "dark",
@@ -43,7 +43,7 @@ const getTheme = (): Theme => {
             main: "#36C5F0",
             // main: "#017BFF", // Orig
         }
-    }
+    };
 
     const lightModePalette: PaletteOptions = {
         type: "light",
@@ -53,7 +53,7 @@ const getTheme = (): Theme => {
         secondary: {
             main: "#36C5F0",
         }
-    }
+    };
 
     const mainTheme = createMuiTheme({
         palette: {

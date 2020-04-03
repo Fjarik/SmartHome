@@ -49,6 +49,6 @@ const HomePage: FunctionComponent<{}> = () => {
     </>
     );
 
-}
+};
 
 export default HomePage;
