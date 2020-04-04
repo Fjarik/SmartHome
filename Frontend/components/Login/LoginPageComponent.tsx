@@ -42,9 +42,9 @@ const LoginPageComponent: FunctionComponent = () => {
         try {
             await login(googleToken);
             if (window) {
-                window.location.pathname = "/";
+                window.location.pathname = "/app";
             } else {
-                Router.push("/");
+                Router.push("/app");
             }
         } catch (e) {
             if (e && e.graphQLErrors && e.graphQLErrors[0]) {

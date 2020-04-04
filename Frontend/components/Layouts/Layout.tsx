@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import Head from "next/head";
-import Header from "./Header";
+import Header from "./Menu/Header";
 
 interface IProps {
     title?: string;
