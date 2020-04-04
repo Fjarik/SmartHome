@@ -1,7 +1,10 @@
 import { FunctionComponent } from "react";
-import { Grid, Paper, Typography, Container, Divider, Card, CardContent, CardActions, Button } from "@material-ui/core";
+import { Grid, Typography, Container, Card, CardContent, CardActions, Button, Link } from "@material-ui/core";
+import customUrls from "../../utils/customUrls";
 
 const Dashboard: FunctionComponent = () => {
+    const { app: { projectsUrls: { calendarUrl } } } = customUrls;
+
     return (<>
         <Container>
             <Grid container justify="center" alignItems="center" >
@@ -15,7 +18,9 @@ const Dashboard: FunctionComponent = () => {
                             </Typography>
                         </CardContent>
                         <CardActions>
-                            <Button>Přejít</Button>
+                            <Link href={calendarUrl} >
+                                <Button>Přejít</Button>
+                            </Link>
                         </CardActions>
                     </Card>
                 </Grid>

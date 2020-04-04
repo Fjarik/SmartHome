@@ -7,6 +7,7 @@ import { switchTheme, getThemeString } from "../../Themes/MainTheme";
 import { useRouter } from "next/router";
 import AuthMenu from "./SubMenus/AuthMenu";
 import SubMenu from "./SubMenus/SubMenu";
+import customUrls from "../../../utils/customUrls";
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -61,6 +62,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 const Header: FunctionComponent = () => {
     const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false);
     const { user, logout } = useContext(ReactAuthContext);
+    const { indexUrl, account: { loginUrl } } = customUrls;
 
     const router = useRouter();
     const c = useStyles();
@@ -81,11 +83,12 @@ const Header: FunctionComponent = () => {
         router.reload();
     };
 
+
     return (
         <header className={c.headerMain}>
             <Container>
                 <div className={c.headerContainer}>
-                    <Link href="/" className={c.logoLink} >
+                    <Link href={indexUrl} className={c.logoLink} >
                         <div className={c.logoContainer}>
                             <img src={getImgSrc()} className={c.logoImg} />
                             <Typography variant="h4" className={c.logoText}>
@@ -104,7 +107,7 @@ const Header: FunctionComponent = () => {
                         {user ?
                             <AuthMenu user={user} logout={logout} />
                             :
-                            <Link href="/login">
+                            <Link href={loginUrl}>
                                 <Button variant="text" size="large" className={c.loginBtn}>
                                     Přihlášení
                             </Button>

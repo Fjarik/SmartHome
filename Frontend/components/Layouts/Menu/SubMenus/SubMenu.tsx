@@ -2,6 +2,7 @@ import { FunctionComponent } from "react";
 import { Link, makeStyles, Theme, createStyles, Typography } from "@material-ui/core";
 import { useRouter } from "next/router";
 import classNames from "classnames";
+import customUrls from "../../../../utils/customUrls";
 
 interface SubMenuItem {
     text: string,
@@ -28,30 +29,41 @@ const SubMenu: FunctionComponent = () => {
     const c = useStyles();
     const router = useRouter();
 
+    const { app: { appUrl, projects, settings } } = customUrls;
+
     const items: SubMenuItem[] = [
         {
             text: "Přehled",
-            link: "/app",
+            link: appUrl,
         },
         {
             text: "Projekty",
-            link: "/projectss",
+            link: projects,
         },
         {
             text: "Nastavení",
-            link: "/settings",
+            link: settings,
         },
     ];
 
-    const getItem = (item: SubMenuItem, index: number, active: boolean) => {
+    const isActive = (link: string): boolean => {
+        if (link == appUrl) {
+            return router.pathname == link;
+        }
+        const withoutApp = link.replace(appUrl, "");
+        return router.pathname.includes(withoutApp);
+    };
+
+    const getItem = ({ link, text }: SubMenuItem, index: number) => {
+        const active = isActive(link);
         const names = classNames(
             c.menuItem,
             { [c.menuItemActive]: active }
         );
         return (
-            <Link key={index} href={item.link} className={names} color="textPrimary">
+            <Link key={index} href={link} className={names} color="textPrimary">
                 <Typography variant="body1" component="span">
-                    {item.text}
+                    {text}
                 </Typography>
             </Link>
         );
@@ -60,7 +72,7 @@ const SubMenu: FunctionComponent = () => {
     return (
         <div className={c.menuContainer}>
             {items.map((item, index) =>
-                getItem(item, index, router.pathname === item.link)
+                getItem(item, index)
             )}
         </div>
     );

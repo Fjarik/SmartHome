@@ -2,6 +2,7 @@ import { FunctionComponent, useContext } from "react";
 import Link from "next/link";
 import { ReactAuthContext } from "../../src/graphql/auth";
 import { Grid, Button, makeStyles, Theme, Typography } from "@material-ui/core";
+import customUrls from "../../utils/customUrls";
 
 const useStyles = makeStyles((theme: Theme) =>
     ({
@@ -22,8 +23,10 @@ const HomePage: FunctionComponent<{}> = () => {
 
     const c = useStyles();
 
+    const { app: { appUrl }, account: { loginUrl } } = customUrls;
+
     const getLink = () => {
-        return isLoggedIn() ? "/app" : "/login";
+        return isLoggedIn() ? appUrl : loginUrl;
     };
 
     return (<>

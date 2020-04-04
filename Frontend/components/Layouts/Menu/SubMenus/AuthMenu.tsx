@@ -5,6 +5,8 @@ import PersonIcon from "@material-ui/icons/Person";
 import SettingsIcon from "@material-ui/icons/Settings";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 import { getLogged_logged } from "../../../../src/graphql/types/getLogged";
+import { useRouter } from "next/router";
+import customUrls from "../../../../utils/customUrls";
 
 interface IAuthMenuProps {
     user: getLogged_logged;
@@ -14,6 +16,8 @@ interface IAuthMenuProps {
 const AuthMenu: FunctionComponent<IAuthMenuProps> = ({ user, logout }) => {
     const [anchorAuthMenu, setAnchorAuthMenu] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorAuthMenu);
+    const router = useRouter();
+    const { account: { accountUrl, settingsUrl } } = customUrls;
 
     const handleAuthMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorAuthMenu(event.currentTarget);
@@ -21,6 +25,10 @@ const AuthMenu: FunctionComponent<IAuthMenuProps> = ({ user, logout }) => {
 
     const handleClose = () => {
         setAnchorAuthMenu(null);
+    };
+
+    const redirect = (url: string) => {
+        router.push(url);
     };
 
     return (
@@ -38,7 +46,7 @@ const AuthMenu: FunctionComponent<IAuthMenuProps> = ({ user, logout }) => {
                 open={open}
                 onClose={handleClose}
             >
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={() => redirect(accountUrl)}>
                     <ListItemIcon>
                         <PersonIcon fontSize="small" />
                     </ListItemIcon>
@@ -46,7 +54,7 @@ const AuthMenu: FunctionComponent<IAuthMenuProps> = ({ user, logout }) => {
                         Profil
                     </Typography>
                 </MenuItem>
-                <MenuItem onClick={handleClose} >
+                <MenuItem onClick={() => redirect(settingsUrl)} >
                     <ListItemIcon>
                         <SettingsIcon fontSize="small" />
                     </ListItemIcon>
