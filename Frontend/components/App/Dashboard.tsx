@@ -36,10 +36,9 @@ const Dashboard: FunctionComponent = () => {
 
     return (<>
         <Container>
-            <Grid container justify="space-between" alignItems="stretch" spacing={2} >
-                <Grid item xs></Grid>
+            <Grid container justify="space-around" alignItems="stretch" spacing={2} >
                 {apps.map((i, index) => (
-                    <Grid item key={index} xs>
+                    <Grid item key={index} xs={12} sm={6} md={4} xl={3}>
                         <Card className={c.customCard}>
                             <CardHeader title={i.title}
                                 avatar={i.avatar}
@@ -58,7 +57,6 @@ const Dashboard: FunctionComponent = () => {
                         </Card>
                     </Grid>
                 ))}
-                <Grid item xs></Grid>
             </Grid>
         </Container>
     </>

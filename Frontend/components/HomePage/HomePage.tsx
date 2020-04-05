@@ -13,7 +13,9 @@ const useStyles = makeStyles((theme: Theme) =>
             textAlign: "center",
         },
         mainGrid: {
-            marginTop: "15rem",
+            [theme.breakpoints.up("md")]: {
+                marginTop: "15rem",
+            }
         },
     }));
 

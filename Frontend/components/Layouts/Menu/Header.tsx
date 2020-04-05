@@ -1,5 +1,5 @@
 import { FunctionComponent, useState, useEffect, useContext } from "react";
-import { Button, Toolbar, Theme, Link, IconButton, makeStyles, colors, Typography, Container, Divider } from "@material-ui/core";
+import { Button, Toolbar, Theme, Link, IconButton, makeStyles, colors, Typography, Container, Divider, useMediaQuery } from "@material-ui/core";
 import { ReactAuthContext } from "../../../src/graphql/auth";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
@@ -63,6 +63,8 @@ const Header: FunctionComponent = () => {
     const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false);
     const { user, logout } = useContext(ReactAuthContext);
     const { indexUrl, account: { loginUrl } } = customUrls;
+    
+    const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.up("sm"));
 
     const router = useRouter();
     const c = useStyles();
@@ -97,13 +99,15 @@ const Header: FunctionComponent = () => {
                         </div>
                     </Link>
                     <div>
-                        <IconButton color="inherit" onClick={changeTheme}>
-                            {isDarkTheme ?
-                                <Brightness7Icon />
-                                :
-                                <Brightness4Icon />
-                            }
-                        </IconButton>
+                        {isMobile &&
+                            <IconButton color="inherit" onClick={changeTheme}>
+                                {isDarkTheme ?
+                                    <Brightness7Icon />
+                                    :
+                                    <Brightness4Icon />
+                                }
+                            </IconButton>
+                        }
                         {user ?
                             <AuthMenu user={user} logout={logout} />
                             :
