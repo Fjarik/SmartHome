@@ -1,29 +1,64 @@
 import { FunctionComponent } from "react";
-import { Grid, Typography, Container, Card, CardContent, CardActions, Button, Link } from "@material-ui/core";
+import { Grid, Typography, Container, Card, CardContent, CardActions, Button, Link, CardHeader, makeStyles, Theme, createStyles } from "@material-ui/core";
+import EventNoteIcon from "@material-ui/icons/EventNote";
+import RestaurantIcon from "@material-ui/icons/Restaurant";
 import customUrls from "../../utils/customUrls";
 
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    customCard: {
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+    }
+}));
+
 const Dashboard: FunctionComponent = () => {
-    const { app: { projectsUrls: { calendarUrl } } } = customUrls;
+    const c = useStyles();
+    const { app: { projectsUrls: { calendarUrl, mealsUrl } } } = customUrls;
+
+    const apps = [
+        {
+            title: "Kalendář",
+            avatar: <EventNoteIcon />,
+            subheader: "Všechny plánované události",
+            content: "Přehledný kalendář pro celou vaši domácnost.",
+            url: calendarUrl
+        },
+        {
+            title: "Jídelníček",
+            avatar: <RestaurantIcon />,
+            subheader: "Aktuálné plánovaná jídla",
+            content: "Vytvořte si, nebo si nechejte vygenerovat jídelníček pro celou rodinu.",
+            url: mealsUrl
+        }
+    ];
 
     return (<>
         <Container>
-            <Grid container justify="center" alignItems="center" >
-                <Grid item>
-                </Grid>
-                <Grid item>
-                    <Card>
-                        <CardContent>
-                            <Typography variant="h5">
-                                Kalendář
-                            </Typography>
-                        </CardContent>
-                        <CardActions>
-                            <Link href={calendarUrl} >
-                                <Button>Přejít</Button>
-                            </Link>
-                        </CardActions>
-                    </Card>
-                </Grid>
+            <Grid container justify="space-between" alignItems="stretch" spacing={2} >
+                <Grid item xs></Grid>
+                {apps.map((i, index) => (
+                    <Grid item key={index} xs>
+                        <Card className={c.customCard}>
+                            <CardHeader title={i.title}
+                                avatar={i.avatar}
+                                subheader={i.subheader}
+                            />
+                            <CardContent>
+                                <Typography variant="body1">
+                                    {i.content}
+                                </Typography>
+                            </CardContent>
+                            <CardActions>
+                                <Link href={i.url} >
+                                    <Button>Přejít do aplikace</Button>
+                                </Link>
+                            </CardActions>
+                        </Card>
+                    </Grid>
+                ))}
+                <Grid item xs></Grid>
             </Grid>
         </Container>
     </>

@@ -9,6 +9,7 @@ const accountUrls = {
 
 const projectsUrls = {
     get calendarUrl() { return projectsUrl + "/calendar"; },
+    get mealsUrl() { return projectsUrl + "/meals"; },
 };
 
 const appUrls = {

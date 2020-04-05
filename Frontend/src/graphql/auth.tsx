@@ -25,11 +25,12 @@ const defaultContext: IAuthContext = {
     logout: () => undefined,
 };
 
-export let lastContextValue: IAuthContext = defaultContext;
-
 export const ReactAuthContext = createContext<IAuthContext>(defaultContext);
 
 const AuthContextProvider: FunctionComponent<{} | IAuthContext> = (props) => {
+
+    const [currentUser, setCurrentUser] = useState<getLogged_logged>(defaultContext.user);
+    const [currentToken, setCurrentToken] = useState<string>(getToken());
 
     const login = async (googleToken: string): Promise<string> => {
         const { data: { login: { authToken } }, errors, } = await client.mutate<login>({
@@ -55,6 +56,7 @@ const AuthContextProvider: FunctionComponent<{} | IAuthContext> = (props) => {
         try {
             if (window) {
                 window.localStorage.setItem("logout", Date.now().toString());
+                window.localStorage.removeItem("user");
                 window.location.reload();
             } else {
                 Router.push("/login");
@@ -65,69 +67,80 @@ const AuthContextProvider: FunctionComponent<{} | IAuthContext> = (props) => {
         }
     };
 
-    const setToken = (token: string | undefined | null) => {
-        // tslint:disable-next-line:no-shadowed-variable
+    const setToken = (token: string | null) => {
         const cookies = new Cookies();
         if (token) {
-            setState({
-                ...state,
-                token,
-            });
+            setCurrentToken(token);
 
             cookies.set(UserTokenCookieKey, token, { path: "/", maxAge: 60 * 60 * 24, sameSite: "strict" });
         } else {
-            setState({
-                ...state,
-                token: null,
-            });
+            setCurrentToken(null);
             cookies.remove(UserTokenCookieKey);
         }
     };
 
-    const getSessionUser = async (): Promise<getLogged_logged> => {
+    const getDbUser = async (): Promise<getLogged_logged> => {
         const { data: { logged }, errors } = await client.query<getLogged>({ query: getLoggedUser });
         if (errors?.length > 0) {
             console.log(errors);
             return null;
         }
-        setState({
-            ...state,
-            user: logged
-        });
         return logged;
     };
 
-    const seeIfSessionIsValid = async () => {
+    const getLocalUser = (): getLogged_logged => {
+        if (window) {
+            var u = window.localStorage.getItem("user");
+            return JSON.parse(u) as getLogged_logged;
+        }
+        return null;
+    };
+
+    const checkSession = async (): Promise<void> => {
         try {
-            await getSessionUser();
+            const user = await getDbUser();
+            if (!user) {
+                await logout();
+                return;
+            }
+            if (user && window) {
+                window.localStorage.setItem("user", JSON.stringify(user));
+                setCurrentUser(user);
+            }
         } catch (e) {
-            setToken(undefined);
+            setToken(null);
         }
     };
 
-    const [state, setState] = useState<IAuthContext>({
-        ...props,
-        user: defaultContext.user,
-        logout,
-        login,
-        token: getToken(),
-    });
-
     useEffect(() => {
-        const token = getToken();
-        if (token) {
-            setToken(token);
-            seeIfSessionIsValid();
+        if (currentToken) {
+            const logged = getLocalUser();
+            setCurrentUser(logged);
+            if (!logged) {
+                checkSession();
+            }
         }
-        // see if session is valid and update user info every 15 mins
-        setInterval(seeIfSessionIsValid, 15 * 60 * 1000);
         return () => {
         };
     }, []);
 
-    lastContextValue = state;
+    useEffect(() => {
+        if (currentToken) {
+            checkSession();
+        }
+
+        return () => {
+        };
+    }, [currentToken]);
+
+
     return (
-        <ReactAuthContext.Provider value={state}>
+        <ReactAuthContext.Provider value={{
+            user: currentUser,
+            token: currentToken,
+            login,
+            logout,
+        }}>
             {props.children}
         </ReactAuthContext.Provider>
     );

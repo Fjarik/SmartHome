@@ -6,6 +6,7 @@ import client from "../src/graphql/client";
 import fetch from "node-fetch";
 import { ThemeProvider, CssBaseline } from "@material-ui/core";
 import { getTheme } from "../components/Themes/MainTheme";
+import { NextPageContext } from "next";
 
 // eslint-disable-next-line no-unused-vars
 class DomacnostApp extends App<{}> {

@@ -16,9 +16,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     menuItem: {
         padding: "0.5rem",
         display: "inline-block",
-        // "&:first-child": {
-        //     paddingLeft: "0",
-        // }
     },
     menuItemActive: {
         borderBottom: `2px solid ${theme.palette.secondary.main}`,

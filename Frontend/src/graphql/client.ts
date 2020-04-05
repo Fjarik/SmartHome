@@ -1,5 +1,5 @@
 import ApolloClient from "apollo-boost";
-import { lastContextValue, getToken } from "./auth";
+import { getToken } from "./auth";
 import { ServerError } from "apollo-link-http-common";
 
 const apiUri = "https://domov.azurewebsites.net/graphql";
@@ -21,7 +21,7 @@ const client = new ApolloClient({
         if ((networkError && (networkError as ServerError).statusCode === 401) ||
             (response && response.errors && (response.errors[0].message as any).statusCode === 401)) {
             if (operation.operationName !== "logout") {
-                lastContextValue.logout();
+                // lastContextValue.logout();
             }
         }
         console.error("GraphQL onError handle", { networkError, response, operation, ...other });

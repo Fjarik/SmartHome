@@ -4,11 +4,14 @@ import Router from "next/router";
 import { Grid, makeStyles, Theme, createStyles, useTheme, Paper, Typography, CircularProgress } from "@material-ui/core";
 import { GoogleLogin, GoogleLoginResponse } from "react-google-login";
 import Link from "next/link";
+import CenterLoading from "../Loading/CenterLoading";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         mainGrid: {
             marginTop: "15rem",
+            justifyContent: "center",
+            alignItems: "center"
         },
         mainForm: {
             padding: "4rem",
@@ -20,8 +23,8 @@ const LoginPageComponent: FunctionComponent = () => {
     const { login, user } = useContext(ReactAuthContext);
     const [loading, setLoading] = useState<boolean>(false);
     const [autoLogin, setAutoLogin] = useState<boolean>(false);
-    const theme = useTheme();
-    const c = useStyles(theme);
+    
+    const c = useStyles();
 
     useEffect(() => {
         if (user) {
@@ -62,20 +65,13 @@ const LoginPageComponent: FunctionComponent = () => {
 
     if (loading) {
         return (
-            <Grid container justify="center" alignItems="center" className={c.mainGrid} >
-                <Grid item style={{ textAlign: "center" }}>
-                    <CircularProgress color="secondary" />
-                    <Typography variant="h6" color="primary" style={{ marginTop: "0.5rem" }}>
-                        Probíhá přihlašování
-                    </Typography>
-                </Grid>
-            </Grid>
+            <CenterLoading text={"Probíhá přihlašování"} />
         );
     }
 
     return (
         <>
-            <Grid container justify="center" alignItems="center" className={c.mainGrid} >
+            <Grid container className={c.mainGrid} >
                 <Grid item>
                     <Paper elevation={3}>
                         <div className={c.mainForm}>
