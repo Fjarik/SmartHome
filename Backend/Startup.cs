@@ -64,12 +64,17 @@ namespace Backend
 
 			// CORS
 			services.AddCors(opt => {
+				opt.AddDefaultPolicy(builder => builder.AllowAnyOrigin()
+													   .AllowAnyHeader()
+													   .AllowAnyMethod());
+
 				opt.AddPolicy(_myAllowSpecificOrigins,
 							  builder => {
-								  builder.WithOrigins("http://localhost:3000")
+								  builder.WithOrigins("http://localhost:3000", "https://smarthome.now.sh/")
 										 .AllowAnyHeader()
 										 .AllowAnyMethod()
-										 .AllowAnyOrigin();
+										 .AllowCredentials();
+								  //.AllowAnyOrigin();
 							  });
 			});
 

@@ -18,6 +18,7 @@ namespace DataAccess.Repositories
 		{
 			return this.DbSet
 					   .Include(x => x.MealCategories)
+					   .Include(x => x.Food) // TODO: Edit
 					   .ToList();
 		}
 
