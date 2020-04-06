@@ -8,6 +8,7 @@ import Router from "next/router";
 import { UserTokenCookieKey } from "../Global/Keys";
 import { logout } from "./types/logout";
 import { useApolloClient } from "react-apollo";
+import customUrls from "../../utils/customUrls";
 
 export const getToken = (): string | null => new Cookies().get(UserTokenCookieKey);
 
@@ -32,6 +33,7 @@ const AuthContextProvider: FunctionComponent<{}> = ({ children }) => {
     const [currentUser, setCurrentUser] = useState<getLogged_logged>(defaultContext.user);
     const [currentToken, setCurrentToken] = useState<string>(getToken());
     const client = useApolloClient();
+    const { account: { loginUrl } } = customUrls;
 
     const login = async (googleToken: string): Promise<string> => {
         const { data: { login: { authToken } }, errors, } = await client.mutate<login>({
@@ -60,7 +62,7 @@ const AuthContextProvider: FunctionComponent<{}> = ({ children }) => {
                 window.localStorage.removeItem("user");
                 window.location.reload();
             } else {
-                Router.push("/login");
+                Router.push(loginUrl);
             }
             // eslint-disable-next-line no-empty
         } catch {

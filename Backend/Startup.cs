@@ -70,7 +70,7 @@ namespace Backend
 
 				opt.AddPolicy(_myAllowSpecificOrigins,
 							  builder => {
-								  builder.WithOrigins("http://localhost:3000", "https://smarthome.now.sh/")
+								  builder.WithOrigins("http://localhost:3000", "https://smarthome.now.sh")
 										 .AllowAnyHeader()
 										 .AllowAnyMethod()
 										 .AllowCredentials();

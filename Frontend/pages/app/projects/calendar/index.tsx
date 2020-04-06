@@ -1,5 +1,6 @@
 import { NextPage } from "next";
 import Layout from "../../../../components/Layouts/Layout";
+import withUser from "../../../../lib/withUser";
 
 const index: NextPage = () => {
     return (
@@ -9,4 +10,4 @@ const index: NextPage = () => {
     );
 };
 
-export default index;
+export default withUser(index);

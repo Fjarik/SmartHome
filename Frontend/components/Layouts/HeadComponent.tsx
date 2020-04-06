@@ -1,15 +1,18 @@
 import { FunctionComponent, useEffect } from "react";
 import Head from "next/head";
 import Router from "next/router";
+import customUrls from "../../utils/customUrls";
 
 const HeadComponent: FunctionComponent = ({ children }) => {
+    const { account: { loginUrl } } = customUrls;
+
     const syncLogout = (event: StorageEvent) => {
         if (event.key === "logout") {
-            console.log("logged out from storage!");
+            console.log("Logged out");
             if (window) {
                 window.location.reload();
             }
-            Router.push("/login");
+            Router.push(loginUrl);
         }
     };
 

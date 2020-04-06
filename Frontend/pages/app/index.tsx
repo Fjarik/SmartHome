@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import Dashboard from "../../components/App/Dashboard";
 import Layout from "../../components/Layouts/Layout";
+import withUser from "../../lib/withUser";
 
 const Index: NextPage = () => {
     return (
@@ -10,4 +11,4 @@ const Index: NextPage = () => {
     );
 };
 
-export default Index;
+export default withUser(Index);
