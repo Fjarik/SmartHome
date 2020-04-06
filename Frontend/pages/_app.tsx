@@ -2,14 +2,14 @@ import App from "next/app";
 import HeadComponent from "../components/Layouts/HeadComponent";
 import { AuthContext } from "../src/graphql/auth";
 import { ApolloProvider } from "react-apollo";
-import client from "../src/graphql/client";
+// import client from "../src/graphql/client";
 import fetch from "node-fetch";
 import { ThemeProvider, CssBaseline } from "@material-ui/core";
 import { getTheme } from "../components/Themes/MainTheme";
-import { NextPageContext } from "next";
+import { withApollo } from "../lib/apollo";
 
 // eslint-disable-next-line no-unused-vars
-class DomacnostApp extends App<{}> {
+class DomacnostApp extends App<any> {
     componentDidMount() {
         // Remove the server-side injected CSS.
         const jssStyles = document.querySelector("#jss-server-side");
@@ -21,21 +21,21 @@ class DomacnostApp extends App<{}> {
     render() {
         // @ts-ignore
         global.fetch = fetch;
-        const { Component, pageProps } = this.props;
+        const { Component, pageProps, apolloClient } = this.props;
         const theme = getTheme();
         return <>
             <HeadComponent>
-                <AuthContext.Provider>
-                    <ApolloProvider client={client}>
+                <ApolloProvider client={apolloClient} >
+                    <AuthContext.Provider>
                         <ThemeProvider theme={theme}>
                             <CssBaseline />
                             <Component {...pageProps} />
                         </ThemeProvider>
-                    </ApolloProvider>
-                </AuthContext.Provider>
+                    </AuthContext.Provider>
+                </ApolloProvider>
             </HeadComponent>
         </>;
     }
 }
 
-export default DomacnostApp;
+export default withApollo(DomacnostApp);

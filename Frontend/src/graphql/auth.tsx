@@ -3,11 +3,11 @@ import { login } from "./types/login";
 import { loginMutation, logoutMutation } from "./mutations";
 import { getLogged_logged, getLogged } from "./types/getLogged";
 import { getLoggedUser } from "./queries";
-import client from "./client";
 import Cookies from "universal-cookie";
 import Router from "next/router";
 import { UserTokenCookieKey } from "../Global/Keys";
 import { logout } from "./types/logout";
+import { useApolloClient } from "react-apollo";
 
 export const getToken = (): string | null => new Cookies().get(UserTokenCookieKey);
 
@@ -27,10 +27,11 @@ const defaultContext: IAuthContext = {
 
 export const ReactAuthContext = createContext<IAuthContext>(defaultContext);
 
-const AuthContextProvider: FunctionComponent<{} | IAuthContext> = (props) => {
+const AuthContextProvider: FunctionComponent<{}> = ({ children }) => {
 
     const [currentUser, setCurrentUser] = useState<getLogged_logged>(defaultContext.user);
     const [currentToken, setCurrentToken] = useState<string>(getToken());
+    const client = useApolloClient();
 
     const login = async (googleToken: string): Promise<string> => {
         const { data: { login: { authToken } }, errors, } = await client.mutate<login>({
@@ -124,14 +125,14 @@ const AuthContextProvider: FunctionComponent<{} | IAuthContext> = (props) => {
         };
     }, []);
 
-    useEffect(() => {
-        if (currentToken) {
-            checkSession();
-        }
+    // useEffect(() => {
+    //     if (currentToken) {
+    //         checkSession();
+    //     }
 
-        return () => {
-        };
-    }, [currentToken]);
+    //     return () => {
+    //     };
+    // }, [currentToken]);
 
 
     return (
@@ -141,7 +142,7 @@ const AuthContextProvider: FunctionComponent<{} | IAuthContext> = (props) => {
             login,
             logout,
         }}>
-            {props.children}
+            {children}
         </ReactAuthContext.Provider>
     );
 };

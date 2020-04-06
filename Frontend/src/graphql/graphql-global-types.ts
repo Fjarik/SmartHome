@@ -16,6 +16,15 @@ export enum FoodTypeEnum {
   SOUP = "SOUP",
 }
 
+/**
+ * Meal enum types
+ */
+export enum MealTypeEnum {
+  FOOD_BOX = "FOOD_BOX",
+  NORMAL = "NORMAL",
+  RESTAURANT = "RESTAURANT",
+}
+
 //==============================================================
 // END Enums and Input Objects
 //==============================================================

@@ -23,3 +23,17 @@ export const getFoods = gql`
     }
   }
 `;
+
+export const getMealsBasic = gql`
+  query getBasicMeals{
+    meals {
+      id
+      date
+      type
+      food {
+        id
+        name
+      }
+    }
+  }
+`;
