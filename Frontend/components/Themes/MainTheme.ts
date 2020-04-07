@@ -37,11 +37,13 @@ const getTheme = (): Theme => {
     const darkModePalette: PaletteOptions = {
         type: "dark",
         primary: {
-            main: "#CF0E58",
+            // main: "#CF0E58", // Red
+            main: "#36C5F0", //Blue
         },
         secondary: {
-            main: "#36C5F0",
-            // main: "#017BFF", // Orig
+            main: "#CF0E58",
+            // main: "#36C5F0",
+            // contrastText: "#fff",
         }
     };
 
@@ -52,6 +54,7 @@ const getTheme = (): Theme => {
         },
         secondary: {
             main: "#36C5F0",
+            contrastText: "#fff",
         }
     };
 

@@ -1,12 +1,20 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import { getBasicMeals } from "../../../src/graphql/types/getBasicMeals";
 import { getMealsBasic } from "../../../src/graphql/queries";
 import CenterLoading from "../../Loading/CenterLoading";
 import { Button, Container, TableContainer, Table, Paper, TableHead, TableRow, TableCell, TableBody, Grid } from "@material-ui/core";
 import { useQuery } from "react-apollo";
+import useDate from "../../../lib/useDate";
+import AddMeal from "./AddMeal";
 
 const MealPage: FunctionComponent = () => {
     const { data, loading, error, refetch } = useQuery<getBasicMeals>(getMealsBasic, { ssr: false, });
+    const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+    const d = useDate();
+
+    const handleAddModalClose = () => {
+        setIsAddModalOpen(false);
+    };
 
     if (loading || !data) {
         return <CenterLoading text="Načítání" />;
@@ -25,9 +33,13 @@ const MealPage: FunctionComponent = () => {
                     <Button onClick={() => refetch()}>Refetch</Button>
                 </Grid>
                 <Grid item>
-                    <Button variant="contained" color="secondary">
+                    {d().format("YYYY-MM-DD")}
+                </Grid>
+                <Grid item>
+                    <Button variant="contained" color="secondary" onClick={() => setIsAddModalOpen(true)}>
                         Přidat nové jídlo
                     </Button>
+                    <AddMeal isOpen={isAddModalOpen} handleClose={handleAddModalClose} />
                 </Grid>
             </Grid>
             <TableContainer component={Paper}>
@@ -44,7 +56,7 @@ const MealPage: FunctionComponent = () => {
                         {meals.map((i) => (
                             <TableRow key={i.id}>
                                 <TableCell>{i.id}</TableCell>
-                                <TableCell>{i.date}</TableCell>
+                                <TableCell>{d(i.date).fromNow()}</TableCell>
                                 <TableCell>{i.type}</TableCell>
                                 <TableCell>{i.food.name}</TableCell>
                             </TableRow>
