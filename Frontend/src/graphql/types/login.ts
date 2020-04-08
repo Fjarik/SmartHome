@@ -13,6 +13,22 @@ export interface login_login {
    * Token
    */
   authToken: string | null;
+  /**
+   * Id property
+   */
+  id: string | null;
+  /**
+   * Firstname
+   */
+  firstname: string | null;
+  /**
+   * Lastname
+   */
+  lastname: string | null;
+  /**
+   * Created at
+   */
+  createdAt: any | null;
 }
 
 export interface login {

@@ -9,6 +9,7 @@ import { UserTokenCookieKey } from "../Global/Keys";
 import { logout } from "./types/logout";
 import { useApolloClient } from "react-apollo";
 import customUrls from "../../utils/customUrls";
+import { useSnackbar } from "notistack";
 
 export const getToken = (): string | null => new Cookies().get(UserTokenCookieKey);
 
@@ -33,10 +34,11 @@ const AuthContextProvider: FunctionComponent<{}> = ({ children }) => {
     const [currentUser, setCurrentUser] = useState<getLogged_logged>(defaultContext.user);
     const [currentToken, setCurrentToken] = useState<string>(getToken());
     const client = useApolloClient();
+    const { enqueueSnackbar } = useSnackbar();
     const { account: { loginUrl } } = customUrls;
 
     const login = async (googleToken: string): Promise<string> => {
-        const { data: { login: { authToken } }, errors, } = await client.mutate<login>({
+        const { data: { login: { authToken, id, firstname, lastname, createdAt } }, errors, } = await client.mutate<login>({
             mutation: loginMutation,
             variables: { googleToken }
         });
@@ -45,29 +47,37 @@ const AuthContextProvider: FunctionComponent<{}> = ({ children }) => {
             return null;
         }
         setToken(authToken);
+        setUser({
+            __typename: "UserType",
+            id,
+            firstname,
+            lastname,
+            createdAt,
+        });
         return authToken;
     };
 
     const logout = async () => {
-        const { data: { logout: res } } = await client.mutate<logout>({
-            mutation: logoutMutation
-        });
-        if (!res) {
-            console.log("Logout returned: ", res);
-        }
-        setToken(null);
         try {
-            if (window) {
-                window.localStorage.setItem("logout", Date.now().toString());
-                window.localStorage.removeItem("user");
-                window.location.reload();
-            } else {
-                Router.push(loginUrl);
+            const { data: { logout: res } } = await client.mutate<logout>({
+                mutation: logoutMutation
+            });
+            if (!res) {
+                console.log("Logout returned: ", res);
             }
             // eslint-disable-next-line no-empty
-        } catch {
-
+        } catch (error) {
+            console.log("Error when logging out: ", error);
         }
+        setToken(null);
+        if (window) {
+            window.localStorage.setItem("logout", Date.now().toString());
+            window.localStorage.removeItem("user");
+            window.location.pathname = loginUrl;
+        } else {
+            Router.push(loginUrl);
+        }
+        enqueueSnackbar("Odhlášení proběhlo úspěšně", { variant: "success" });
     };
 
     const setToken = (token: string | null) => {
@@ -106,12 +116,16 @@ const AuthContextProvider: FunctionComponent<{}> = ({ children }) => {
                 await logout();
                 return;
             }
-            if (user && window) {
-                window.localStorage.setItem("user", JSON.stringify(user));
-                setCurrentUser(user);
-            }
+            setUser(user);
         } catch (e) {
             setToken(null);
+        }
+    };
+
+    const setUser = (user: getLogged_logged) => {
+        if (user && window) {
+            window.localStorage.setItem("user", JSON.stringify(user));
+            setCurrentUser(user);
         }
     };
 
@@ -135,7 +149,6 @@ const AuthContextProvider: FunctionComponent<{}> = ({ children }) => {
     //     return () => {
     //     };
     // }, [currentToken]);
-
 
     return (
         <ReactAuthContext.Provider value={{
