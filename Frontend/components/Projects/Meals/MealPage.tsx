@@ -4,13 +4,12 @@ import { getMealsBasic } from "../../../src/graphql/queries";
 import CenterLoading from "../../Loading/CenterLoading";
 import { Button, Container, TableContainer, Table, Paper, TableHead, TableRow, TableCell, TableBody, Grid } from "@material-ui/core";
 import { useQuery } from "react-apollo";
-import useDate from "../../../lib/useDate";
 import AddMeal from "./AddMeal";
+import { DateTime } from "luxon";
 
 const MealPage: FunctionComponent = () => {
     const { data, loading, error, refetch } = useQuery<getBasicMeals>(getMealsBasic, { ssr: false, });
     const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
-    const d = useDate();
 
     const handleAddModalClose = () => {
         setIsAddModalOpen(false);
@@ -33,9 +32,6 @@ const MealPage: FunctionComponent = () => {
                     <Button onClick={() => refetch()}>Refetch</Button>
                 </Grid>
                 <Grid item>
-                    {d().format("YYYY-MM-DD")}
-                </Grid>
-                <Grid item>
                     <Button variant="contained" color="secondary" onClick={() => setIsAddModalOpen(true)}>
                         Přidat nové jídlo
                     </Button>
@@ -53,14 +49,19 @@ const MealPage: FunctionComponent = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {meals.map((i) => (
-                            <TableRow key={i.id}>
+                        {meals.map((i) => {
+                            const d = DateTime.fromISO(i.date);
+                            const dateString = d.toRelative({ locale: "cz" })
+                                + " ("
+                                + d.toLocaleString({ locale: "cz" })
+                                + ")";
+                            return <TableRow key={i.id}>
                                 <TableCell>{i.id}</TableCell>
-                                <TableCell>{d(i.date).fromNow()}</TableCell>
+                                <TableCell>{dateString}</TableCell>
                                 <TableCell>{i.type}</TableCell>
                                 <TableCell>{i.food.name}</TableCell>
-                            </TableRow>
-                        ))}
+                            </TableRow>;
+                        })}
                     </TableBody>
                 </Table>
             </TableContainer>

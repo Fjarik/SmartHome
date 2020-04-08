@@ -3,10 +3,10 @@ import gql from "graphql-tag";
 export const getLoggedUser = gql`
   query getLogged {
     logged {
-        id
-        firstname
-        lastname
-	    createdAt
+      id
+      firstname
+      lastname
+      createdAt
     }
   }
 `;
@@ -32,6 +32,19 @@ export const getMealsBasic = gql`
       type
       food {
         id
+        name
+      }
+    }
+  }
+`;
+
+export const getFoodsBasic = gql`
+ query getBasicFoods{
+    foods {
+      id
+      name
+      type
+      categories {
         name
       }
     }
