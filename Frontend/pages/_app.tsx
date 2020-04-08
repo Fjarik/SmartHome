@@ -7,6 +7,9 @@ import fetch from "node-fetch";
 import { ThemeProvider, CssBaseline } from "@material-ui/core";
 import { getTheme } from "../components/Themes/MainTheme";
 import { withApollo } from "../lib/apollo";
+import { SnackbarProvider } from "notistack";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import LuxonAdapter from "@date-io/luxon";
 
 // eslint-disable-next-line no-unused-vars
 class DomacnostApp extends App<any> {
@@ -25,14 +28,18 @@ class DomacnostApp extends App<any> {
         const theme = getTheme();
         return <>
             <HeadComponent>
-                <ApolloProvider client={apolloClient} >
-                    <AuthContext.Provider>
-                        <ThemeProvider theme={theme}>
-                            <CssBaseline />
-                            <Component {...pageProps} />
-                        </ThemeProvider>
-                    </AuthContext.Provider>
-                </ApolloProvider>
+                <SnackbarProvider maxSnack={3} >
+                    <ApolloProvider client={apolloClient} >
+                        <AuthContext.Provider>
+                            <ThemeProvider theme={theme}>
+                                <MuiPickersUtilsProvider utils={LuxonAdapter}>
+                                    <CssBaseline />
+                                    <Component {...pageProps} />
+                                </MuiPickersUtilsProvider>
+                            </ThemeProvider>
+                        </AuthContext.Provider>
+                    </ApolloProvider>
+                </SnackbarProvider>
             </HeadComponent>
         </>;
     }

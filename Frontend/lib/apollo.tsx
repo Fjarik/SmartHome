@@ -9,6 +9,9 @@ import { onError } from "apollo-link-error";
 import { ApolloLink } from "apollo-link";
 import { getToken } from "../src/graphql/auth";
 
+const endpoint = "https://domov.azurewebsites.net/graphql";
+// https://domov.azurewebsites.net/ui/playground
+
 /**
  * Creates and provides the apolloContext
  * to a next.js PageTree. Use it by wrapping
@@ -128,7 +131,7 @@ const initApolloClient = (initState: any) => {
  */
 const createApolloClient = (initialState = {}) => {
     const httpLink = new HttpLink({
-        uri: "https://domov.azurewebsites.net/graphql",
+        uri: endpoint,
         credentials: "include",
         fetch
     });

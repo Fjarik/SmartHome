@@ -18,10 +18,10 @@ const useStyles = makeStyles((theme: Theme) =>
     }));
 
 interface LoadingProps {
-    text: string
+    text?: string
 }
 
-const CenterLoading: FunctionComponent<LoadingProps> = ({ text }) => {
+const CenterLoading: FunctionComponent<LoadingProps> = ({ text = "Probíhá načítání" }) => {
 
     const c = useStyles();
 

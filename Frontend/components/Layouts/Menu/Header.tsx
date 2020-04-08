@@ -62,8 +62,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 const Header: FunctionComponent = () => {
     const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false);
     const { user, logout } = useContext(ReactAuthContext);
-    const { indexUrl, account: { loginUrl } } = customUrls;
-    
+    const { indexUrl, app: { appUrl }, account: { loginUrl } } = customUrls;
+
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.up("sm"));
 
     const router = useRouter();
@@ -85,17 +85,21 @@ const Header: FunctionComponent = () => {
         router.reload();
     };
 
+    const getLink = () => {
+        return user ? appUrl : indexUrl;
+    };
+
 
     return (
         <header className={c.headerMain}>
             <Container>
                 <div className={c.headerContainer}>
-                    <Link href={indexUrl} className={c.logoLink} >
+                    <Link href={getLink()} className={c.logoLink} >
                         <div className={c.logoContainer}>
                             <img src={getImgSrc()} className={c.logoImg} />
                             <Typography variant="h4" className={c.logoText}>
                                 SmartHome
-                        </Typography>
+                            </Typography>
                         </div>
                     </Link>
                     <div>

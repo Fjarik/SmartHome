@@ -1,10 +1,12 @@
 import { FunctionComponent, useEffect, useContext, useState } from "react";
 import { ReactAuthContext } from "../../src/graphql/auth";
 import Router from "next/router";
-import { Grid, makeStyles, Theme, createStyles, useTheme, Paper, Typography, CircularProgress } from "@material-ui/core";
+import { Grid, makeStyles, Theme, createStyles, Paper, Typography } from "@material-ui/core";
 import { GoogleLogin, GoogleLoginResponse } from "react-google-login";
 import Link from "next/link";
 import CenterLoading from "../Loading/CenterLoading";
+import customUrls from "../../utils/customUrls";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -20,16 +22,20 @@ const useStyles = makeStyles((theme: Theme) =>
     }));
 
 const LoginPageComponent: FunctionComponent = () => {
-    const { login, user } = useContext(ReactAuthContext);
+    const { login, token } = useContext(ReactAuthContext);
     const [loading, setLoading] = useState<boolean>(false);
     const [autoLogin, setAutoLogin] = useState<boolean>(false);
-    
+    const { enqueueSnackbar } = useSnackbar();
+    const { app: { appUrl }, account: { loginUrl } } = customUrls;
+
     const c = useStyles();
 
     useEffect(() => {
-        if (user) {
-            Router.push("/");
+        if (token) {
+            enqueueSnackbar("Již jste přihlášen/a", { variant: "warning" });
+            Router.push(appUrl);
         }
+        return () => { };
     }, []);
 
     const googleLoginSuccess = async ({ accessToken }: GoogleLoginResponse) => {
@@ -38,16 +44,18 @@ const LoginPageComponent: FunctionComponent = () => {
 
     const handleLogin = async (googleToken: string) => {
         if (!googleToken) {
+            enqueueSnackbar("Google nevrátil data", { variant: "error" });
             console.log("Prázdné vstupní údaje");
             return;
         }
         setLoading(true);
         try {
             await login(googleToken);
+            enqueueSnackbar("Přihlášení proběhlo úspěšně", { variant: "success" });
             if (window) {
-                window.location.pathname = "/app";
+                window.location.pathname = appUrl;
             } else {
-                Router.push("/app");
+                Router.push(appUrl);
             }
         } catch (e) {
             if (e && e.graphQLErrors && e.graphQLErrors[0]) {
@@ -88,7 +96,7 @@ const LoginPageComponent: FunctionComponent = () => {
                                 <Typography variant="body2" style={{ marginRight: "0.25em" }}>
                                     Nemáte účet?
                                 </Typography>
-                                <Link href="/login">
+                                <Link href={loginUrl}>
                                     <Typography variant="body2" color="secondary">
                                         Použijte tlačítko výše.
                                     </Typography>
