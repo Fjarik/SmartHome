@@ -5,6 +5,10 @@ import { PaletteOptions } from "@material-ui/core/styles/createPalette";
 
 const defaultTheme = "light";
 
+const isBrowserDark = (): boolean => {
+    return window && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+};
+
 const setTheme = (theme: string) => {
     new Cookies().set(ThemeCookieKey, theme, { path: "/", maxAge: 60 * 60 * 24 * 10 /* seconds -> 10 days*/ });
 };
@@ -23,6 +27,9 @@ const getThemeString = (): string => {
     // console.log(theme);
     if (!theme) {
         theme = defaultTheme;
+        if (isBrowserDark) {
+            theme = "dark";
+        }
         setTheme(theme);
     }
     return theme;

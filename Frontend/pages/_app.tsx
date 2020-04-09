@@ -32,7 +32,7 @@ class DomacnostApp extends App<any> {
                     <ApolloProvider client={apolloClient} >
                         <AuthContext.Provider>
                             <ThemeProvider theme={theme}>
-                                <MuiPickersUtilsProvider utils={LuxonAdapter}>
+                                <MuiPickersUtilsProvider utils={LuxonAdapter} locale="cz">
                                     <CssBaseline />
                                     <Component {...pageProps} />
                                 </MuiPickersUtilsProvider>
