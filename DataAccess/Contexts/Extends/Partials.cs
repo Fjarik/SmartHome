@@ -27,11 +27,11 @@ namespace DataAccess.Contexts
 		partial void OnModelCreatingPartial(ModelBuilder modelBuilder)
 		{
 			// dotnet ef migrations add InitialCreate --project DataAccess --startup-project Backend
-			modelBuilder.Entity<Category>().Seed();
-			modelBuilder.Entity<SideDish>().Seed();
-			modelBuilder.Entity<Food>().Seed();
-			modelBuilder.Entity<FoodSide>().Seed();
-			modelBuilder.Entity<FoodCategory>().Seed();
+			//modelBuilder.Entity<Category>().Seed();
+			//modelBuilder.Entity<SideDish>().Seed();
+			//modelBuilder.Entity<Food>().Seed();
+			//modelBuilder.Entity<FoodSide>().Seed();
+			//modelBuilder.Entity<FoodCategory>().Seed();
 		}
 	}
 }

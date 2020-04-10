@@ -12,9 +12,9 @@ namespace Backend.GraphQL.Types
 		public SideDishType()
 		{
 			Field(x => x.Id, type: typeof(IdGraphType)).Description("Id property");
-			Field(x => x.Name, type: typeof(StringGraphType)).Description("Name of dish");
+			Field(x => x.Name, type: typeof(StringGraphType)).Description("Name of side dish");
 			Field(x => x.Description, type: typeof(StringGraphType)).Description("Description");
-			Field(x => x.GlutenFree, type: typeof(BooleanGraphType), nullable: true).Description("Is gluten free");
+			Field(x => x.GlutenFree, type: typeof(BooleanGraphType)).Description("Is gluten free");
 		}
 	}
 }

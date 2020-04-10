@@ -53,7 +53,7 @@ namespace Backend.Managers
 
 		public AuthUser Login(string googleToken, ResolveFieldContext<object> ctx)
 		{
-			Userinfoplus userInfo;
+			Userinfo userInfo;
 			try {
 				userInfo = _authService.GetGoogleUser(googleToken);
 			} catch (Exception e) {

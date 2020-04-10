@@ -21,6 +21,7 @@ namespace Backend.GraphQL.Queries
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly IAuthManager _authManager;
 		private readonly ICategoryService _categoryService;
+		private readonly ISideDishService _sideDishService;
 		private readonly IMealService _mealService;
 
 		public AppQuery(IUserService userService,
@@ -28,7 +29,8 @@ namespace Backend.GraphQL.Queries
 						IAuthManager authManager,
 						IFoodService foodService,
 						ICategoryService categoryService,
-						IMealService mealService)
+						IMealService mealService,
+						ISideDishService sideDishService)
 		{
 			_userService = userService;
 			_httpContextAccessor = httpContextAccessor;
@@ -36,6 +38,7 @@ namespace Backend.GraphQL.Queries
 			_foodService = foodService;
 			_categoryService = categoryService;
 			_mealService = mealService;
+			_sideDishService = sideDishService;
 			Field<UserType, User>("logged")
 				.Resolve(GetLogged);
 			Field<ListGraphType<UserType>, List<User>>("users")
@@ -44,6 +47,8 @@ namespace Backend.GraphQL.Queries
 				.Resolve(ctx => this._foodService.GetAll());
 			Field<ListGraphType<CategoryType>, List<Category>>("categories")
 				.Resolve(ctx => this._categoryService.GetAll());
+			Field<ListGraphType<SideDishType>, List<SideDish>>("sidedishes")
+				.Resolve(ctx => this._sideDishService.GetAll());
 			Field<ListGraphType<MealType>, List<Meal>>("meals")
 				.Argument<DateGraphType>("date", "Get meals by date")
 				.Resolve(GetMeals);

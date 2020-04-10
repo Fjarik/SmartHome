@@ -12,7 +12,7 @@ namespace Backend.GraphQL.Types.InputTypes
 		public MealInputType()
 		{
 			Name = "MealInput";
-			Field(x => x.CookedById, type: typeof(NonNullGraphType<IdGraphType>));
+			Field(x => x.SideDishId, type: typeof(NonNullGraphType<IdGraphType>));
 			Field(x => x.FoodId, type: typeof(NonNullGraphType<IdGraphType>));
 			Field(x => x.Type, type: typeof(NonNullGraphType<MealTypeEnum>));
 			Field(x => x.Date, type: typeof(NonNullGraphType<DateGraphType>));

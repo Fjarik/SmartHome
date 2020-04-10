@@ -56,6 +56,13 @@ namespace DataAccess.Other
 			new FoodName(7) {Name = "Čočka na kyselo", Type = 1, Categories = new[] {3, 6},},
 			new FoodName(1, 7) {Name = "Míchaná zelenina", Type = 1, Categories = new[] {2, 5},},
 			new FoodName(1, 7) {Name = "Pečené maso", Type = 1, Categories = new[] {3, 5},},
+			new FoodName() {Name = "Buřtgulášová polévka", Type = 2, Categories = new[] {3},},
+			new FoodName() {Name = "Česnečka", Type = 2, Categories = new[] {2},},
+			new FoodName() {Name = "Bramboračka", Type = 2, Categories = new[] {2},},
+			new FoodName() {Name = "Pórková polévka", Type = 2, Categories = new[] {2},},
+			new FoodName() {Name = "Houbová polévka", Type = 2, Categories = new[] {2},},
+			new FoodName() {Name = "Polévka z kuřecího vývaru", Type = 2, Categories = new[] {3},},
+			new FoodName() {Name = "Špenátová polévka", Type = 2, Categories = new[] {2},},
 		};
 
 		public static void Seed(this EntityTypeBuilder<Category> builder)

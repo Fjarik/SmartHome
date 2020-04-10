@@ -24,7 +24,7 @@ namespace DataAccess.Models
         [StringLength(200)]
         public string Name { get; set; }
         [Required]
-        public bool? GlutenFree { get; set; }
+        public bool GlutenFree { get; set; }
 
         [InverseProperty(nameof(FoodCategory.Food))]
         public virtual ICollection<FoodCategory> FoodCategories { get; set; }

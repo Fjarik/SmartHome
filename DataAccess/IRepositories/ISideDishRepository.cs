@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace DataAccess.IRepositories
 {
-	public interface IMealRepository : IBaseRepository<Meal>
+	public interface ISideDishRepository : IBaseRepository<SideDish>
 	{
-		List<Meal> GetByDate(DateTime date);
-		EntityEntry<Meal> Create(int foodId, int typeId, DateTime date, int? originalMealId = null);
+		bool Exists(string name);
+		EntityEntry<SideDish> Create(string name, string description = null, bool glutenFree = true);
 	}
 }

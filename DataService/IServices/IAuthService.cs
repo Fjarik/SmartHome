@@ -10,6 +10,6 @@ namespace DataService.IServices
 {
 	public interface IAuthService
 	{
-		Userinfoplus GetGoogleUser(string googleToken);
+		Userinfo GetGoogleUser(string googleToken);
 	}
 }

@@ -10,31 +10,38 @@ namespace DataAccess.Models
     {
         public Meal()
         {
+            InverseOriginalMeal = new HashSet<Meal>();
             MealCategories = new HashSet<MealCategory>();
-            MealSides = new HashSet<MealSide>();
         }
 
         [Key]
         [Column("ID")]
         public int Id { get; set; }
-        [Column("CookedByID")]
-        public int CookedById { get; set; }
         [Column("FoodID")]
         public int FoodId { get; set; }
         [Column("TypeID")]
         public int TypeId { get; set; }
+        [Column("SideID")]
+        public int? SideId { get; set; }
+        [Column("OriginalMealID")]
+        public int? OriginalMealId { get; set; }
         [Column(TypeName = "date")]
         public DateTime Date { get; set; }
+        [StringLength(500)]
+        public string Note { get; set; }
 
-        [ForeignKey(nameof(CookedById))]
-        [InverseProperty(nameof(User.Meals))]
-        public virtual User CookedBy { get; set; }
         [ForeignKey(nameof(FoodId))]
         [InverseProperty("Meals")]
         public virtual Food Food { get; set; }
+        [ForeignKey(nameof(OriginalMealId))]
+        [InverseProperty(nameof(Meal.InverseOriginalMeal))]
+        public virtual Meal OriginalMeal { get; set; }
+        [ForeignKey(nameof(SideId))]
+        [InverseProperty(nameof(SideDish.Meals))]
+        public virtual SideDish Side { get; set; }
+        [InverseProperty(nameof(Meal.OriginalMeal))]
+        public virtual ICollection<Meal> InverseOriginalMeal { get; set; }
         [InverseProperty(nameof(MealCategory.Meal))]
         public virtual ICollection<MealCategory> MealCategories { get; set; }
-        [InverseProperty(nameof(MealSide.Meal))]
-        public virtual ICollection<MealSide> MealSides { get; set; }
     }
 }

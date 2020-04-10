@@ -21,7 +21,7 @@ namespace DataService.Services
 			_userService = userService;
 		}
 
-		public Userinfoplus GetGoogleUser(string googleToken)
+		public Userinfo GetGoogleUser(string googleToken)
 		{
 			var service = new Oauth2Service(new BaseClientService.Initializer {
 				HttpClientInitializer = GoogleCredential.FromAccessToken(googleToken),

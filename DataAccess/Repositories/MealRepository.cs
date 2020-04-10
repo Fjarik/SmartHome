@@ -27,17 +27,20 @@ namespace DataAccess.Repositories
 			return this.DbSet.Where(x => x.Date.Date == date.Date).ToList();
 		}
 
-		public EntityEntry<Meal> Create(int cookedById, int foodId, int typeId, DateTime date)
+		public EntityEntry<Meal> Create(int foodId, int typeId, DateTime date, int? originalMealId = null)
 		{
-			if (cookedById < 1 ||
-				foodId < 1 ||
+			if (foodId < 1 ||
 				typeId < 1) {
 				return null;
 			}
+			if (originalMealId != null && originalMealId < 1) {
+				return null;
+			}
+
 			var m = new Meal {
-				CookedById = cookedById,
 				FoodId = foodId,
 				TypeId = typeId,
+				OriginalMealId = originalMealId,
 				Date = date.Date,
 			};
 

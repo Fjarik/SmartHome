@@ -21,6 +21,7 @@ namespace Backend.Other
 				   .AddScoped<IFoodRepository, FoodRepository>()
 				   .AddScoped<ICategoryRepository, CategoryRepository>()
 				   .AddScoped<IMealRepository, MealRepository>()
+				   .AddScoped<ISideDishRepository, SideDishRepository>()
 				   .AddScoped<ITokenRepository, TokenRepository>();
 		}
 
@@ -32,6 +33,7 @@ namespace Backend.Other
 				   .AddScoped<IFoodService, FoodService>()
 				   .AddScoped<ICategoryService, CategoryService>()
 				   .AddScoped<IMealService, MealService>()
+				   .AddScoped<ISideDishService, SideDishService>()
 				   .AddScoped<IAuthService, AuthService>();
 		}
 

@@ -19,7 +19,6 @@ namespace DataAccess.Other
 			this.Firstname = u.Firstname;
 			this.Lastname = u.Lastname;
 			this.CreatedAt = u.CreatedAt;
-			this.Meals = u.Meals;
 			this.Tokens = u.Tokens;
 		}
 	}

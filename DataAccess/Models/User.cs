@@ -10,7 +10,6 @@ namespace DataAccess.Models
     {
         public User()
         {
-            Meals = new HashSet<Meal>();
             Tokens = new HashSet<Token>();
         }
 
@@ -33,8 +32,6 @@ namespace DataAccess.Models
         [Column(TypeName = "datetime")]
         public DateTime CreatedAt { get; set; }
 
-        [InverseProperty(nameof(Meal.CookedBy))]
-        public virtual ICollection<Meal> Meals { get; set; }
         [InverseProperty(nameof(Token.User))]
         public virtual ICollection<Token> Tokens { get; set; }
     }

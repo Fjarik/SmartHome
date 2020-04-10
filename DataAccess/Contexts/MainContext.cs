@@ -14,7 +14,6 @@ namespace DataAccess.Contexts
         public virtual DbSet<FoodSide> FoodSides { get; set; }
         public virtual DbSet<Meal> Meals { get; set; }
         public virtual DbSet<MealCategory> MealCategories { get; set; }
-        public virtual DbSet<MealSide> MealSides { get; set; }
         public virtual DbSet<SideDish> SideDishes { get; set; }
         public virtual DbSet<Token> Tokens { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -89,17 +88,23 @@ namespace DataAccess.Contexts
 
             modelBuilder.Entity<Meal>(entity =>
             {
-                entity.HasOne(d => d.CookedBy)
-                    .WithMany(p => p.Meals)
-                    .HasForeignKey(d => d.CookedById)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Meals_Users");
+                entity.HasComment("Jídla v jednotlivé dny");
 
                 entity.HasOne(d => d.Food)
                     .WithMany(p => p.Meals)
                     .HasForeignKey(d => d.FoodId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Meals_Foods");
+
+                entity.HasOne(d => d.OriginalMeal)
+                    .WithMany(p => p.InverseOriginalMeal)
+                    .HasForeignKey(d => d.OriginalMealId)
+                    .HasConstraintName("FK_Meals_Meals");
+
+                entity.HasOne(d => d.Side)
+                    .WithMany(p => p.Meals)
+                    .HasForeignKey(d => d.SideId)
+                    .HasConstraintName("FK_Meals_SideDishes");
             });
 
             modelBuilder.Entity<MealCategory>(entity =>
@@ -120,23 +125,6 @@ namespace DataAccess.Contexts
                     .HasForeignKey(d => d.MealId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_MealCategories_Meals");
-            });
-
-            modelBuilder.Entity<MealSide>(entity =>
-            {
-                entity.HasKey(e => new { e.MealId, e.SideDishesId });
-
-                entity.HasOne(d => d.Meal)
-                    .WithMany(p => p.MealSides)
-                    .HasForeignKey(d => d.MealId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_MealSides_Meals");
-
-                entity.HasOne(d => d.SideDishes)
-                    .WithMany(p => p.MealSides)
-                    .HasForeignKey(d => d.SideDishesId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_MealSides_SideDishes");
             });
 
             modelBuilder.Entity<SideDish>(entity =>

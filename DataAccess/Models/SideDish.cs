@@ -11,7 +11,7 @@ namespace DataAccess.Models
         public SideDish()
         {
             FoodSides = new HashSet<FoodSide>();
-            MealSides = new HashSet<MealSide>();
+            Meals = new HashSet<Meal>();
         }
 
         [Key]
@@ -24,11 +24,11 @@ namespace DataAccess.Models
         [StringLength(500)]
         public string Description { get; set; }
         [Required]
-        public bool? GlutenFree { get; set; }
+        public bool GlutenFree { get; set; }
 
         [InverseProperty(nameof(FoodSide.Side))]
         public virtual ICollection<FoodSide> FoodSides { get; set; }
-        [InverseProperty(nameof(MealSide.SideDishes))]
-        public virtual ICollection<MealSide> MealSides { get; set; }
+        [InverseProperty(nameof(Meal.Side))]
+        public virtual ICollection<Meal> Meals { get; set; }
     }
 }

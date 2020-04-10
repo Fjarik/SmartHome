@@ -1,20 +1,14 @@
 using System.Text;
 using Backend.GraphQL.Schemas;
 using Backend.IManagers;
-using Backend.Managers;
 using Backend.Other;
 using Backend.Other.Auth;
 using DataAccess.Contexts;
-using DataAccess.IRepositories;
-using DataAccess.Repositories;
 using DataService;
-using DataService.IServices;
-using DataService.Services;
 using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using GraphQL.Server.Ui.Voyager;
-using GraphQL.Validation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -26,7 +20,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Backend
@@ -74,7 +67,6 @@ namespace Backend
 										 .AllowAnyHeader()
 										 .AllowAnyMethod()
 										 .AllowCredentials();
-								  //.AllowAnyOrigin();
 							  });
 			});
 
@@ -106,9 +98,7 @@ namespace Backend
 			services.Configure<KestrelServerOptions>(options => { options.AllowSynchronousIO = true; })
 					.Configure<IISServerOptions>(options => { options.AllowSynchronousIO = true; })
 					.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = long.MaxValue; })
-					.AddRazorPages().AddNewtonsoftJson()
-					.Services.AddControllers()
-					.Services.AddMvc();
+					.AddRazorPages();
 
 			// JWT
 			var appSettings = appSettingsSection.Get<AppSettings>();
@@ -152,16 +142,18 @@ namespace Backend
 
 			app.UseCors(_myAllowSpecificOrigins)
 			   .UseGraphQL<AppSchema>()
-			   .UseGraphQLPlayground(options: new GraphQLPlaygroundOptions())
-			   .UseGraphQLVoyager(new GraphQLVoyagerOptions())
+			   .UseGraphQLPlayground(new GraphQLPlaygroundOptions {
+				   GraphQLEndPoint = "/graphql",
+				   Path = "/",
+			   })
+			   .UseGraphQLVoyager(new GraphQLVoyagerOptions {
+				   GraphQLEndPoint = "/graphql",
+				   Path = "/voyager",
+			   })
 			   .UseWebSockets()
 			   .UseRouting()
 			   .UseAuthentication()
-			   .UseAuthorization()
-			   .UseEndpoints(endpoints => {
-				   endpoints.MapControllers();
-				   endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-			   });
+			   .UseAuthorization();
 		}
 	}
 }
