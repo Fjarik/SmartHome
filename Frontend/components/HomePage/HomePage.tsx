@@ -31,7 +31,7 @@ const HomePage: FunctionComponent<{}> = () => {
         return isLoggedIn() ? appUrl : loginUrl;
     };
 
-    return (<>
+    return (
         <Grid container justify="center" alignItems="center" className={c.mainGrid}>
             <Grid item className={c.mainText}>
                 <Typography variant="h2" gutterBottom>
@@ -51,7 +51,6 @@ const HomePage: FunctionComponent<{}> = () => {
                 </Link>
             </Grid>
         </Grid>
-    </>
     );
 
 };

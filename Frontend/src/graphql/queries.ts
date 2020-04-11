@@ -31,6 +31,7 @@ export const getFoodsBasic = gql`
       id
       name
       type
+      sideIds
     }
     sidedishes {
       id

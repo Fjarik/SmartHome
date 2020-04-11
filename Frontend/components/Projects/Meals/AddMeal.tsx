@@ -1,12 +1,14 @@
 import { FunctionComponent, useState, ChangeEvent, useEffect } from "react";
-import { Modal, makeStyles, Theme, createStyles, Select, MenuItem, Table, TableCell, TableHead, TableRow, TableBody, Checkbox, TableContainer, Grid, Button, FormControlLabel, FormControl, InputLabel } from "@material-ui/core";
-import { useQuery } from "react-apollo";
+import { Modal, makeStyles, Theme, createStyles, Select, MenuItem, Table, TableCell, TableHead, TableRow, TableBody, Checkbox, TableContainer, Grid, Button, FormControlLabel, FormControl, InputLabel, ListSubheader, FormHelperText } from "@material-ui/core";
+import { useQuery, useMutation, useApolloClient } from "react-apollo";
 import { getBasicFoods } from "../../../src/graphql/types/getBasicFoods";
 import { getFoodsBasic } from "../../../src/graphql/queries";
 import { DateTime } from "luxon";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import CenterLoading from "../../Loading/CenterLoading";
-import { FoodTypeEnum } from "../../../src/graphql/graphql-global-types";
+import { FoodTypeEnum, MealTypeEnum } from "../../../src/graphql/graphql-global-types";
+import { createMeal, createMealVariables } from "../../../src/graphql/types/createMeal";
+import { createMealMutation } from "../../../src/graphql/mutations";
 
 class Day {
     ActualDate: DateTime;
@@ -58,12 +60,15 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
 
     const c = useStyles();
     const [selectedFood, setSelectedFood] = useState<string>("");
-    const [soupId, setSoupId] = useState<number | null>(0);
-    const [sideId, setSideId] = useState<number | null>(0);
+    const [soupId, setSoupId] = useState<number>(0);
+    const [sideId, setSideId] = useState<number>(0);
     const [selectedDate, setSelectedDate] = useState<DateTime>();
+    const [recomendedSides, setRecomendedSides] = useState<number[]>([]);
+    const [showError, setShowError] = useState<boolean>(false);
     const [days, setDays] = useState<Day[]>([]);
 
     const { loading, data, error } = useQuery<getBasicFoods>(getFoodsBasic);
+    const client = useApolloClient();
 
     useEffect(() => {
         if (error) {
@@ -131,28 +136,41 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
         setSelectedDate(date);
     };
 
-    const onFoodSelect = (event: ChangeEvent<{ value: string }>) => {
-        setSelectedFood(event?.target?.value);
-    };
-
     const onSoupSelect = (event: ChangeEvent<{ value: number | null }>): void => {
-        const val: number | null = event?.target?.value ?? null;
-
-        if (val && val > 0) {
-            setSoupId(val);
-            return;
-        }
-        setSoupId(null);
+        setSoupId(event?.target?.value ?? 0);
     };
 
     const onSideSelect = (event: ChangeEvent<{ value: number | null }>): void => {
-        const val: number | null = event?.target?.value ?? null;
+        setSideId(event?.target?.value ?? 0);
+    };
 
-        if (val && val > 0) {
-            setSideId(val);
+    const createMealAsync = async (variables: createMealVariables): Promise<string> => {
+        const { data: { createMeal: { id } } } = await client.mutate<createMeal, createMealVariables>({
+            mutation: createMealMutation,
+            variables: variables
+        });
+        return id;
+    };
+
+    const submit = async () => {
+        if (!selectedFood) {
+            setShowError(true);
             return;
         }
-        setSideId(null);
+        const date = selectedDate.toISODate();
+
+        const side = sideId === 0 ? null : sideId.toString();
+
+        // Main meal
+        const mainMealId = await createMealAsync({
+            foodId: selectedFood,
+            date: date,
+            type: MealTypeEnum.NORMAL,
+            sideDishId: side
+        });
+
+        console.log(mainMealId);
+
     };
 
     if (loading) {
@@ -166,8 +184,20 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
     }
 
     const { foods, sidedishes } = data;
-    const mainMeals = foods.filter(x => x.type === FoodTypeEnum.MAIN_MEAL);
-    const soups = foods.filter(x => x.type === FoodTypeEnum.SOUP);
+    const mainMeals = foods.filter(x => x.type === FoodTypeEnum.MAIN_MEAL).sort((a, b) => a.name.localeCompare(b.name));
+    const soups = foods.filter(x => x.type === FoodTypeEnum.SOUP).sort((a, b) => a.name.localeCompare(b.name));
+
+    const onFoodSelect = (event: ChangeEvent<{ value: string }>) => {
+        const foodId = event?.target?.value;
+        setSelectedFood(foodId);
+        setShowError(false);
+
+        const selFood = foods.find(x => x.id === foodId);
+        if (selFood) {
+            // console.log(selFood);
+            setRecomendedSides(selFood.sideIds);
+        }
+    };
 
     return (
         <Modal
@@ -206,7 +236,7 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12} sm={4}>
-                                <FormControl className={c.formControl}>
+                                <FormControl className={c.formControl} error={showError}>
                                     <InputLabel id="lbl2">Vyberte jídlo</InputLabel>
                                     <Select
                                         labelId="lbl2"
@@ -218,6 +248,10 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
                                             )
                                         }
                                     </Select>
+                                    {
+                                        showError &&
+                                        <FormHelperText>Musíte vybrat jídlo</FormHelperText>
+                                    }
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12} sm={4}>
@@ -227,9 +261,16 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
                                         labelId="lbl1"
                                         value={sideId}
                                         onChange={onSideSelect}>
+                                        <ListSubheader>Doporučené</ListSubheader>
                                         <MenuItem value={0}>Žádná</MenuItem>
                                         {
-                                            sidedishes.map((i) =>
+                                            sidedishes.filter(x => recomendedSides.includes(parseInt(x.id))).map((i) =>
+                                                <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>
+                                            )
+                                        }
+                                        <ListSubheader>Ostatní</ListSubheader>
+                                        {
+                                            sidedishes.filter(x => !recomendedSides.includes(parseInt(x.id))).map((i) =>
                                                 <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>
                                             )
                                         }
@@ -273,7 +314,7 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
                         {/* </TableContainer> */}
                     </Grid>
                     <Grid item style={{ alignSelf: "flex-end" }}>
-                        <Button color="primary" variant="contained">
+                        <Button color="primary" variant="contained" onClick={submit} >
                             Potvrdit
                         </Button>
                     </Grid>

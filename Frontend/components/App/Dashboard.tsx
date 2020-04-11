@@ -34,7 +34,7 @@ const Dashboard: FunctionComponent = () => {
         }
     ];
 
-    return (<>
+    return (
         <Container>
             <Grid container justify="space-around" alignItems="stretch" spacing={2} >
                 {apps.map((i, index) => (
@@ -59,7 +59,6 @@ const Dashboard: FunctionComponent = () => {
                 ))}
             </Grid>
         </Container>
-    </>
     );
 };
 

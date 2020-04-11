@@ -78,35 +78,33 @@ const LoginPageComponent: FunctionComponent = () => {
     }
 
     return (
-        <>
-            <Grid container className={c.mainGrid} >
-                <Grid item>
-                    <Paper elevation={3}>
-                        <div className={c.mainForm}>
-                            <Typography variant="h4" color="primary" style={{ marginBottom: "2rem" }}>
-                                Přihlášení
+        <Grid container className={c.mainGrid} >
+            <Grid item>
+                <Paper elevation={3}>
+                    <div className={c.mainForm}>
+                        <Typography variant="h4" color="primary" style={{ marginBottom: "2rem" }}>
+                            Přihlášení
                             </Typography>
-                            <GoogleLogin clientId="1080634695580-t83muhrjtdvnk0jf12kuerh30l2pclpu.apps.googleusercontent.com"
-                                buttonText="Přihlásit se přes Google"
-                                onSuccess={googleLoginSuccess}
-                                onFailure={onExternalLoginFail}
-                                cookiePolicy={"single_host_origin"}
-                            />
-                            <div style={{ display: "flex", marginTop: "2rem" }}>
-                                <Typography variant="body2" style={{ marginRight: "0.25em" }}>
-                                    Nemáte účet?
+                        <GoogleLogin clientId="1080634695580-t83muhrjtdvnk0jf12kuerh30l2pclpu.apps.googleusercontent.com"
+                            buttonText="Přihlásit se přes Google"
+                            onSuccess={googleLoginSuccess}
+                            onFailure={onExternalLoginFail}
+                            cookiePolicy={"single_host_origin"}
+                        />
+                        <div style={{ display: "flex", marginTop: "2rem" }}>
+                            <Typography variant="body2" style={{ marginRight: "0.25em" }}>
+                                Nemáte účet?
                                 </Typography>
-                                <Link href={loginUrl}>
-                                    <Typography variant="body2" color="secondary">
-                                        Použijte tlačítko výše.
+                            <Link href={loginUrl}>
+                                <Typography variant="body2" color="secondary">
+                                    Použijte tlačítko výše.
                                     </Typography>
-                                </Link>
-                            </div>
+                            </Link>
                         </div>
-                    </Paper>
-                </Grid>
+                    </div>
+                </Paper>
             </Grid>
-        </>
+        </Grid>
     );
 
 };

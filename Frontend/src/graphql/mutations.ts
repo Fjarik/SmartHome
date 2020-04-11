@@ -9,9 +9,34 @@ export const loginMutation = gql`
       lastname
       createdAt
     }
-}`;
+  }
+`;
 
 export const logoutMutation = gql`
   mutation logout($everywhere: Boolean) {
     logout(logoutAll: $everywhere)
-}`;
+  }
+`;
+
+
+export const createMealMutation = gql`
+  mutation createMeal(
+    $foodId: ID!
+    $type: MealTypeEnum!
+    $date: Date!
+    $sideDishId: ID = null
+    $originalMealId: ID = null
+  ) {
+    createMeal(
+      meal: {
+        foodId: $foodId
+        type: $type
+        date: $date
+        sideDishId: $sideDishId
+        originalMealId: $originalMealId
+      }
+    ) {
+      id
+    }
+  }
+`;

@@ -1,12 +1,12 @@
 import React, { createContext, FunctionComponent, useState, useEffect } from "react";
-import { login } from "./types/login";
+import { login, loginVariables } from "./types/login";
 import { loginMutation, logoutMutation } from "./mutations";
 import { getLogged_logged, getLogged } from "./types/getLogged";
 import { getLoggedUser } from "./queries";
 import Cookies from "universal-cookie";
 import Router from "next/router";
 import { UserTokenCookieKey } from "../Global/Keys";
-import { logout } from "./types/logout";
+import { logout, logoutVariables } from "./types/logout";
 import { useApolloClient } from "react-apollo";
 import customUrls from "../../utils/customUrls";
 import { useSnackbar } from "notistack";
@@ -38,7 +38,7 @@ const AuthContextProvider: FunctionComponent<{}> = ({ children }) => {
     const { account: { loginUrl } } = customUrls;
 
     const login = async (googleToken: string): Promise<string> => {
-        const { data: { login: { authToken, id, firstname, lastname, createdAt } }, errors, } = await client.mutate<login>({
+        const { data: { login: { authToken, id, firstname, lastname, createdAt } }, errors, } = await client.mutate<login, loginVariables>({
             mutation: loginMutation,
             variables: { googleToken }
         });
@@ -59,7 +59,7 @@ const AuthContextProvider: FunctionComponent<{}> = ({ children }) => {
 
     const logout = async () => {
         try {
-            const { data: { logout: res } } = await client.mutate<logout>({
+            const { data: { logout: res } } = await client.mutate<logout, logoutVariables>({
                 mutation: logoutMutation
             });
             if (!res) {

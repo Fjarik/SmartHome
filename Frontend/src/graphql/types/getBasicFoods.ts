@@ -23,6 +23,10 @@ export interface getBasicFoods_foods {
    * Type of food
    */
   type: FoodTypeEnum;
+  /**
+   * Side dish IDs of food
+   */
+  sideIds: number[] | null;
 }
 
 export interface getBasicFoods_sidedishes {

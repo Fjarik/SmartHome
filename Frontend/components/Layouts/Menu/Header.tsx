@@ -123,7 +123,7 @@ const Header: FunctionComponent = () => {
                         }
                     </div>
                 </div>
-                {user ? <SubMenu /> : <></>}
+                {user && <SubMenu />}
             </Container>
             <Divider />
         </header>

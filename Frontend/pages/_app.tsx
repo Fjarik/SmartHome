@@ -26,22 +26,20 @@ class DomacnostApp extends App<any> {
         global.fetch = fetch;
         const { Component, pageProps, apolloClient } = this.props;
         const theme = getTheme();
-        return <>
-            <HeadComponent>
-                <SnackbarProvider maxSnack={3} >
-                    <ApolloProvider client={apolloClient} >
-                        <AuthContext.Provider>
-                            <ThemeProvider theme={theme}>
-                                <MuiPickersUtilsProvider utils={LuxonAdapter} locale="cz">
-                                    <CssBaseline />
-                                    <Component {...pageProps} />
-                                </MuiPickersUtilsProvider>
-                            </ThemeProvider>
-                        </AuthContext.Provider>
-                    </ApolloProvider>
-                </SnackbarProvider>
-            </HeadComponent>
-        </>;
+        return <HeadComponent>
+            <SnackbarProvider maxSnack={3} >
+                <ApolloProvider client={apolloClient} >
+                    <AuthContext.Provider>
+                        <ThemeProvider theme={theme}>
+                            <MuiPickersUtilsProvider utils={LuxonAdapter} locale="cz">
+                                <CssBaseline />
+                                <Component {...pageProps} />
+                            </MuiPickersUtilsProvider>
+                        </ThemeProvider>
+                    </AuthContext.Provider>
+                </ApolloProvider>
+            </SnackbarProvider>
+        </HeadComponent>;
     }
 }
 
