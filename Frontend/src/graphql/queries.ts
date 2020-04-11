@@ -11,19 +11,6 @@ export const getLoggedUser = gql`
   }
 `;
 
-export const getFoods = gql`
-  query getFoods{
-    foods {
-      name
-      type
-      categoryIds
-      categories {
-        name
-      }
-    }
-  }
-`;
-
 export const getMealsBasic = gql`
   query getBasicMeals{
     meals {
@@ -44,9 +31,10 @@ export const getFoodsBasic = gql`
       id
       name
       type
-      categories {
-        name
-      }
+    }
+    sidedishes {
+      id
+      name
     }
   }
 `;

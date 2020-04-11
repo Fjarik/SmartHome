@@ -59,7 +59,7 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
     const c = useStyles();
     const [selectedFood, setSelectedFood] = useState<string>("");
     const [soupId, setSoupId] = useState<number | null>(0);
-    const [sideIds, SideIds] = useState<number[]>([]);
+    const [sideId, setSideId] = useState<number | null>(0);
     const [selectedDate, setSelectedDate] = useState<DateTime>();
     const [days, setDays] = useState<Day[]>([]);
 
@@ -145,6 +145,16 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
         setSoupId(null);
     };
 
+    const onSideSelect = (event: ChangeEvent<{ value: number | null }>): void => {
+        const val: number | null = event?.target?.value ?? null;
+
+        if (val && val > 0) {
+            setSideId(val);
+            return;
+        }
+        setSideId(null);
+    };
+
     if (loading) {
         return <Modal
             open={isOpen}
@@ -155,7 +165,7 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
         </Modal>;
     }
 
-    const { foods } = data;
+    const { foods, sidedishes } = data;
     const mainMeals = foods.filter(x => x.type === FoodTypeEnum.MAIN_MEAL);
     const soups = foods.filter(x => x.type === FoodTypeEnum.SOUP);
 
@@ -170,6 +180,7 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
                         <KeyboardDatePicker
                             // clearable={false}
                             disableToolbar
+                            autoOk={true}
                             variant="inline"
                             label="Vyberte datum"
                             format="dd.MM.yyyy"
@@ -210,27 +221,20 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12} sm={4}>
-                                <p>Přílohy jsou v plánu</p>
-                                {/* <FormControl className={c.formControl}>
-                                    <InputLabel id="lbl3">Přílohy</InputLabel> 
-                                     <Select
-                                        labelId="lbl3"
-                                        id="demo-mutiple-checkbox"
-                                        multiple
-                                        // value={personName}
-                                        // onChange={handleChange}
-                                        // input={<Input />}
-                                        renderValue={(selected) => (selected as string[]).join(", ")}
-                                    >
-                                        {names.map((name) => (
-                                            <MenuItem key={name} value={name}>
-                                                <Checkbox checked={personName.indexOf(name) > -1} />
-                                                <ListItemText primary={name} />
-                                            </MenuItem>
-                                        ))}
+                                <FormControl className={c.formControl}>
+                                    <InputLabel id="lbl2">Vyberte přílohu</InputLabel>
+                                    <Select
+                                        labelId="lbl1"
+                                        value={sideId}
+                                        onChange={onSideSelect}>
+                                        <MenuItem value={0}>Žádná</MenuItem>
+                                        {
+                                            sidedishes.map((i) =>
+                                                <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>
+                                            )
+                                        }
                                     </Select>
-                                </FormControl> */}
-
+                                </FormControl>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -269,7 +273,6 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
                         {/* </TableContainer> */}
                     </Grid>
                     <Grid item style={{ alignSelf: "flex-end" }}>
-                        TODO: Příloha/y, polévka
                         <Button color="primary" variant="contained">
                             Potvrdit
                         </Button>

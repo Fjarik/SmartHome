@@ -9,14 +9,6 @@ import { FoodTypeEnum } from "./../graphql-global-types";
 // GraphQL query operation: getBasicFoods
 // ====================================================
 
-export interface getBasicFoods_foods_categories {
-  __typename: "CategoryType";
-  /**
-   * Name of food category
-   */
-  name: string;
-}
-
 export interface getBasicFoods_foods {
   __typename: "FoodType";
   /**
@@ -31,12 +23,21 @@ export interface getBasicFoods_foods {
    * Type of food
    */
   type: FoodTypeEnum;
+}
+
+export interface getBasicFoods_sidedishes {
+  __typename: "SideDishType";
   /**
-   * Categories of food
+   * Id property
    */
-  categories: getBasicFoods_foods_categories[] | null;
+  id: string;
+  /**
+   * Name of side dish
+   */
+  name: string;
 }
 
 export interface getBasicFoods {
   foods: (getBasicFoods_foods | null)[] | null;
+  sidedishes: (getBasicFoods_sidedishes | null)[] | null;
 }
