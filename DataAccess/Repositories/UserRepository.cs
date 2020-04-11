@@ -18,9 +18,6 @@ namespace DataAccess.Repositories
 
 		public bool Exists(string googleId)
 		{
-			if (string.IsNullOrWhiteSpace(googleId)) {
-				return false;
-			}
 			return this.DbSet.Any(x => x.GoogleId == googleId);
 		}
 
@@ -32,12 +29,6 @@ namespace DataAccess.Repositories
 		public EntityEntry<User> Create(string email, string firstname, string lastname,
 										string googleId)
 		{
-			if (string.IsNullOrEmpty(email) ||
-				string.IsNullOrEmpty(firstname) ||
-				string.IsNullOrEmpty(lastname) ||
-				string.IsNullOrEmpty(googleId)) {
-				return null;
-			}
 			var u = new User {
 				Email = email,
 				Firstname = firstname,

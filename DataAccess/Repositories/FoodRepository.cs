@@ -26,9 +26,6 @@ namespace DataAccess.Repositories
 
 		public bool Exists(string name)
 		{
-			if (string.IsNullOrWhiteSpace(name)) {
-				return false;
-			}
 			return this.DbSet.Any(x => x.Name == name);
 		}
 
@@ -47,10 +44,6 @@ namespace DataAccess.Repositories
 		public EntityEntry<Food> Create(string name, int typeId,
 										bool glutenFree = true)
 		{
-			if (string.IsNullOrEmpty(name) ||
-				typeId < 1) {
-				return null;
-			}
 			var f = new Food() {
 				Name = name,
 				TypeId = typeId,

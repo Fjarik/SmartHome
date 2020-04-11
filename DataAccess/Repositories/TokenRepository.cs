@@ -49,9 +49,6 @@ namespace DataAccess.Repositories
 
 		public bool Delete(string token)
 		{
-			if (string.IsNullOrWhiteSpace(token)) {
-				return false;
-			}
 			var t = this.GetByToken(token);
 			if (t == null) {
 				return false;
@@ -63,9 +60,6 @@ namespace DataAccess.Repositories
 
 		public bool DeleteByUserId(int userId)
 		{
-			if (userId < 1) {
-				return false;
-			}
 			var tokens = this.DbSet.Where(x => x.UserId == userId);
 			this.DbSet.RemoveRange(tokens);
 			this.Save();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,6 +32,11 @@ namespace DataService.Services
 			}
 			var ent = this.Repository.GetById(id);
 			return new HomeResult<TEntity>(StatusCode.OK, ent);
+		}
+
+		public ILookup<int, TEntity> GetLookupByIds(IEnumerable<int> ids)
+		{
+			return this.Repository.GetLookupByIds(ids);
 		}
 
 		public virtual List<TEntity> GetAll()

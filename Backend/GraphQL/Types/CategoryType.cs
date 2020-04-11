@@ -11,9 +11,10 @@ namespace Backend.GraphQL.Types
 	{
 		public CategoryType()
 		{
-			Field(x => x.Id, type: typeof(IdGraphType)).Description("Id property");
-			Field(x => x.Name, type: typeof(StringGraphType)).Description("Name of food category");
-			Field(x => x.Description, type: typeof(StringGraphType)).Description("Description of food category");
+			Field(x => x.Id, type: typeof(NonNullGraphType<IdGraphType>)).Description("Id property");
+			Field(x => x.Name, type: typeof(NonNullGraphType<StringGraphType>)).Description("Name of food category");
+			Field(x => x.Description, type: typeof(StringGraphType), nullable: true)
+				.Description("Description of food category");
 			Field(x => x.FoodIds, type: typeof(ListGraphType<IntGraphType>)).Description("Food(s) of category");
 
 			//Field<ListGraphType<FoodType>, List<Food>>("Foods")

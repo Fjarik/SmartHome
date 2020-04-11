@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace DataAccess.IRepositories
 	{
 		List<TEntity> GetAll();
 		TEntity GetById(int id);
+		ILookup<int, TEntity> GetLookupByIds(IEnumerable<int> ids);
 
 		EntityEntry<TEntity> Create(TEntity entity);
 		bool Delete(TEntity entity);

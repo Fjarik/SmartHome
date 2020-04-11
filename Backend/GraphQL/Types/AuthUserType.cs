@@ -12,12 +12,12 @@ namespace Backend.GraphQL.Types
 	{
 		public AuthUserType()
 		{
-			Field(x => x.Id, type: typeof(IdGraphType)).Description("Id property");
-			Field(x => x.Firstname, type: typeof(StringGraphType)).Description("Firstname");
-			Field(x => x.Lastname, type: typeof(StringGraphType)).Description("Lastname");
-			Field(x => x.CreatedAt, type: typeof(DateTimeGraphType)).Description("Created at");
+			Field(x => x.Id, type: typeof(NonNullGraphType<IdGraphType>)).Description("Id property");
+			Field(x => x.Firstname, type: typeof(NonNullGraphType<StringGraphType>)).Description("Firstname");
+			Field(x => x.Lastname, type: typeof(NonNullGraphType<StringGraphType>)).Description("Lastname");
+			Field(x => x.CreatedAt, type: typeof(NonNullGraphType<DateTimeGraphType>)).Description("Created at");
 
-			Field(x => x.AuthToken, type: typeof(StringGraphType)).Description("Token");
+			Field(x => x.AuthToken, type: typeof(NonNullGraphType<StringGraphType>)).Description("Token");
 
 			this.Interface<UserInterface>();
 		}

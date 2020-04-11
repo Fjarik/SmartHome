@@ -15,18 +15,11 @@ namespace DataAccess.Repositories
 
 		public bool Exists(string name)
 		{
-			if (string.IsNullOrWhiteSpace(name)) {
-				return false;
-			}
 			return this.DbSet.Any(x => x.Name == name);
 		}
 
 		public EntityEntry<SideDish> Create(string name, string description = null, bool glutenFree = true)
 		{
-			if (string.IsNullOrWhiteSpace(name)) {
-				return null;
-			}
-
 			var side = new SideDish {
 				Name = name,
 				Description = description,

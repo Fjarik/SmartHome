@@ -33,6 +33,12 @@ namespace DataAccess.Repositories
 			return this.DbSet.FirstOrDefault(x => x.Id == id);
 		}
 
+		public ILookup<int, TEntity> GetLookupByIds(IEnumerable<int> ids)
+		{
+			var ents = this.DbSet.Where(x => ids.Contains(x.Id)).ToList();
+			return ents.ToLookup(x => x.Id);
+		}
+
 		public virtual EntityEntry<TEntity> Create(TEntity entity)
 		{
 			var ent = this.DbSet.Add(entity);

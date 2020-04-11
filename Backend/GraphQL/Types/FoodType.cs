@@ -16,12 +16,12 @@ namespace Backend.GraphQL.Types
 						ICategoryService categoryService,
 						IDataLoaderContextAccessor dataLoader)
 		{
-			Field(x => x.Id, type: typeof(IdGraphType)).Description("Id property");
-			Field(x => x.Name, type: typeof(StringGraphType)).Description("Name of food");
+			Field(x => x.Id, type: typeof(NonNullGraphType<IdGraphType>)).Description("Id property");
+			Field(x => x.Name, type: typeof(NonNullGraphType<StringGraphType>)).Description("Name of food");
 
 			Field(x => x.CategoryIds, type: typeof(ListGraphType<IntGraphType>)).Description("Category IDs of food");
 			Field(x => x.SideIds, type: typeof(ListGraphType<IntGraphType>)).Description("Side dish IDs of food");
-			Field(x => x.Type, type: typeof(FoodTypeEnum)).Description("Type of food");
+			Field(x => x.Type, type: typeof(NonNullGraphType<FoodTypeEnum>)).Description("Type of food");
 
 			Field<ListGraphType<CategoryType>, List<Category>>("categories")
 				.Resolve(ctx => categoryService.GetByIds(ctx.Source.CategoryIds))

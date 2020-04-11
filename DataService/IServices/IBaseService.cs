@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace DataService.IServices
 		TRepository Repository { get; }
 
 		HomeResult<TEntity> GetById(int id);
+		ILookup<int, TEntity> GetLookupByIds(IEnumerable<int> ids);
 		List<TEntity> GetAll();
 	}
 }
