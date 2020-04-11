@@ -29,7 +29,7 @@ namespace Backend.GraphQL.Types
 			Field(x => x.OriginalMealId, type: typeof(IdGraphType), nullable: true).Description("Original meal id");
 			Field(x => x.FoodId, type: typeof(NonNullGraphType<IdGraphType>)).Description("Food id property");
 			Field(x => x.Date, type: typeof(NonNullGraphType<DateGraphType>)).Description("Name of food");
-			Field(x => x.CategoryIds, type: typeof(ListGraphType<IntGraphType>)).Description("Categories of food");
+			Field(x => x.CategoryIds, type: typeof(ListGraphType<NonNullGraphType<IntGraphType>>)).Description("Categories of food");
 			Field(x => x.Type, type: typeof(NonNullGraphType<MealTypeEnum>)).Description("Meal type");
 
 			Field<MealType, Meal>("originalmeal")
@@ -42,7 +42,7 @@ namespace Backend.GraphQL.Types
 				.Resolve(GetFood)
 				.Description("Food");
 
-			Field<ListGraphType<CategoryType>, List<Category>>("categories")
+			Field<ListGraphType<NonNullGraphType<CategoryType>>, List<Category>>("categories")
 				.Resolve(ctx => categoryService.GetByIds(ctx.Source.CategoryIds))
 				.Description("Categories of meal");
 		}

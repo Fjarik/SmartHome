@@ -14,11 +14,11 @@ export interface getBasicMeals_meals_food {
   /**
    * Id property
    */
-  id: string | null;
+  id: string;
   /**
    * Name of food
    */
-  name: string | null;
+  name: string;
 }
 
 export interface getBasicMeals_meals {
@@ -26,19 +26,19 @@ export interface getBasicMeals_meals {
   /**
    * Id property
    */
-  id: string | null;
+  id: string;
   /**
    * Name of food
    */
-  date: any | null;
+  date: any;
   /**
    * Meal type
    */
-  type: MealTypeEnum | null;
+  type: MealTypeEnum;
   /**
    * Food
    */
-  food: getBasicMeals_meals_food | null;
+  food: getBasicMeals_meals_food;
 }
 
 export interface getBasicMeals {

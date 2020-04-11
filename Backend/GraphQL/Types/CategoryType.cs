@@ -15,7 +15,7 @@ namespace Backend.GraphQL.Types
 			Field(x => x.Name, type: typeof(NonNullGraphType<StringGraphType>)).Description("Name of food category");
 			Field(x => x.Description, type: typeof(StringGraphType), nullable: true)
 				.Description("Description of food category");
-			Field(x => x.FoodIds, type: typeof(ListGraphType<IntGraphType>)).Description("Food(s) of category");
+			Field(x => x.FoodIds, type: typeof(ListGraphType<NonNullGraphType<IntGraphType>>)).Description("Food(s) of category");
 
 			//Field<ListGraphType<FoodType>, List<Food>>("Foods")
 			//	.Resolve(ctx => ctx.Source.FoodCategories.Select(y => y.Food).ToList())

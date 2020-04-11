@@ -14,7 +14,7 @@ export interface getBasicFoods_foods_categories {
   /**
    * Name of food category
    */
-  name: string | null;
+  name: string;
 }
 
 export interface getBasicFoods_foods {
@@ -22,19 +22,19 @@ export interface getBasicFoods_foods {
   /**
    * Id property
    */
-  id: string | null;
+  id: string;
   /**
    * Name of food
    */
-  name: string | null;
+  name: string;
   /**
    * Type of food
    */
-  type: FoodTypeEnum | null;
+  type: FoodTypeEnum;
   /**
    * Categories of food
    */
-  categories: (getBasicFoods_foods_categories | null)[] | null;
+  categories: getBasicFoods_foods_categories[] | null;
 }
 
 export interface getBasicFoods {

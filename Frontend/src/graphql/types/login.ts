@@ -12,23 +12,23 @@ export interface login_login {
   /**
    * Token
    */
-  authToken: string | null;
+  authToken: string;
   /**
    * Id property
    */
-  id: string | null;
+  id: string;
   /**
    * Firstname
    */
-  firstname: string | null;
+  firstname: string;
   /**
    * Lastname
    */
-  lastname: string | null;
+  lastname: string;
   /**
    * Created at
    */
-  createdAt: any | null;
+  createdAt: any;
 }
 
 export interface login {

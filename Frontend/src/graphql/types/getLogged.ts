@@ -12,19 +12,19 @@ export interface getLogged_logged {
   /**
    * Id property
    */
-  id: string | null;
+  id: string;
   /**
    * Firstname
    */
-  firstname: string | null;
+  firstname: string;
   /**
    * Lastname
    */
-  lastname: string | null;
+  lastname: string;
   /**
    * Created at
    */
-  createdAt: any | null;
+  createdAt: any;
 }
 
 export interface getLogged {
