@@ -1,5 +1,5 @@
 import { FunctionComponent, useState, ChangeEvent, useEffect } from "react";
-import { Modal, makeStyles, Theme, createStyles, Select, MenuItem, Table, TableCell, TableHead, TableRow, TableBody, Checkbox, TableContainer, Grid, Button, FormControlLabel, FormControl, InputLabel, ListSubheader, FormHelperText } from "@material-ui/core";
+import { Modal, makeStyles, Theme, createStyles, Select, MenuItem, Table, TableCell, TableHead, TableRow, TableBody, Checkbox, TableContainer, Grid, Button, FormControlLabel, FormControl, InputLabel, ListSubheader, FormHelperText, Container } from "@material-ui/core";
 import { useQuery, useMutation, useApolloClient } from "react-apollo";
 import { getBasicFoods } from "../../../../src/graphql/types/getBasicFoods";
 import { getFoodsBasic } from "../../../../src/graphql/queries";
@@ -10,6 +10,7 @@ import { FoodTypeEnum, MealTypeEnum, MealTimeEnum } from "../../../../src/graphq
 import { createMeal, createMealVariables } from "../../../../src/graphql/types/createMeal";
 import { createMealMutation } from "../../../../src/graphql/mutations";
 import { useSnackbar } from "notistack";
+import { useRouter } from "next/router";
 
 class Day {
     ActualDate: DateTime;
@@ -32,12 +33,6 @@ class Day {
     }
 }
 
-
-interface IAddMealProps {
-    isOpen: boolean;
-    handleClose: () => void;
-}
-
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         paper: {
@@ -57,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
         }
     }),
 );
-const AddLunch: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
+const AddLunch: FunctionComponent<{}> = () => {
     const dayCount = 5;
 
     const c = useStyles();
@@ -69,7 +64,7 @@ const AddLunch: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => 
     const [recomendedSides, setRecomendedSides] = useState<number[]>([]);
     const [showError, setShowError] = useState<boolean>(false);
     const [days, setDays] = useState<Day[]>([]);
-
+    const { query: { time } } = useRouter();
     const { loading, data, error } = useQuery<getBasicFoods>(getFoodsBasic);
     const client = useApolloClient();
 
@@ -214,17 +209,10 @@ const AddLunch: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => 
         });
 
         enqueueSnackbar("Jídla úspěšně vytvořena", { variant: "success" });
-        handleClose();
     };
 
     if (loading) {
-        return <Modal
-            open={isOpen}
-            onClose={handleClose}>
-            <div className={c.paper}>
-                <CenterLoading />
-            </div>
-        </Modal>;
+        return <CenterLoading />;
     }
 
     const { foods, sidedishes } = data;
@@ -244,88 +232,84 @@ const AddLunch: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => 
     };
 
     return (
-        <Modal
-            open={isOpen}
-            onClose={handleClose}>
-            <div className={c.paper}>
-                <h2>Nastavit nové jídlo</h2>
-                <Grid container direction="column" alignItems="center" justify="space-between" spacing={2} >
-                    <Grid item>
-                        <KeyboardDatePicker
-                            // clearable={false}
-                            disableToolbar
-                            autoOk={true}
-                            variant="inline"
-                            label="Vyberte datum"
-                            format="dd.MM.yyyy"
-                            value={selectedDate}
-                            onChange={onDateChange} />
-                    </Grid>
-                    <Grid item style={{ alignSelf: "stretch" }}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={4}>
-                                <FormControl className={c.formControl}>
-                                    <InputLabel id="lbl1">Vyberte polévku</InputLabel>
-                                    <Select
-                                        labelId="lbl1"
-                                        value={soupId}
-                                        onChange={onSoupSelect}>
-                                        <MenuItem value={0}>Žádná</MenuItem>
-                                        {
-                                            soups.map((i) =>
-                                                <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>
-                                            )
-                                        }
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                            <Grid item xs={12} sm={4}>
-                                <FormControl className={c.formControl} error={showError}>
-                                    <InputLabel id="lbl2">Vyberte jídlo</InputLabel>
-                                    <Select
-                                        labelId="lbl2"
-                                        value={selectedFood}
-                                        onChange={onFoodSelect}>
-                                        <MenuItem value={0}>Žádná</MenuItem>
-                                        {
-                                            mainMeals.map((i) =>
-                                                <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>
-                                            )
-                                        }
-                                    </Select>
+        <Container>
+            <Grid container direction="column" alignItems="center" justify="space-between" spacing={2} >
+                <Grid item>
+                    <KeyboardDatePicker
+                        // clearable={false}
+                        disableToolbar
+                        autoOk={true}
+                        variant="inline"
+                        label="Vyberte datum"
+                        format="dd.MM.yyyy"
+                        value={selectedDate}
+                        onChange={onDateChange} />
+                </Grid>
+                <Grid item style={{ alignSelf: "stretch" }}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={4}>
+                            <FormControl className={c.formControl}>
+                                <InputLabel id="lbl1">Vyberte polévku</InputLabel>
+                                <Select
+                                    labelId="lbl1"
+                                    value={soupId}
+                                    onChange={onSoupSelect}>
+                                    <MenuItem value={0}>Žádná</MenuItem>
                                     {
-                                        showError &&
-                                        <FormHelperText>Musíte vybrat jídlo</FormHelperText>
+                                        soups.map((i) =>
+                                            <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>
+                                        )
                                     }
-                                </FormControl>
-                            </Grid>
-                            <Grid item xs={12} sm={4}>
-                                <FormControl className={c.formControl}>
-                                    <InputLabel id="lbl3">Vyberte přílohu</InputLabel>
-                                    <Select
-                                        labelId="lbl3"
-                                        value={sideId}
-                                        onChange={onSideSelect}>
-                                        <ListSubheader>Doporučené</ListSubheader>
-                                        <MenuItem value={0}>Žádná</MenuItem>
-                                        {
-                                            sidedishes.filter(x => recomendedSides.includes(parseInt(x.id))).map((i) =>
-                                                <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>
-                                            )
-                                        }
-                                        <ListSubheader>Ostatní</ListSubheader>
-                                        {
-                                            sidedishes.filter(x => !recomendedSides.includes(parseInt(x.id))).map((i) =>
-                                                <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>
-                                            )
-                                        }
-                                    </Select>
-                                </FormControl>
-                            </Grid>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                            <FormControl className={c.formControl} error={showError}>
+                                <InputLabel id="lbl2">Vyberte jídlo</InputLabel>
+                                <Select
+                                    labelId="lbl2"
+                                    value={selectedFood}
+                                    onChange={onFoodSelect}>
+                                    <MenuItem value={0}>Žádná</MenuItem>
+                                    {
+                                        mainMeals.map((i) =>
+                                            <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>
+                                        )
+                                    }
+                                </Select>
+                                {
+                                    showError &&
+                                    <FormHelperText>Musíte vybrat jídlo</FormHelperText>
+                                }
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                            <FormControl className={c.formControl}>
+                                <InputLabel id="lbl3">Vyberte přílohu</InputLabel>
+                                <Select
+                                    labelId="lbl3"
+                                    value={sideId}
+                                    onChange={onSideSelect}>
+                                    <ListSubheader>Doporučené</ListSubheader>
+                                    <MenuItem value={0}>Žádná</MenuItem>
+                                    {
+                                        sidedishes.filter(x => recomendedSides.includes(parseInt(x.id))).map((i) =>
+                                            <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>
+                                        )
+                                    }
+                                    <ListSubheader>Ostatní</ListSubheader>
+                                    {
+                                        sidedishes.filter(x => !recomendedSides.includes(parseInt(x.id))).map((i) =>
+                                            <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>
+                                        )
+                                    }
+                                </Select>
+                            </FormControl>
                         </Grid>
                     </Grid>
-                    <Grid item>
-                        {/* <TableContainer> */}
+                </Grid>
+                <Grid item>
+                    <TableContainer>
                         <Table>
                             <TableHead>
                                 <TableRow>
@@ -368,16 +352,15 @@ const AddLunch: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => 
                                 </TableRow>
                             </TableBody>
                         </Table>
-                        {/* </TableContainer> */}
-                    </Grid>
-                    <Grid item style={{ alignSelf: "flex-end" }}>
-                        <Button color="primary" variant="contained" onClick={submit} >
-                            Potvrdit
-                        </Button>
-                    </Grid>
+                    </TableContainer>
                 </Grid>
-            </div>
-        </Modal>
+                <Grid item style={{ alignSelf: "flex-end" }}>
+                    <Button color="primary" variant="contained" onClick={submit} >
+                        Potvrdit
+                        </Button>
+                </Grid>
+            </Grid>
+        </Container>
     );
 };
 

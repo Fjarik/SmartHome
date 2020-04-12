@@ -10,11 +10,6 @@ import NewMealsButton from "./AddMeals/NewMealsButton";
 
 const MealPage: FunctionComponent = () => {
     const { data, loading, error, refetch } = useQuery<getBasicMeals>(getMealsBasic, { ssr: false, });
-    const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
-
-    const handleAddModalClose = () => {
-        setIsAddModalOpen(false);
-    };
 
     if (loading || !data) {
         return <CenterLoading text="Načítání" />;
@@ -33,13 +28,7 @@ const MealPage: FunctionComponent = () => {
                     <Button onClick={() => refetch()}>Refetch</Button>
                 </Grid>
                 <Grid item>
-                    <Button variant="contained" color="secondary" onClick={() => setIsAddModalOpen(true)}>
-                        Přidat nové jídlo
-                    </Button>
-                    <AddLunch isOpen={isAddModalOpen} handleClose={handleAddModalClose} />
-                </Grid>
-                <Grid item>
-                   <NewMealsButton />
+                    <NewMealsButton />
                 </Grid>
             </Grid>
             <TableContainer component={Paper}>
