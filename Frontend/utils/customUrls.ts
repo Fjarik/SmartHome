@@ -1,5 +1,9 @@
+import { MealTimeEnum } from "../src/graphql/graphql-global-types";
+
 const appUrl = "/app";
 const projectsUrl = appUrl + "/projects";
+const calendarUrl = projectsUrl + "/calendar";
+const mealsUrl = projectsUrl + "/meals";
 
 const accountUrls = {
     loginUrl: "/login",
@@ -7,9 +11,17 @@ const accountUrls = {
     get settingsUrl() { return this.accountUrl + "/settings"; },
 };
 
+const meals = {
+    get mealsIndex() { return mealsUrl; },
+    get addMeal() { return mealsUrl + "/addMeal"; },
+    getAddMeal: (time: MealTimeEnum = MealTimeEnum.LUNCH) => {
+        return mealsUrl + "/addMeal?time=" + time.toString();
+    },
+};
+
 const projectsUrls = {
-    get calendarUrl() { return projectsUrl + "/calendar"; },
-    get mealsUrl() { return projectsUrl + "/meals"; },
+    calendarUrl: calendarUrl,
+    meals: meals,
 };
 
 const appUrls = {

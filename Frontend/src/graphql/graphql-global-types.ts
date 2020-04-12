@@ -17,11 +17,22 @@ export enum FoodTypeEnum {
 }
 
 /**
+ * Meal time enum
+ */
+export enum MealTimeEnum {
+  BREAKFAST = "BREAKFAST",
+  DINNER = "DINNER",
+  LUNCH = "LUNCH",
+}
+
+/**
  * Meal enum types
  */
 export enum MealTypeEnum {
   FOOD_BOX = "FOOD_BOX",
+  GRANDMA = "GRANDMA",
   NORMAL = "NORMAL",
+  OTHER = "OTHER",
   RESTAURANT = "RESTAURANT",
 }
 

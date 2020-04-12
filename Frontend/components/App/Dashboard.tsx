@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 const Dashboard: FunctionComponent = () => {
     const c = useStyles();
-    const { app: { projectsUrls: { calendarUrl, mealsUrl } } } = customUrls;
+    const { app: { projectsUrls: { calendarUrl, meals: { mealsIndex } } } } = customUrls;
 
     const apps = [
         {
@@ -30,7 +30,7 @@ const Dashboard: FunctionComponent = () => {
             avatar: <RestaurantIcon />,
             subheader: "Aktuálné plánovaná jídla",
             content: "Vytvořte si, nebo si nechejte vygenerovat jídelníček pro celou rodinu.",
-            url: mealsUrl
+            url: mealsIndex
         }
     ];
 

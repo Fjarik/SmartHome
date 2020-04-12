@@ -2,10 +2,11 @@ import { FunctionComponent, useState } from "react";
 import { getBasicMeals } from "../../../src/graphql/types/getBasicMeals";
 import { getMealsBasic } from "../../../src/graphql/queries";
 import CenterLoading from "../../Loading/CenterLoading";
-import { Button, Container, TableContainer, Table, Paper, TableHead, TableRow, TableCell, TableBody, Grid } from "@material-ui/core";
+import { Button, Container, TableContainer, Table, Paper, TableHead, TableRow, TableCell, TableBody, Grid, ButtonGroup } from "@material-ui/core";
 import { useQuery } from "react-apollo";
-import AddMeal from "./AddMeal";
+import AddLunch from "./AddMeals/AddLunch";
 import { DateTime } from "luxon";
+import NewMealsButton from "./AddMeals/NewMealsButton";
 
 const MealPage: FunctionComponent = () => {
     const { data, loading, error, refetch } = useQuery<getBasicMeals>(getMealsBasic, { ssr: false, });
@@ -35,7 +36,10 @@ const MealPage: FunctionComponent = () => {
                     <Button variant="contained" color="secondary" onClick={() => setIsAddModalOpen(true)}>
                         Přidat nové jídlo
                     </Button>
-                    <AddMeal isOpen={isAddModalOpen} handleClose={handleAddModalClose} />
+                    <AddLunch isOpen={isAddModalOpen} handleClose={handleAddModalClose} />
+                </Grid>
+                <Grid item>
+                   <NewMealsButton />
                 </Grid>
             </Grid>
             <TableContainer component={Paper}>

@@ -3,13 +3,25 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { MealTypeEnum } from "./../graphql-global-types";
+import { MealTypeEnum, MealTimeEnum } from "./../graphql-global-types";
 
 // ====================================================
 // GraphQL query operation: getBasicMeals
 // ====================================================
 
 export interface getBasicMeals_meals_food {
+  __typename: "FoodType";
+  /**
+   * Id property
+   */
+  id: string;
+  /**
+   * Name of food
+   */
+  name: string;
+}
+
+export interface getBasicMeals_meals_soup {
   __typename: "FoodType";
   /**
    * Id property
@@ -36,9 +48,17 @@ export interface getBasicMeals_meals {
    */
   type: MealTypeEnum;
   /**
+   * Meal time
+   */
+  time: MealTimeEnum;
+  /**
    * Food
    */
-  food: getBasicMeals_meals_food;
+  food: getBasicMeals_meals_food | null;
+  /**
+   * Soup
+   */
+  soup: getBasicMeals_meals_soup | null;
 }
 
 export interface getBasicMeals {

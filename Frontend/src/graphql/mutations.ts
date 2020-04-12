@@ -21,19 +21,23 @@ export const logoutMutation = gql`
 
 export const createMealMutation = gql`
   mutation createMeal(
-    $foodId: ID!
-    $type: MealTypeEnum!
     $date: Date!
+    $type: MealTypeEnum!
+    $time: MealTimeEnum!
+    $foodId: ID
     $sideDishId: ID = null
     $originalMealId: ID = null
+    $soupId: ID = null
   ) {
     createMeal(
       meal: {
         foodId: $foodId
         type: $type
+        time: $time
         date: $date
         sideDishId: $sideDishId
         originalMealId: $originalMealId
+        soupId: $soupId
       }
     ) {
       id

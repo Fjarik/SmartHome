@@ -10,6 +10,7 @@ import { ApolloLink } from "apollo-link";
 import { getToken } from "../src/graphql/auth";
 
 const endpoint = "https://domov.azurewebsites.net/graphql";
+// const endpoint = "http://localhost:20436/graphql";
 // https://domov.azurewebsites.net/ui/playground
 
 /**

@@ -1,18 +1,20 @@
 import { FunctionComponent, useState, ChangeEvent, useEffect } from "react";
 import { Modal, makeStyles, Theme, createStyles, Select, MenuItem, Table, TableCell, TableHead, TableRow, TableBody, Checkbox, TableContainer, Grid, Button, FormControlLabel, FormControl, InputLabel, ListSubheader, FormHelperText } from "@material-ui/core";
 import { useQuery, useMutation, useApolloClient } from "react-apollo";
-import { getBasicFoods } from "../../../src/graphql/types/getBasicFoods";
-import { getFoodsBasic } from "../../../src/graphql/queries";
+import { getBasicFoods } from "../../../../src/graphql/types/getBasicFoods";
+import { getFoodsBasic } from "../../../../src/graphql/queries";
 import { DateTime } from "luxon";
 import { KeyboardDatePicker } from "@material-ui/pickers";
-import CenterLoading from "../../Loading/CenterLoading";
-import { FoodTypeEnum, MealTypeEnum } from "../../../src/graphql/graphql-global-types";
-import { createMeal, createMealVariables } from "../../../src/graphql/types/createMeal";
-import { createMealMutation } from "../../../src/graphql/mutations";
+import CenterLoading from "../../../Loading/CenterLoading";
+import { FoodTypeEnum, MealTypeEnum, MealTimeEnum } from "../../../../src/graphql/graphql-global-types";
+import { createMeal, createMealVariables } from "../../../../src/graphql/types/createMeal";
+import { createMealMutation } from "../../../../src/graphql/mutations";
+import { useSnackbar } from "notistack";
 
 class Day {
     ActualDate: DateTime;
     Checked: boolean = false;
+    soup: boolean = false;
 
     private get localDate(): DateTime {
         return this.ActualDate.setLocale("cs-CZ");
@@ -55,11 +57,12 @@ const useStyles = makeStyles((theme: Theme) =>
         }
     }),
 );
-const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
+const AddLunch: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
     const dayCount = 5;
 
     const c = useStyles();
-    const [selectedFood, setSelectedFood] = useState<string>("");
+    const { enqueueSnackbar } = useSnackbar();
+    const [selectedFood, setSelectedFood] = useState<number>(0);
     const [soupId, setSoupId] = useState<number>(0);
     const [sideId, setSideId] = useState<number>(0);
     const [selectedDate, setSelectedDate] = useState<DateTime>();
@@ -92,6 +95,15 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
 
         // console.log(newDays);
 
+        setDays([...newDays]);
+    };
+
+    const onCheckBoxSoupChange = (checked: boolean, index: number): void => {
+        const day = days[index];
+        day.soup = checked;
+
+        const newDays = days;
+        newDays[index] = day;
         setDays([...newDays]);
     };
 
@@ -145,10 +157,13 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
     };
 
     const createMealAsync = async (variables: createMealVariables): Promise<string> => {
-        const { data: { createMeal: { id } } } = await client.mutate<createMeal, createMealVariables>({
+        const { data: { createMeal: { id } }, errors: cErrors } = await client.mutate<createMeal, createMealVariables>({
             mutation: createMealMutation,
             variables: variables
         });
+        if (cErrors) {
+            cErrors.forEach(console.log);
+        }
         return id;
     };
 
@@ -159,18 +174,47 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
         }
         const date = selectedDate.toISODate();
 
+        const soup = soupId === 0 ? null : soupId.toString();
+        const food = selectedFood === 0 ? null : selectedFood.toString();
         const side = sideId === 0 ? null : sideId.toString();
 
         // Main meal
         const mainMealId = await createMealAsync({
-            foodId: selectedFood,
+            foodId: food,
             date: date,
             type: MealTypeEnum.NORMAL,
-            sideDishId: side
+            time: MealTimeEnum.LUNCH,
+            sideDishId: side,
+            soupId: soup,
         });
 
         console.log(mainMealId);
 
+        if (!mainMealId) {
+            enqueueSnackbar("Nezdařilo se vytvořit hlavní jídlo", { variant: "error" });
+            return;
+        }
+
+        days.filter(x => x.Checked || x.soup).forEach(async (x) => {
+            const res = await createMealAsync({
+                foodId: food,
+                date: x.ActualDate.toISODate(),
+                type: MealTypeEnum.FOOD_BOX,
+                time: MealTimeEnum.LUNCH,
+                sideDishId: side,
+                soupId: soup,
+                originalMealId: mainMealId
+            });
+            console.log(res);
+
+            if (!res) {
+                enqueueSnackbar("Nezdařilo se vytvořit krabičku", { variant: "error" });
+                return;
+            }
+        });
+
+        enqueueSnackbar("Jídla úspěšně vytvořena", { variant: "success" });
+        handleClose();
     };
 
     if (loading) {
@@ -187,12 +231,12 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
     const mainMeals = foods.filter(x => x.type === FoodTypeEnum.MAIN_MEAL).sort((a, b) => a.name.localeCompare(b.name));
     const soups = foods.filter(x => x.type === FoodTypeEnum.SOUP).sort((a, b) => a.name.localeCompare(b.name));
 
-    const onFoodSelect = (event: ChangeEvent<{ value: string }>) => {
-        const foodId = event?.target?.value;
+    const onFoodSelect = (event: ChangeEvent<{ value: number | null }>) => {
+        const foodId = event?.target?.value ?? 0;
         setSelectedFood(foodId);
         setShowError(false);
 
-        const selFood = foods.find(x => x.id === foodId);
+        const selFood = foods.find(x => x.id === foodId.toString());
         if (selFood) {
             // console.log(selFood);
             setRecomendedSides(selFood.sideIds);
@@ -242,6 +286,7 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
                                         labelId="lbl2"
                                         value={selectedFood}
                                         onChange={onFoodSelect}>
+                                        <MenuItem value={0}>Žádná</MenuItem>
                                         {
                                             mainMeals.map((i) =>
                                                 <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>
@@ -256,9 +301,9 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
                             </Grid>
                             <Grid item xs={12} sm={4}>
                                 <FormControl className={c.formControl}>
-                                    <InputLabel id="lbl2">Vyberte přílohu</InputLabel>
+                                    <InputLabel id="lbl3">Vyberte přílohu</InputLabel>
                                     <Select
-                                        labelId="lbl1"
+                                        labelId="lbl3"
                                         value={sideId}
                                         onChange={onSideSelect}>
                                         <ListSubheader>Doporučené</ListSubheader>
@@ -309,6 +354,18 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
                                         )
                                     }
                                 </TableRow>
+                                <TableRow>
+                                    <TableCell>Polévka</TableCell>
+                                    {
+                                        days.map((elem, index) =>
+                                            <TableCell key={index}>
+                                                <Checkbox
+                                                    checked={elem.soup}
+                                                    onChange={(event, checked: boolean) => onCheckBoxSoupChange(checked, index)} />
+                                            </TableCell>
+                                        )
+                                    }
+                                </TableRow>
                             </TableBody>
                         </Table>
                         {/* </TableContainer> */}
@@ -324,4 +381,4 @@ const AddMeal: FunctionComponent<IAddMealProps> = ({ isOpen, handleClose }) => {
     );
 };
 
-export default AddMeal;
+export default AddLunch;

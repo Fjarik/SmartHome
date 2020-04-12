@@ -17,7 +17,12 @@ export const getMealsBasic = gql`
       id
       date
       type
+      time
       food {
+        id
+        name
+      }
+      soup {
         id
         name
       }
