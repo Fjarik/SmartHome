@@ -9,6 +9,9 @@ namespace DataAccess.IRepositories
 	public interface IMealRepository : IBaseRepository<Meal>
 	{
 		List<Meal> GetByDate(DateTime date);
-		EntityEntry<Meal> Create(int foodId, int typeId, DateTime date, int? sideId = null, int? originalMealId = null);
+
+		EntityEntry<Meal> Create(DateTime date, short typeId, short timeId,
+								 int? foodId = null, int? soupId = null,
+								 int? sideId = null, int? originalMealId = null);
 	}
 }

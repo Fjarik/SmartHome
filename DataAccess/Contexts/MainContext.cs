@@ -18,13 +18,6 @@ namespace DataAccess.Contexts
         public virtual DbSet<Token> Tokens { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Category>(entity =>
@@ -90,21 +83,29 @@ namespace DataAccess.Contexts
             {
                 entity.HasComment("Jídla v jednotlivé dny");
 
+                entity.Property(e => e.TimeId)
+                    .HasDefaultValueSql("((2))")
+                    .HasComment("Snídaně, oběd, večeře");
+
                 entity.HasOne(d => d.Food)
-                    .WithMany(p => p.Meals)
+                    .WithMany(p => p.MealFoods)
                     .HasForeignKey(d => d.FoodId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Meals_Foods");
 
                 entity.HasOne(d => d.OriginalMeal)
                     .WithMany(p => p.InverseOriginalMeal)
                     .HasForeignKey(d => d.OriginalMealId)
-                    .HasConstraintName("FK_Meals_Meals");
+                    .HasConstraintName("FK_Meals_OriginalMeals");
 
                 entity.HasOne(d => d.Side)
                     .WithMany(p => p.Meals)
                     .HasForeignKey(d => d.SideId)
                     .HasConstraintName("FK_Meals_SideDishes");
+
+                entity.HasOne(d => d.Soup)
+                    .WithMany(p => p.MealSoups)
+                    .HasForeignKey(d => d.SoupId)
+                    .HasConstraintName("FK_Meals_Soup");
             });
 
             modelBuilder.Entity<MealCategory>(entity =>

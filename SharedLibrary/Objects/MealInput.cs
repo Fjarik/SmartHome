@@ -7,16 +7,18 @@ namespace SharedLibrary.Objects
 {
 	public class MealInput
 	{
-		public int FoodId { get; set; }
-		public MealTypes Type { get; set; }
 		public DateTime Date { get; set; }
+		public MealTypes Type { get; set; }
+		public MealTimes Time { get; set; } = MealTimes.Lunch;
+
+		public int? FoodId { get; set; } = null;
+		public int? SoupId { get; set; } = null;
 		public int? SideDishId { get; set; } = null;
 		public int? OriginalMealId { get; set; } = null;
 
-		public bool IsValid => FoodId > 0 &&
-							   (SideDishId == null ||
-								(SideDishId != null && SideDishId > 1)) &&
-							   (OriginalMealId == null ||
-								(OriginalMealId != null && OriginalMealId > 1));
+		public bool IsValid => (FoodId > 0 || FoodId == null) &&
+							   (SoupId > 0 || SoupId == null) &&
+							   (SideDishId > 0 || SideDishId == null) &&
+							   (OriginalMealId > 0 || OriginalMealId == null);
 	}
 }

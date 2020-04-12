@@ -33,6 +33,9 @@ namespace DataAccess.Models
 
 		[NotMapped]
 		public MealTypes Type => (MealTypes) this.TypeId;
+
+		[NotMapped]
+		public MealTimes Time => (MealTimes)this.TimeId;
 	}
 
 	public partial class SideDish : IDbEntity { }

@@ -26,21 +26,30 @@ namespace Backend.GraphQL.Types
 			_foodService = foodService;
 			_mealService = mealService;
 			Field(x => x.Id, type: typeof(NonNullGraphType<IdGraphType>)).Description("Id property");
-			Field(x => x.OriginalMealId, type: typeof(IdGraphType), nullable: true).Description("Original meal id");
-			Field(x => x.FoodId, type: typeof(NonNullGraphType<IdGraphType>)).Description("Food id property");
 			Field(x => x.Date, type: typeof(NonNullGraphType<DateGraphType>)).Description("Name of food");
-			Field(x => x.CategoryIds, type: typeof(ListGraphType<NonNullGraphType<IntGraphType>>)).Description("Categories of food");
 			Field(x => x.Type, type: typeof(NonNullGraphType<MealTypeEnum>)).Description("Meal type");
+			Field(x => x.Time, type: typeof(NonNullGraphType<MealTimeEnum>)).Description("Meal time");
+
+			Field(x => x.OriginalMealId, type: typeof(IdGraphType), nullable: true).Description("Original meal id");
+			Field(x => x.SoupId, type: typeof(IdGraphType), nullable: true).Description("Id of soup property");
+			Field(x => x.FoodId, type: typeof(IdGraphType), nullable: true).Description("Id of main food property");
+			Field(x => x.SideId, type: typeof(IdGraphType), nullable: true).Description("Id of side dish property");
+			
+			Field(x => x.CategoryIds, type: typeof(ListGraphType<NonNullGraphType<IntGraphType>>))
+				.Description("Categories of food");
 
 			Field<MealType, Meal>("originalmeal")
 				.Resolve(GetOriginalMeal)
 				.Description("Original meal");
+			Field<FoodType, Food>("soup")
+				.Resolve(GetSoup)
+				.Description("Soup");
+			Field<FoodType, Food>("food")
+				.Resolve(GetFood)
+				.Description("Food");
 			Field<SideDishType, SideDish>("sidedish")
 				.Resolve(GetSideDish)
 				.Description("Side dish");
-			Field<NonNullGraphType<FoodType>, Food>("food")
-				.Resolve(GetFood)
-				.Description("Food");
 
 			Field<ListGraphType<NonNullGraphType<CategoryType>>, List<Category>>("categories")
 				.Resolve(ctx => categoryService.GetByIds(ctx.Source.CategoryIds))
@@ -60,6 +69,11 @@ namespace Backend.GraphQL.Types
 		private Food GetFood(ResolveFieldContext<Meal> ctx)
 		{
 			return this.GetById(ctx, x => x.FoodId, _foodService);
+		}
+
+		private Food GetSoup(ResolveFieldContext<Meal> ctx)
+		{
+			return this.GetById(ctx, x => x.SoupId, _foodService);
 		}
 
 		private TOutEntity GetById<TInEntity, TOutEntity>(ResolveFieldContext<TInEntity> ctx,

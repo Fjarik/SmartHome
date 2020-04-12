@@ -18,11 +18,15 @@ namespace DataAccess.Models
         [Column("ID")]
         public int Id { get; set; }
         [Column("FoodID")]
-        public int FoodId { get; set; }
+        public int? FoodId { get; set; }
         [Column("TypeID")]
-        public int TypeId { get; set; }
-        [Column("SideID")]
+        public short TypeId { get; set; }
+        [Column("TimeID")]
+        public short TimeId { get; set; }
+		[Column("SideID")]
         public int? SideId { get; set; }
+        [Column("SoupID")]
+        public int? SoupId { get; set; }
         [Column("OriginalMealID")]
         public int? OriginalMealId { get; set; }
         [Column(TypeName = "date")]
@@ -31,7 +35,7 @@ namespace DataAccess.Models
         public string Note { get; set; }
 
         [ForeignKey(nameof(FoodId))]
-        [InverseProperty("Meals")]
+        [InverseProperty("MealFoods")]
         public virtual Food Food { get; set; }
         [ForeignKey(nameof(OriginalMealId))]
         [InverseProperty(nameof(Meal.InverseOriginalMeal))]
@@ -39,6 +43,9 @@ namespace DataAccess.Models
         [ForeignKey(nameof(SideId))]
         [InverseProperty(nameof(SideDish.Meals))]
         public virtual SideDish Side { get; set; }
+        [ForeignKey(nameof(SoupId))]
+        [InverseProperty("MealSoups")]
+        public virtual Food Soup { get; set; }
         [InverseProperty(nameof(Meal.OriginalMeal))]
         public virtual ICollection<Meal> InverseOriginalMeal { get; set; }
         [InverseProperty(nameof(MealCategory.Meal))]

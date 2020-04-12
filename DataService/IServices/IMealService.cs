@@ -12,7 +12,13 @@ namespace DataService.IServices
 	{
 		List<Meal> GetByDate(DateTime date);
 		HomeResult<Meal> Create(MealInput input);
-		HomeResult<Meal> Create(int foodId, MealTypes type, DateTime date, int? sideId = null, int? originalMealId = null);
-		HomeResult<Meal> Create(int foodId, int typeId, DateTime date, int? sideId = null, int? originalMealId = null);
+
+		HomeResult<Meal> Create(DateTime date, MealTypes type, MealTimes time,
+								int? foodId = null, int? soupId = null,
+								int? sideId = null, int? originalMealId = null);
+
+		HomeResult<Meal> Create(DateTime date, short typeId, short timeId,
+								int? foodId = null, int? soupId = null,
+								int? sideId = null, int? originalMealId = null);
 	}
 }

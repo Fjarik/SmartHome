@@ -26,29 +26,34 @@ namespace DataService.Services
 			if (!input.IsValid) {
 				return new HomeResult<Meal>(StatusCode.NotValidId);
 			}
-			return this.Create(input.FoodId, input.Type, input.Date, input.SideDishId, input.OriginalMealId);
+			return this.Create(input.Date, input.Type, input.Time,
+							   input.FoodId, input.SoupId,
+							   input.SideDishId, input.OriginalMealId);
 		}
 
-		public HomeResult<Meal> Create(int foodId, MealTypes type, DateTime date, int? sideId = null,
-									   int? originalMealId = null)
+		public HomeResult<Meal> Create(DateTime date, MealTypes type, MealTimes time = MealTimes.Lunch,
+									   int? foodId = null, int? soupId = null,
+									   int? sideId = null, int? originalMealId = null)
 		{
-			return this.Create(foodId, (int) type, date, sideId, originalMealId);
+			return this.Create(date, (short) type, (short) time, foodId, soupId, sideId, originalMealId);
 		}
 
-		public HomeResult<Meal> Create(int foodId, int typeId, DateTime date, int? sideId = null,
-									   int? originalMealId = null)
+		public HomeResult<Meal> Create(DateTime date, short typeId, short timeId,
+									   int? foodId = null, int? soupId = null,
+									   int? sideId = null, int? originalMealId = null)
 		{
-			if (foodId < 1 ||
-				typeId < 1) {
+			if (typeId < 1) {
 				return new HomeResult<Meal>(StatusCode.NotValidId);
 			}
 
-			if ((originalMealId != null && originalMealId < 1) ||
+			if ((foodId != null && foodId < 1) ||
+				(soupId != null && soupId < 1) ||
+				(originalMealId != null && originalMealId < 1) ||
 				(sideId != null && sideId < 1)) {
 				return new HomeResult<Meal>(StatusCode.NotValidId);
 			}
 
-			var m = this.Repository.Create(foodId, typeId, date, sideId, originalMealId);
+			var m = this.Repository.Create(date, typeId, timeId, foodId, soupId, sideId, originalMealId);
 			if (m?.Entity == null) {
 				return new HomeResult<Meal>(StatusCode.InternalError);
 			}
