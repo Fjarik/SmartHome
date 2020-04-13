@@ -10,12 +10,12 @@ const { app: { projectsUrls: { meals: { getAddMeal } } } } = customUrls;
 const options = [
     {
         text: "Přidat snídani",
-        disabled: true,
+        disabled: false,
         url: getAddMeal(MealTimeEnum.BREAKFAST),
     },
     {
         text: "Přidat večeři",
-        disabled: true,
+        disabled: false,
         url: getAddMeal(MealTimeEnum.DINNER),
     }
 ];

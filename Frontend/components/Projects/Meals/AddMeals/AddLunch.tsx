@@ -1,16 +1,16 @@
 import { FunctionComponent, useState, ChangeEvent, useEffect } from "react";
-import { Modal, makeStyles, Theme, createStyles, Select, MenuItem, Table, TableCell, TableHead, TableRow, TableBody, Checkbox, TableContainer, Grid, Button, FormControlLabel, FormControl, InputLabel, ListSubheader, FormHelperText, Container } from "@material-ui/core";
-import { useQuery, useMutation, useApolloClient } from "react-apollo";
+import { makeStyles, Theme, createStyles, Select, MenuItem, Table, TableCell, TableHead, TableRow, TableBody, Checkbox, TableContainer, Grid, Button, FormControl, InputLabel, ListSubheader, FormHelperText, Container } from "@material-ui/core";
+import { useQuery, useApolloClient } from "react-apollo";
 import { getBasicFoods } from "../../../../src/graphql/types/getBasicFoods";
 import { getFoodsBasic } from "../../../../src/graphql/queries";
 import { DateTime } from "luxon";
-import { KeyboardDatePicker } from "@material-ui/pickers";
 import CenterLoading from "../../../Loading/CenterLoading";
 import { FoodTypeEnum, MealTypeEnum, MealTimeEnum } from "../../../../src/graphql/graphql-global-types";
 import { createMeal, createMealVariables } from "../../../../src/graphql/types/createMeal";
 import { createMealMutation } from "../../../../src/graphql/mutations";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/router";
+import customUrls from "../../../../utils/customUrls";
 
 class Day {
     ActualDate: DateTime;
@@ -52,7 +52,12 @@ const useStyles = makeStyles((theme: Theme) =>
         }
     }),
 );
-const AddLunch: FunctionComponent<{}> = () => {
+
+interface AddLunchProps {
+    selectedDate: DateTime;
+}
+
+const AddLunch: FunctionComponent<AddLunchProps> = ({ selectedDate }) => {
     const dayCount = 5;
 
     const c = useStyles();
@@ -60,13 +65,12 @@ const AddLunch: FunctionComponent<{}> = () => {
     const [selectedFood, setSelectedFood] = useState<number>(0);
     const [soupId, setSoupId] = useState<number>(0);
     const [sideId, setSideId] = useState<number>(0);
-    const [selectedDate, setSelectedDate] = useState<DateTime>();
     const [recomendedSides, setRecomendedSides] = useState<number[]>([]);
-    const [showError, setShowError] = useState<boolean>(false);
     const [days, setDays] = useState<Day[]>([]);
-    const { query: { time } } = useRouter();
     const { loading, data, error } = useQuery<getBasicFoods>(getFoodsBasic);
     const client = useApolloClient();
+    const router = useRouter();
+    const { app: { projectsUrls: { meals: { mealsIndex } } } } = customUrls;
 
     useEffect(() => {
         if (error) {
@@ -75,11 +79,18 @@ const AddLunch: FunctionComponent<{}> = () => {
         if (loading) {
             return;
         }
-        const date = DateTime.local();
-        onDateChange(date);
         return () => {
         };
     }, [loading]);
+
+    useEffect(() => {
+        const date = selectedDate ?? DateTime.local();
+
+        onDateChange(date);
+        return () => {
+
+        };
+    }, [selectedDate]);
 
     const onCheckBoxChange = (checked: boolean, index: number): void => {
         const day = days[index];
@@ -140,7 +151,6 @@ const AddLunch: FunctionComponent<{}> = () => {
         });
 
         setDays(wholeDays);
-        setSelectedDate(date);
     };
 
     const onSoupSelect = (event: ChangeEvent<{ value: number | null }>): void => {
@@ -162,9 +172,9 @@ const AddLunch: FunctionComponent<{}> = () => {
         return id;
     };
 
-    const submit = async () => {
-        if (!selectedFood) {
-            setShowError(true);
+    const handleSubmit = async (): Promise<void> => {
+        if (!selectedFood && !soupId) {
+            enqueueSnackbar("Musíte vybrat polévku nebo hlavní jídlo", { variant: "error" });
             return;
         }
         const date = selectedDate.toISODate();
@@ -209,6 +219,11 @@ const AddLunch: FunctionComponent<{}> = () => {
         });
 
         enqueueSnackbar("Jídla úspěšně vytvořena", { variant: "success" });
+        router.push(mealsIndex);
+    };
+
+    const handleCancel = (): void => {
+        router.push(mealsIndex);
     };
 
     if (loading) {
@@ -222,11 +237,9 @@ const AddLunch: FunctionComponent<{}> = () => {
     const onFoodSelect = (event: ChangeEvent<{ value: number | null }>) => {
         const foodId = event?.target?.value ?? 0;
         setSelectedFood(foodId);
-        setShowError(false);
 
         const selFood = foods.find(x => x.id === foodId.toString());
         if (selFood) {
-            // console.log(selFood);
             setRecomendedSides(selFood.sideIds);
         }
     };
@@ -234,20 +247,9 @@ const AddLunch: FunctionComponent<{}> = () => {
     return (
         <Container>
             <Grid container direction="column" alignItems="center" justify="space-between" spacing={2} >
-                <Grid item>
-                    <KeyboardDatePicker
-                        // clearable={false}
-                        disableToolbar
-                        autoOk={true}
-                        variant="inline"
-                        label="Vyberte datum"
-                        format="dd.MM.yyyy"
-                        value={selectedDate}
-                        onChange={onDateChange} />
-                </Grid>
                 <Grid item style={{ alignSelf: "stretch" }}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={4}>
+                    <Grid container justify="center" spacing={2}>
+                        <Grid item xs={12} sm={6} md={4}>
                             <FormControl className={c.formControl}>
                                 <InputLabel id="lbl1">Vyberte polévku</InputLabel>
                                 <Select
@@ -263,27 +265,23 @@ const AddLunch: FunctionComponent<{}> = () => {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <FormControl className={c.formControl} error={showError}>
-                                <InputLabel id="lbl2">Vyberte jídlo</InputLabel>
+                        <Grid item xs={12} sm={6} md={4}>
+                            <FormControl className={c.formControl}>
+                                <InputLabel id="lbl2">Vyberte hlavní chod</InputLabel>
                                 <Select
                                     labelId="lbl2"
                                     value={selectedFood}
                                     onChange={onFoodSelect}>
-                                    <MenuItem value={0}>Žádná</MenuItem>
+                                    <MenuItem value={0}>Žádný</MenuItem>
                                     {
                                         mainMeals.map((i) =>
                                             <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>
                                         )
                                     }
                                 </Select>
-                                {
-                                    showError &&
-                                    <FormHelperText>Musíte vybrat jídlo</FormHelperText>
-                                }
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12} sm={4}>
+                        <Grid item xs={12} sm={6} md={4}>
                             <FormControl className={c.formControl}>
                                 <InputLabel id="lbl3">Vyberte přílohu</InputLabel>
                                 <Select
@@ -309,55 +307,79 @@ const AddLunch: FunctionComponent<{}> = () => {
                     </Grid>
                 </Grid>
                 <Grid item>
-                    <TableContainer>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell></TableCell>
-                                    {
-                                        days.map((elem, index) =>
-                                            <TableCell key={index} align="center">
-                                                {elem.DayName}
-                                                <br />
-                                                {elem.WholeDay}
-                                            </TableCell>
-                                        )
-                                    }
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                <TableRow>
-                                    <TableCell>Krabička</TableCell>
-                                    {
-                                        days.map((elem, index) =>
-                                            <TableCell key={index}>
-                                                <Checkbox
-                                                    checked={elem.Checked}
-                                                    onChange={(event, checked: boolean) => onCheckBoxChange(checked, index)} />
-                                            </TableCell>
-                                        )
-                                    }
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell>Polévka</TableCell>
-                                    {
-                                        days.map((elem, index) =>
-                                            <TableCell key={index}>
-                                                <Checkbox
-                                                    checked={elem.soup}
-                                                    onChange={(event, checked: boolean) => onCheckBoxSoupChange(checked, index)} />
-                                            </TableCell>
-                                        )
-                                    }
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                    {
+                        (selectedFood > 0 || soupId > 0) &&
+                        (
+                            <TableContainer>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell></TableCell>
+                                            {
+                                                days.map((elem, index) =>
+                                                    <TableCell key={index} align="center">
+                                                        {elem.DayName}
+                                                        <br />
+                                                        {elem.WholeDay}
+                                                    </TableCell>
+                                                )
+                                            }
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {
+                                            selectedFood > 0 &&
+                                            (
+                                                <TableRow>
+                                                    <TableCell>Krabička</TableCell>
+                                                    {
+                                                        days.map((elem, index) =>
+                                                            <TableCell key={index}>
+                                                                <Checkbox
+                                                                    checked={elem.Checked}
+                                                                    onChange={(event, checked: boolean) => onCheckBoxChange(checked, index)} />
+                                                            </TableCell>
+                                                        )
+                                                    }
+                                                </TableRow>
+                                            )
+                                        }
+                                        {
+                                            soupId > 0 &&
+                                            (
+                                                <TableRow>
+                                                    <TableCell>Polévka</TableCell>
+                                                    {
+                                                        days.map((elem, index) =>
+                                                            <TableCell key={index}>
+                                                                <Checkbox
+                                                                    checked={elem.soup}
+                                                                    onChange={(event, checked: boolean) => onCheckBoxSoupChange(checked, index)} />
+                                                            </TableCell>
+                                                        )
+                                                    }
+                                                </TableRow>
+                                            )
+                                        }
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        )
+                    }
                 </Grid>
                 <Grid item style={{ alignSelf: "flex-end" }}>
-                    <Button color="primary" variant="contained" onClick={submit} >
-                        Potvrdit
-                        </Button>
+                    <Grid container spacing={2}>
+                        <Grid item>
+                            <Button color="secondary" variant="contained" onClick={handleCancel} >
+                                Zrušit
+                            </Button>
+                        </Grid>
+                        <Grid item>
+                            <Button color="primary" variant="contained" onClick={handleSubmit} >
+                                Potvrdit
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         </Container>

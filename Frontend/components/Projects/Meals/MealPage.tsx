@@ -4,7 +4,6 @@ import { getMealsBasic } from "../../../src/graphql/queries";
 import CenterLoading from "../../Loading/CenterLoading";
 import { Button, Container, TableContainer, Table, Paper, TableHead, TableRow, TableCell, TableBody, Grid, ButtonGroup } from "@material-ui/core";
 import { useQuery } from "react-apollo";
-import AddLunch from "./AddMeals/AddLunch";
 import { DateTime } from "luxon";
 import NewMealsButton from "./AddMeals/NewMealsButton";
 
