@@ -16,6 +16,9 @@ namespace DataService.IServices
 
 		List<Category> GetCategories(int foodId);
 
+		List<Food> GetByTypes(params FoodTypes[] types);
+		List<Food> GetByTypes(params int[] ids);
+
 		HomeResult<Food> Create(FoodInput input);
 
 		HomeResult<Food> Create(string name, FoodTypes type, IList<int> categories,

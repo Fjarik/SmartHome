@@ -38,6 +38,24 @@ namespace DataService.Services
 			return this._categoryService.GetByIds(ids);
 		}
 
+		public List<Food> GetByTypes(params FoodTypes[] types)
+		{
+			var ids = types.Select(x => (int) x)
+						   .Distinct()
+						   .ToArray();
+
+			return this.GetByTypes(ids);
+		}
+
+		public List<Food> GetByTypes(params int[] ids)
+		{
+			var types = ids.Distinct().ToArray();
+			if (!types.Any()) {
+				return new List<Food>();
+			}
+			return this.Repository.GetByTypes(types);
+		}
+
 		public HomeResult<Food> Create(FoodInput input)
 		{
 			if (input == null || !input.IsValid) {

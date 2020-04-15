@@ -23,7 +23,7 @@ namespace DataAccess.Models
 		public IEnumerable<int> CategoryIds => this.FoodCategories.Select(x => x.CategoryId);
 
 		[NotMapped]
-		public IEnumerable<int> SideIds => this.FoodSides.Select(x => x.SideId);
+		public IEnumerable<int> SideIds => this.FoodSideSides.Select(x => x.SideId);
 	}
 
 	public partial class Meal : IDbEntity
@@ -35,10 +35,8 @@ namespace DataAccess.Models
 		public MealTypes Type => (MealTypes) this.TypeId;
 
 		[NotMapped]
-		public MealTimes Time => (MealTimes)this.TimeId;
+		public MealTimes Time => (MealTimes) this.TimeId;
 	}
-
-	public partial class SideDish : IDbEntity { }
 
 	public partial class Token : IDbEntity
 	{

@@ -23,7 +23,7 @@ namespace DataAccess.Models
         public short TypeId { get; set; }
         [Column("TimeID")]
         public short TimeId { get; set; }
-		[Column("SideID")]
+        [Column("SideID")]
         public int? SideId { get; set; }
         [Column("SoupID")]
         public int? SoupId { get; set; }
@@ -41,8 +41,8 @@ namespace DataAccess.Models
         [InverseProperty(nameof(Meal.InverseOriginalMeal))]
         public virtual Meal OriginalMeal { get; set; }
         [ForeignKey(nameof(SideId))]
-        [InverseProperty(nameof(SideDish.Meals))]
-        public virtual SideDish Side { get; set; }
+        [InverseProperty("MealSides")]
+        public virtual Food Side { get; set; }
         [ForeignKey(nameof(SoupId))]
         [InverseProperty("MealSoups")]
         public virtual Food Soup { get; set; }

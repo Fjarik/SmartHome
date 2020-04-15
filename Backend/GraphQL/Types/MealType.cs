@@ -14,15 +14,12 @@ namespace Backend.GraphQL.Types
 	public class MealType : ObjectGraphType<Meal>
 	{
 		private readonly IMealService _mealService;
-		private readonly ISideDishService _sideDishService;
 		private readonly IFoodService _foodService;
 
 		public MealType(ICategoryService categoryService,
-						ISideDishService sideDishService,
 						IFoodService foodService,
 						IMealService mealService)
 		{
-			_sideDishService = sideDishService;
 			_foodService = foodService;
 			_mealService = mealService;
 			Field(x => x.Id, type: typeof(NonNullGraphType<IdGraphType>)).Description("Id property");
@@ -34,7 +31,7 @@ namespace Backend.GraphQL.Types
 			Field(x => x.SoupId, type: typeof(IdGraphType), nullable: true).Description("Id of soup property");
 			Field(x => x.FoodId, type: typeof(IdGraphType), nullable: true).Description("Id of main food property");
 			Field(x => x.SideId, type: typeof(IdGraphType), nullable: true).Description("Id of side dish property");
-			
+
 			Field(x => x.CategoryIds, type: typeof(ListGraphType<NonNullGraphType<IntGraphType>>))
 				.Description("Categories of food");
 
@@ -47,7 +44,7 @@ namespace Backend.GraphQL.Types
 			Field<FoodType, Food>("food")
 				.Resolve(GetFood)
 				.Description("Food");
-			Field<SideDishType, SideDish>("sidedish")
+			Field<FoodType, Food>("sidedish")
 				.Resolve(GetSideDish)
 				.Description("Side dish");
 
@@ -61,9 +58,9 @@ namespace Backend.GraphQL.Types
 			return this.GetById(ctx, x => x.OriginalMealId, _mealService);
 		}
 
-		private SideDish GetSideDish(ResolveFieldContext<Meal> ctx)
+		private Food GetSideDish(ResolveFieldContext<Meal> ctx)
 		{
-			return this.GetById(ctx, x => x.SideId, _sideDishService);
+			return this.GetById(ctx, x => x.SideId, _foodService);
 		}
 
 		private Food GetFood(ResolveFieldContext<Meal> ctx)

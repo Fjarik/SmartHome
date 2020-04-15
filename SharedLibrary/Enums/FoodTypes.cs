@@ -8,6 +8,7 @@ namespace SharedLibrary.Enums
 	{
 		MainMeal = 1,
 		Soup = 2,
-		Desert = 3
+		Desert = 3,
+		SideDish = 4,
 	}
 }

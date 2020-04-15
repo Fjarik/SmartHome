@@ -5,6 +5,7 @@ using System.Text;
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SharedLibrary.Enums;
 
 namespace DataAccess.Other
 {
@@ -63,6 +64,17 @@ namespace DataAccess.Other
 			new FoodName() {Name = "Houbová polévka", Type = 2, Categories = new[] {2},},
 			new FoodName() {Name = "Polévka z kuřecího vývaru", Type = 2, Categories = new[] {3},},
 			new FoodName() {Name = "Špenátová polévka", Type = 2, Categories = new[] {2},},
+		};
+
+		private static string[] SideDishNames => new[] {
+			"Brambory", // 1
+			"Bramborová kaše", // 2
+			"Knedlíky", // 3
+			"Rýže", // 4
+			"Těstoviny", // 5
+			"Hranolky", // 6
+			"Pečivo", // 7
+			"Zelenina" // 8
 		};
 
 		public static void Seed(this EntityTypeBuilder<Category> builder)
@@ -127,23 +139,13 @@ namespace DataAccess.Other
 			builder.HasData(types);
 		}
 
-		public static void Seed(this EntityTypeBuilder<SideDish> builder)
+		public static void SeedSides(this EntityTypeBuilder<Food> builder)
 		{
-			var names = new[] {
-				"Brambory", // 1
-				"Bramborová kaše", // 2
-				"Knedlíky", // 3
-				"Rýže", // 4
-				"Těstoviny", // 5
-				"Hranolky", // 6
-				"Pečivo", // 7
-				"Zelenina" // 8
-			};
-
-			var sides = names.Select((x, index) => new SideDish {
+			var sides = SideDishNames.Select((x, index) => new Food {
 				Id = index + 1,
 				Name = x,
-				Description = "",
+				TypeId = (int) FoodTypes.SideDish,
+				GlutenFree = true,
 			});
 
 			builder.HasData(sides);
@@ -151,8 +153,10 @@ namespace DataAccess.Other
 
 		public static void Seed(this EntityTypeBuilder<Food> builder)
 		{
+			var baseId = SideDishNames.Length;
+
 			var foods = FoodNames.Select((x, index) => new Food {
-				Id = index + 1,
+				Id = baseId + index + 1,
 				Name = x.Name,
 				TypeId = x.Type,
 				GlutenFree = true,
@@ -163,11 +167,13 @@ namespace DataAccess.Other
 
 		public static void Seed(this EntityTypeBuilder<FoodSide> builder)
 		{
+			var baseId = SideDishNames.Length;
+
 			var foods = FoodNames.SelectMany((x, index) =>
 												 x.FoodSides
 												  .Select(y =>
 															  new FoodSide {
-																  FoodId = index + 1,
+																  FoodId = baseId + index + 1,
 																  SideId = y
 															  }));
 
@@ -176,11 +182,13 @@ namespace DataAccess.Other
 
 		public static void Seed(this EntityTypeBuilder<FoodCategory> builder)
 		{
+			var baseId = SideDishNames.Length;
+
 			var foods = FoodNames.SelectMany((x, index) =>
 												 x.Categories
 												  .Select(y =>
 															  new FoodCategory {
-																  FoodId = index + 1,
+																  FoodId = baseId + index + 1,
 																  CategoryId = y
 															  }));
 

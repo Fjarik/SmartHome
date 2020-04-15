@@ -16,10 +16,10 @@ namespace DataAccess.Models
         public int SideId { get; set; }
 
         [ForeignKey(nameof(FoodId))]
-        [InverseProperty("FoodSides")]
+        [InverseProperty("FoodSideFoods")]
         public virtual Food Food { get; set; }
         [ForeignKey(nameof(SideId))]
-        [InverseProperty(nameof(SideDish.FoodSides))]
-        public virtual SideDish Side { get; set; }
+        [InverseProperty("FoodSideSides")]
+        public virtual Food Side { get; set; }
     }
 }

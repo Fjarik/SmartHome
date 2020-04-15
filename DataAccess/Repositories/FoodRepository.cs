@@ -20,7 +20,7 @@ namespace DataAccess.Repositories
 		{
 			return this.DbSet
 					   .Include(x => x.FoodCategories)
-					   .Include(x => x.FoodSides)
+					   .Include(x => x.FoodSideSides)
 					   .ToList();
 		}
 
@@ -38,6 +38,14 @@ namespace DataAccess.Repositories
 					   .FoodCategories
 					   .Where(x => x.FoodId == foodId)
 					   .Select(x => x.CategoryId)
+					   .ToList();
+		}
+
+		public List<Food> GetByTypes(params int[] ids)
+		{
+			var types = ids.Distinct();
+			return this.DbSet
+					   .Where(x => types.Contains(x.TypeId))
 					   .ToList();
 		}
 

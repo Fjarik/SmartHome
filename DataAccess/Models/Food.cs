@@ -11,8 +11,10 @@ namespace DataAccess.Models
         public Food()
         {
             FoodCategories = new HashSet<FoodCategory>();
-            FoodSides = new HashSet<FoodSide>();
+            FoodSideFoods = new HashSet<FoodSide>();
+            FoodSideSides = new HashSet<FoodSide>();
             MealFoods = new HashSet<Meal>();
+            MealSides = new HashSet<Meal>();
             MealSoups = new HashSet<Meal>();
         }
 
@@ -30,9 +32,13 @@ namespace DataAccess.Models
         [InverseProperty(nameof(FoodCategory.Food))]
         public virtual ICollection<FoodCategory> FoodCategories { get; set; }
         [InverseProperty(nameof(FoodSide.Food))]
-        public virtual ICollection<FoodSide> FoodSides { get; set; }
+        public virtual ICollection<FoodSide> FoodSideFoods { get; set; }
+        [InverseProperty(nameof(FoodSide.Side))]
+        public virtual ICollection<FoodSide> FoodSideSides { get; set; }
         [InverseProperty(nameof(Meal.Food))]
         public virtual ICollection<Meal> MealFoods { get; set; }
+        [InverseProperty(nameof(Meal.Side))]
+        public virtual ICollection<Meal> MealSides { get; set; }
         [InverseProperty(nameof(Meal.Soup))]
         public virtual ICollection<Meal> MealSoups { get; set; }
     }
