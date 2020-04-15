@@ -47,7 +47,7 @@ namespace Backend.GraphQL.Queries
 			Field<ListGraphType<NonNullGraphType<CategoryType>>, List<Category>>("categories")
 				.Resolve(ctx => this._categoryService.GetAll());
 			Field<ListGraphType<NonNullGraphType<MealType>>, List<Meal>>("meals")
-				.Argument<DateGraphType, DateTime>("date", "Get meals by date")
+				.Argument<DateGraphType, DateTime?>("date", "Get meals by date", defaultValue: null)
 				.Resolve(GetMeals);
 		}
 

@@ -9,7 +9,7 @@ import NewMealsButton from "./AddMeals/NewMealsButton";
 import customUrls from "../../../utils/customUrls";
 
 const MealPage: FunctionComponent = () => {
-    const { data, loading, error, refetch } = useQuery<getBasicMeals>(getMealsBasic, { ssr: false, });
+    const { data, loading, error } = useQuery<getBasicMeals>(getMealsBasic, { ssr: false });
     const { app: { projectsUrls: { meals: { foodsIndex } } } } = customUrls;
 
     if (loading || !data) {
@@ -24,7 +24,7 @@ const MealPage: FunctionComponent = () => {
 
     return (
         <Container>
-            <Grid container justify="space-between" style={{ marginBottom: "1rem" }}>
+            <Grid container justify="space-between" alignItems="center" style={{ marginBottom: "1rem" }}>
                 <Grid item>
                     <Link href={foodsIndex}>
                         <span>Zobrazit všechna jídla</span>

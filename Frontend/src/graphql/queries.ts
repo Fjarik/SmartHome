@@ -47,6 +47,7 @@ export const getAllFoods = gql`
       id
       name
       type
+      sideIds
     }
   }
 `;

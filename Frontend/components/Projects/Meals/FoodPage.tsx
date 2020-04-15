@@ -5,6 +5,7 @@ import { Container, TableContainer, Table, Paper, TableHead, TableRow, TableCell
 import { useQuery } from "react-apollo";
 import { allFoods, allFoods_foods } from "../../../src/graphql/types/allFoods";
 import { FoodTypeEnum } from "../../../src/graphql/graphql-global-types";
+import FoodTable from "./Foods/FoodTable";
 
 const FoodPage: FunctionComponent = () => {
     const { data, loading, error } = useQuery<allFoods>(getAllFoods);
@@ -65,18 +66,18 @@ const FoodPage: FunctionComponent = () => {
                 <Grid item>
                 </Grid>
             </Grid>
-            <Grid container spacing={2}>
-                <Grid item>
-                    {getTable(soups, "Polévky")}
+            <Grid container justify="center" spacing={2}>
+                <Grid item xs={12}>
+                    <FoodTable data={main} title="Hlavní jídla" showSides={true} sides={sides} />
                 </Grid>
-                <Grid item>
-                    {getTable(main, "Hlavní jídla")}
+                <Grid item xs={12} md={6}>
+                    <FoodTable data={soups} title="Polévky" />
                 </Grid>
-                <Grid item>
-                    {getTable(sides, "Přílohy")}
+                <Grid item xs={12} md={6}>
+                    <FoodTable data={sides} title="Přílohy" />
                 </Grid>
-                <Grid item>
-                    {getTable(deserts, "Dezerty")}
+                <Grid item xs={12} md={6}>
+                    <FoodTable data={deserts} title="Dezerty" />
                 </Grid>
             </Grid>
 
