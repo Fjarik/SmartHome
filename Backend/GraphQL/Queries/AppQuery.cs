@@ -39,14 +39,14 @@ namespace Backend.GraphQL.Queries
 			_mealService = mealService;
 			Field<UserType, User>("logged")
 				.Resolve(GetLogged);
-			Field<ListGraphType<UserType>, List<User>>("users")
+			Field<ListGraphType<NonNullGraphType<UserType>>, List<User>>("users")
 				.Resolve(GetUsers);
-			Field<ListGraphType<FoodType>, List<Food>>("foods")
+			Field<ListGraphType<NonNullGraphType<FoodType>>, List<Food>>("foods")
 				.Argument<ListGraphType<NonNullGraphType<FoodTypeEnum>>, List<FoodTypes>>("types", "Get foods by types")
 				.Resolve(GetFoods);
-			Field<ListGraphType<CategoryType>, List<Category>>("categories")
+			Field<ListGraphType<NonNullGraphType<CategoryType>>, List<Category>>("categories")
 				.Resolve(ctx => this._categoryService.GetAll());
-			Field<ListGraphType<MealType>, List<Meal>>("meals")
+			Field<ListGraphType<NonNullGraphType<MealType>>, List<Meal>>("meals")
 				.Argument<DateGraphType, DateTime>("date", "Get meals by date")
 				.Resolve(GetMeals);
 		}

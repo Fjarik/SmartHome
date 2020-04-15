@@ -20,7 +20,7 @@ namespace DataAccess.Repositories
 		{
 			return this.DbSet
 					   .Include(x => x.FoodCategories)
-					   .Include(x => x.FoodSideSides)
+					   .Include(x => x.FoodSideFoods)
 					   .ToList();
 		}
 

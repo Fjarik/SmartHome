@@ -23,7 +23,7 @@ namespace DataAccess.Models
 		public IEnumerable<int> CategoryIds => this.FoodCategories.Select(x => x.CategoryId);
 
 		[NotMapped]
-		public IEnumerable<int> SideIds => this.FoodSideSides.Select(x => x.SideId);
+		public IEnumerable<int> SideIds => this.FoodSideFoods.Select(x => x.SideId);
 	}
 
 	public partial class Meal : IDbEntity
