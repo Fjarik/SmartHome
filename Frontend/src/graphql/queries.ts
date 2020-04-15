@@ -32,15 +32,11 @@ export const getMealsBasic = gql`
 
 export const getFoodsBasic = gql`
  query getBasicFoods{
-    foods {
+    foods(types: [SOUP, MAIN_MEAL, SIDE_DISH]) {
       id
       name
       type
       sideIds
-    }
-    sidedishes {
-      id
-      name
     }
   }
 `;
@@ -51,10 +47,6 @@ export const getAllFoods = gql`
       id
       name
       type
-    }
-    sidedishes {
-      id
-      name
     }
   }
 `;

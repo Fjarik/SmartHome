@@ -62,5 +62,5 @@ export interface getBasicMeals_meals {
 }
 
 export interface getBasicMeals {
-  meals: (getBasicMeals_meals | null)[] | null;
+  meals: getBasicMeals_meals[] | null;
 }

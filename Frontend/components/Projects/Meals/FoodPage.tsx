@@ -49,11 +49,12 @@ const FoodPage: FunctionComponent = () => {
         return <p>{error}</p>;
     }
 
-    const { foods, sidedishes } = data;
+    const { foods } = data;
 
     const sorted = foods.sort((a, b) => a.name.localeCompare(b.name));
     const soups = sorted.filter(x => x.type === FoodTypeEnum.SOUP);
     const main = sorted.filter(x => x.type === FoodTypeEnum.MAIN_MEAL);
+    const sides = sorted.filter(x => x.type === FoodTypeEnum.SIDE_DISH);
     const deserts = sorted.filter(x => x.type === FoodTypeEnum.DESERT);
 
     return (
@@ -72,9 +73,10 @@ const FoodPage: FunctionComponent = () => {
                     {getTable(main, "Hlavní jídla")}
                 </Grid>
                 <Grid item>
-                    {getTable(deserts, "Dezerty")}
+                    {getTable(sides, "Přílohy")}
                 </Grid>
                 <Grid item>
+                    {getTable(deserts, "Dezerty")}
                 </Grid>
             </Grid>
 

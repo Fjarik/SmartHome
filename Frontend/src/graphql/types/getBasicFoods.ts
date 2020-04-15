@@ -29,19 +29,6 @@ export interface getBasicFoods_foods {
   sideIds: number[] | null;
 }
 
-export interface getBasicFoods_sidedishes {
-  __typename: "SideDishType";
-  /**
-   * Id property
-   */
-  id: string;
-  /**
-   * Name of side dish
-   */
-  name: string;
-}
-
 export interface getBasicFoods {
-  foods: (getBasicFoods_foods | null)[] | null;
-  sidedishes: (getBasicFoods_sidedishes | null)[] | null;
+  foods: getBasicFoods_foods[] | null;
 }

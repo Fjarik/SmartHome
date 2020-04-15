@@ -25,19 +25,6 @@ export interface allFoods_foods {
   type: FoodTypeEnum;
 }
 
-export interface allFoods_sidedishes {
-  __typename: "SideDishType";
-  /**
-   * Id property
-   */
-  id: string;
-  /**
-   * Name of side dish
-   */
-  name: string;
-}
-
 export interface allFoods {
-  foods: (allFoods_foods | null)[] | null;
-  sidedishes: (allFoods_sidedishes | null)[] | null;
+  foods: allFoods_foods[] | null;
 }

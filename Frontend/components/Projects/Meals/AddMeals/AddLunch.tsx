@@ -230,9 +230,15 @@ const AddLunch: FunctionComponent<AddLunchProps> = ({ selectedDate }) => {
         return <CenterLoading />;
     }
 
-    const { foods, sidedishes } = data;
-    const mainMeals = foods.filter(x => x.type === FoodTypeEnum.MAIN_MEAL).sort((a, b) => a.name.localeCompare(b.name));
-    const soups = foods.filter(x => x.type === FoodTypeEnum.SOUP).sort((a, b) => a.name.localeCompare(b.name));
+    if (error) {
+        return <p>{error}</p>;
+    }
+
+    const { foods } = data;
+    const sorted = foods.sort((a, b) => a.name.localeCompare(b.name));
+    const mainMeals = sorted.filter(x => x.type === FoodTypeEnum.MAIN_MEAL);
+    const soups = sorted.filter(x => x.type === FoodTypeEnum.SOUP);
+    const sides = sorted.filter(x => x.type === FoodTypeEnum.SIDE_DISH);
 
     const onFoodSelect = (event: ChangeEvent<{ value: number | null }>) => {
         const foodId = event?.target?.value ?? 0;
@@ -292,13 +298,13 @@ const AddLunch: FunctionComponent<AddLunchProps> = ({ selectedDate }) => {
                                     <ListSubheader>Doporučené</ListSubheader>
                                     <MenuItem value={0}>Žádná</MenuItem>
                                     {
-                                        sidedishes.filter(x => recomendedSides.includes(parseInt(x.id))).map((i) =>
+                                        sides.filter(x => recomendedSides.includes(parseInt(x.id))).map((i) =>
                                             <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>
                                         )
                                     }
                                     <ListSubheader>Ostatní</ListSubheader>
                                     {
-                                        sidedishes.filter(x => !recomendedSides.includes(parseInt(x.id))).map((i) =>
+                                        sides.filter(x => !recomendedSides.includes(parseInt(x.id))).map((i) =>
                                             <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>
                                         )
                                     }

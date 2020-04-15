@@ -13,6 +13,7 @@
 export enum FoodTypeEnum {
   DESERT = "DESERT",
   MAIN_MEAL = "MAIN_MEAL",
+  SIDE_DISH = "SIDE_DISH",
   SOUP = "SOUP",
 }
 
