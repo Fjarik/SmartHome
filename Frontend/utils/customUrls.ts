@@ -14,6 +14,8 @@ const accountUrls = {
 const meals = {
     get mealsIndex() { return mealsUrl; },
     get addMeal() { return mealsUrl + "/addMeal"; },
+    get foodsIndex() { return mealsUrl + "/foods"; },
+    get addFood() { return mealsUrl + "/foods/addFood"; },
     getAddMeal: (time: MealTimeEnum = MealTimeEnum.LUNCH) => {
         return mealsUrl + "/addMeal?time=" + time.toString();
     },

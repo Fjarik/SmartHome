@@ -2,13 +2,15 @@ import { FunctionComponent, useState } from "react";
 import { getBasicMeals } from "../../../src/graphql/types/getBasicMeals";
 import { getMealsBasic } from "../../../src/graphql/queries";
 import CenterLoading from "../../Loading/CenterLoading";
-import { Button, Container, TableContainer, Table, Paper, TableHead, TableRow, TableCell, TableBody, Grid, ButtonGroup } from "@material-ui/core";
+import { Button, Container, TableContainer, Table, Paper, TableHead, TableRow, TableCell, TableBody, Grid, ButtonGroup, Link } from "@material-ui/core";
 import { useQuery } from "react-apollo";
 import { DateTime } from "luxon";
 import NewMealsButton from "./AddMeals/NewMealsButton";
+import customUrls from "../../../utils/customUrls";
 
 const MealPage: FunctionComponent = () => {
     const { data, loading, error, refetch } = useQuery<getBasicMeals>(getMealsBasic, { ssr: false, });
+    const { app: { projectsUrls: { meals: { foodsIndex } } } } = customUrls;
 
     if (loading || !data) {
         return <CenterLoading text="Načítání" />;
@@ -24,7 +26,9 @@ const MealPage: FunctionComponent = () => {
         <Container>
             <Grid container justify="space-between" style={{ marginBottom: "1rem" }}>
                 <Grid item>
-                    <Button onClick={() => refetch()}>Refetch</Button>
+                    <Link href={foodsIndex}>
+                        <span>Zobrazit všechna jídla</span>
+                    </Link>
                 </Grid>
                 <Grid item>
                     <NewMealsButton />

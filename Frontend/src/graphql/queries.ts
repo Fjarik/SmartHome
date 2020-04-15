@@ -44,3 +44,17 @@ export const getFoodsBasic = gql`
     }
   }
 `;
+
+export const getAllFoods = gql`
+ query allFoods{
+    foods {
+      id
+      name
+      type
+    }
+    sidedishes {
+      id
+      name
+    }
+  }
+`;

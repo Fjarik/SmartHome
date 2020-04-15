@@ -267,6 +267,7 @@ const AddLunch: FunctionComponent<AddLunchProps> = ({ selectedDate }) => {
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>
                             <FormControl className={c.formControl}>
+                                {/* TODO: Implement food selector */}
                                 <InputLabel id="lbl2">Vyberte hlavní chod</InputLabel>
                                 <Select
                                     labelId="lbl2"
