@@ -16,12 +16,13 @@ namespace DataAccess.Repositories
 	{
 		public FoodRepository(MainContext dbContext) : base(dbContext) { }
 
+		private IQueryable<Food> _all => this.DbSet
+											 .Include(x => x.FoodCategories)
+											 .Include(x => x.FoodSideFoods);
+
 		public override List<Food> GetAll()
 		{
-			return this.DbSet
-					   .Include(x => x.FoodCategories)
-					   .Include(x => x.FoodSideFoods)
-					   .ToList();
+			return _all.ToList();
 		}
 
 		public bool Exists(string name)
@@ -44,7 +45,7 @@ namespace DataAccess.Repositories
 		public List<Food> GetByTypes(params int[] ids)
 		{
 			var types = ids.Distinct();
-			return this.DbSet
+			return this._all
 					   .Where(x => types.Contains(x.TypeId))
 					   .ToList();
 		}
