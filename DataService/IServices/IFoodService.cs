@@ -21,10 +21,14 @@ namespace DataService.IServices
 
 		HomeResult<Food> Create(FoodInput input);
 
-		HomeResult<Food> Create(string name, FoodTypes type, IList<int> categories,
+		HomeResult<Food> Create(string name, FoodTypes type,
+								List<int> categoryIds,
+								List<int> sideIds,
 								bool glutenFree = true);
 
-		HomeResult<Food> Create(string name, int typeId, IList<int> categories,
+		HomeResult<Food> Create(string name, int typeId,
+								List<int> categoryIds,
+								List<int> sideIds,
 								bool glutenFree = true);
 	}
 }

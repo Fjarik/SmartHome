@@ -14,7 +14,8 @@ namespace Backend.GraphQL.Types.InputTypes
 			Name = "FoodInput";
 			Field(x => x.Name, type: typeof(NonNullGraphType<StringGraphType>));
 			Field(x => x.Type, type: typeof(NonNullGraphType<FoodTypeEnum>));
-			Field(x => x.Categories, type: typeof(ListGraphType<IdGraphType>));
+			Field(x => x.CategoryIds, type: typeof(ListGraphType<NonNullGraphType<IdGraphType>>));
+			Field(x => x.SideIds, type: typeof(ListGraphType<NonNullGraphType<IdGraphType>>));
 			Field(x => x.GlutenFree, type: typeof(BooleanGraphType), nullable: true);
 		}
 	}

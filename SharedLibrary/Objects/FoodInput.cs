@@ -9,7 +9,8 @@ namespace SharedLibrary.Objects
 	{
 		public string Name { get; set; }
 		public FoodTypes Type { get; set; }
-		public IList<int> Categories { get; set; } = new List<int>();
+		public List<int> CategoryIds { get; set; } = new List<int>();
+		public List<int> SideIds { get; set; } = new List<int>();
 		public bool GlutenFree { get; set; } = true;
 
 		public bool IsValid => !string.IsNullOrWhiteSpace(this.Name);

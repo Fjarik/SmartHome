@@ -61,23 +61,35 @@ namespace DataService.Services
 			if (input == null || !input.IsValid) {
 				return new HomeResult<Food>(StatusCode.InvalidInput);
 			}
-			return this.Create(input.Name, input.Type, input.Categories, input.GlutenFree);
+			return this.Create(input.Name, input.Type, input.CategoryIds, input.SideIds, input.GlutenFree);
 		}
 
-		public HomeResult<Food> Create(string name, FoodTypes type, IList<int> categories, bool glutenFree = true)
+		public HomeResult<Food> Create(string name, FoodTypes type,
+									   List<int> categoryIds,
+									   List<int> sideIds,
+									   bool glutenFree = true)
 		{
-			return this.Create(name, (int) type, categories, glutenFree);
+			return this.Create(name, (int) type, categoryIds, sideIds, glutenFree);
 		}
 
 		public HomeResult<Food> Create(string name,
 									   int typeId,
-									   IList<int> categories,
+									   List<int> categoryIds,
+									   List<int> sideIds,
 									   bool glutenFree = true)
 		{
 			if (string.IsNullOrEmpty(name) ||
-				!categories.Any() ||
-				categories.Any(x => x < 1) ||
 				typeId < 1) {
+				return new HomeResult<Food>(StatusCode.InvalidInput);
+			}
+
+			if (!categoryIds.Any() ||
+				categoryIds.Any(x => x < 1)) {
+				return new HomeResult<Food>(StatusCode.InvalidInput);
+			}
+
+			if (!sideIds.Any() ||
+				sideIds.Any(x => x < 1)) {
 				return new HomeResult<Food>(StatusCode.InvalidInput);
 			}
 
@@ -90,9 +102,11 @@ namespace DataService.Services
 			if (food == null) {
 				return new HomeResult<Food>(StatusCode.InternalError);
 			}
-			var catgs = this.Repository.CreateFoodCategories(food.Id, categories);
+			var catgs = this.Repository.CreateFoodCategories(food.Id, categoryIds);
+			var sides = this.Repository.CreateFoodSides(food.Id, sideIds);
 
 			food.FoodCategories = catgs;
+			food.FoodSideFoods = sides;
 			return new HomeResult<Food>(StatusCode.OK, food);
 		}
 	}

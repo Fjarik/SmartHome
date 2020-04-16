@@ -18,6 +18,27 @@ export const logoutMutation = gql`
   }
 `;
 
+export const createFoodMutation = gql`
+  mutation createFood(
+    $name: String!
+    $type: FoodTypeEnum!
+    $categoryIds: [ID!] = null
+    $sideIds: [ID!] = null
+    $glutenFree: Boolean = true
+  ) {
+    createFood(
+      food: {
+        name: $name
+        type: $type
+        categoryIds: $categoryIds
+        sideIds: $sideIds
+        glutenFree: $glutenFree
+      }
+    ) {
+      id
+    }
+  }
+`;
 
 export const createMealMutation = gql`
   mutation createMeal(

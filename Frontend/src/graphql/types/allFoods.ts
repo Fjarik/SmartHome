@@ -27,8 +27,25 @@ export interface allFoods_foods {
    * Side dish IDs of food
    */
   sideIds: number[] | null;
+  /**
+   * Category IDs of food
+   */
+  categoryIds: number[] | null;
+}
+
+export interface allFoods_categories {
+  __typename: "CategoryType";
+  /**
+   * Id property
+   */
+  id: string;
+  /**
+   * Name of food category
+   */
+  name: string;
 }
 
 export interface allFoods {
   foods: allFoods_foods[] | null;
+  categories: allFoods_categories[] | null;
 }

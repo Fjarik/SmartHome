@@ -42,12 +42,17 @@ export const getFoodsBasic = gql`
 `;
 
 export const getAllFoods = gql`
- query allFoods{
+  query allFoods {
     foods {
       id
       name
       type
       sideIds
+      categoryIds
+    }
+    categories {
+      id
+      name
     }
   }
 `;

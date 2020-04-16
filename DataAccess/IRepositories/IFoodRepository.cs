@@ -14,6 +14,7 @@ namespace DataAccess.IRepositories
 		List<int> GetCategoryIds(int foodId);
 		List<Food> GetByTypes(params int[] ids);
 		EntityEntry<Food> Create(string name, int typeId, bool glutenFree = true);
-		List<FoodCategory> CreateFoodCategories(int foodId, IEnumerable<int> categoryIds);
+		List<FoodCategory> CreateFoodCategories(int foodId, List<int> categoryIds);
+		List<FoodSide> CreateFoodSides(int foodId, List<int> sideIds);
 	}
 }
