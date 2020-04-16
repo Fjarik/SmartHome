@@ -10,38 +10,6 @@ import FoodTable from "./Foods/FoodTable";
 const FoodPage: FunctionComponent = () => {
     const { data, loading, error } = useQuery<allFoods>(getAllFoods);
 
-    const getTable = (foods: allFoods_foods[], title: string) => {
-        return <>
-            <Typography variant="h5">
-                {title}
-            </Typography>
-            <TableContainer component={Paper}>
-                <Table size="small">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>ID</TableCell>
-                            <TableCell>Název</TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {foods.map((i) => {
-                            return (
-                                <TableRow key={i.id}>
-                                    <TableCell>{i.id}</TableCell>
-                                    <TableCell>{i.name}</TableCell>
-                                    <TableCell>
-
-                                    </TableCell>
-                                </TableRow>
-                            );
-                        })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </>;
-    };
-
     if (loading || !data) {
         return <CenterLoading text="Načítání" />;
     }
@@ -50,7 +18,7 @@ const FoodPage: FunctionComponent = () => {
         return <p>{error}</p>;
     }
 
-    const { foods } = data;
+    const { foods, categories } = data;
 
     const sorted = foods.sort((a, b) => a.name.localeCompare(b.name));
     const soups = sorted.filter(x => x.type === FoodTypeEnum.SOUP);
@@ -68,16 +36,16 @@ const FoodPage: FunctionComponent = () => {
             </Grid>
             <Grid container justify="center" spacing={2}>
                 <Grid item xs={12}>
-                    <FoodTable data={main} title="Hlavní jídla" showSides={true} sides={sides} />
+                    <FoodTable inputData={main} type={FoodTypeEnum.MAIN_MEAL} categories={categories} title="Hlavní jídla" showSides={true} sides={sides} />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <FoodTable data={soups} title="Polévky" />
+                    <FoodTable inputData={soups} type={FoodTypeEnum.SOUP} categories={categories} title="Polévky" />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <FoodTable data={sides} title="Přílohy" />
+                    <FoodTable inputData={sides} type={FoodTypeEnum.SIDE_DISH} categories={categories} title="Přílohy" />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <FoodTable data={deserts} title="Dezerty" />
+                    <FoodTable inputData={deserts} type={FoodTypeEnum.DESERT} categories={categories} title="Dezerty" />
                 </Grid>
             </Grid>
 

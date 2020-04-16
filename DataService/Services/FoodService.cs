@@ -59,7 +59,7 @@ namespace DataService.Services
 		public HomeResult<Food> Create(FoodInput input)
 		{
 			if (input == null || !input.IsValid) {
-				return new HomeResult<Food>(StatusCode.InvalidInput);
+				return new HomeResult<Food>(StatusCode.InvalidInput, nameof(input));
 			}
 			return this.Create(input.Name, input.Type, input.CategoryIds, input.SideIds, input.GlutenFree);
 		}
@@ -78,19 +78,20 @@ namespace DataService.Services
 									   List<int> sideIds,
 									   bool glutenFree = true)
 		{
-			if (string.IsNullOrEmpty(name) ||
-				typeId < 1) {
+			if (string.IsNullOrWhiteSpace(name)) {
 				return new HomeResult<Food>(StatusCode.InvalidInput);
 			}
 
-			if (!categoryIds.Any() ||
-				categoryIds.Any(x => x < 1)) {
-				return new HomeResult<Food>(StatusCode.InvalidInput);
+			if (typeId < 1) {
+				return new HomeResult<Food>(StatusCode.NotValidId, nameof(typeId));
 			}
 
-			if (!sideIds.Any() ||
-				sideIds.Any(x => x < 1)) {
-				return new HomeResult<Food>(StatusCode.InvalidInput);
+			if (categoryIds.Any(x => x < 1)) {
+				return new HomeResult<Food>(StatusCode.NotValidId, nameof(categoryIds));
+			}
+
+			if (sideIds.Any(x => x < 1)) {
+				return new HomeResult<Food>(StatusCode.NotValidId, nameof(sideIds));
 			}
 
 			if (this.Exists(name)) {

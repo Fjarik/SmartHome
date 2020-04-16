@@ -43,5 +43,14 @@ namespace DataService.Services
 		{
 			return this.Repository.GetAll();
 		}
+
+		public virtual bool Delete(int id)
+		{
+			var res = this.GetById(id);
+			if (!res.IsSuccess) {
+				return false;
+			}
+			return this.Repository.Delete(res.Content);
+		}
 	}
 }

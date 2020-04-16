@@ -45,6 +45,9 @@ namespace Backend.GraphQL.Mutations
 			Field<FoodType, Food>("createFood")
 				.Argument<NonNullGraphType<FoodInputType>>("food", "")
 				.Resolve(this.CreateFood);
+			Field<NonNullGraphType<BooleanGraphType>, bool>("removeFood")
+				.Argument<NonNullGraphType<IdGraphType>>("id", "")
+				.Resolve(this.RemoveFood);
 		}
 
 		private AuthUser Login(ResolveFieldContext<object> ctx)
@@ -112,6 +115,22 @@ namespace Backend.GraphQL.Mutations
 			}
 
 			return res.Content;
+		}
+
+		private bool RemoveFood(ResolveFieldContext<object> ctx)
+		{
+			if (!(this._authManager.Authorize(_httpContextAccessor, ctx))) {
+				return false;
+			}
+
+			var input = ctx.GetArgument<int>("id");
+
+			if (input < 1) {
+				ctx.Errors.Add(new ExecutionError("ID is < 1"));
+				return false;
+			}
+
+			return this._foodService.Delete(input);
 		}
 	}
 }

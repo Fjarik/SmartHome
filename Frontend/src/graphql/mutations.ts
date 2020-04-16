@@ -36,7 +36,17 @@ export const createFoodMutation = gql`
       }
     ) {
       id
+      name
+      type
+      sideIds
+      categoryIds
     }
+  }
+`;
+
+export const removeFoodMutation = gql`
+  mutation removeFood($id: ID!) {
+    removeFood(id: $id)
   }
 `;
 

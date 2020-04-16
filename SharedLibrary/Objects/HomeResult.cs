@@ -20,6 +20,8 @@ namespace SharedLibrary.Objects
 
 		public HomeResult(StatusCode status, T result) : this(status, result, null) { }
 
+		public HomeResult(StatusCode status, string text) : this(status, new Exception(text)) { }
+
 		public HomeResult(StatusCode status, Exception exception) : this(status, default(T), exception)
 		{
 			if (exception == null) {
