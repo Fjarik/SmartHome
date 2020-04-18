@@ -19,6 +19,8 @@ namespace DataService.IServices
 		List<Food> GetByTypes(params FoodTypes[] types);
 		List<Food> GetByTypes(params int[] ids);
 
+#region Create
+
 		HomeResult<Food> Create(FoodInput input);
 
 		HomeResult<Food> Create(string name, FoodTypes type,
@@ -30,5 +32,31 @@ namespace DataService.IServices
 								List<int> categoryIds,
 								List<int> sideIds,
 								bool glutenFree = true);
+
+#endregion
+
+#region Update
+
+		HomeResult<Food> Update(int foodId, FoodInput input);
+
+		HomeResult<Food> Update(int foodId,
+								string name, FoodTypes type,
+								List<int> categoryIds,
+								List<int> sideIds,
+								bool glutenFree);
+
+		HomeResult<Food> Update(int foodId,
+								string name, int typeId,
+								List<int> categoryIds,
+								List<int> sideIds,
+								bool glutenFree);
+
+		HomeResult<Food> Update(Food original,
+								string name, int typeId,
+								List<int> categoryIds,
+								List<int> sideIds,
+								bool glutenFree);
+
+#endregion
 	}
 }

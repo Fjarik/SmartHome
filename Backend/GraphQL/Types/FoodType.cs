@@ -12,15 +12,15 @@ namespace Backend.GraphQL.Types
 {
 	public class FoodType : ObjectGraphType<Food>
 	{
-		public FoodType(IFoodService foodService,
-						ICategoryService categoryService,
-						IDataLoaderContextAccessor dataLoader)
+		public FoodType(ICategoryService categoryService)
 		{
 			Field(x => x.Id, type: typeof(NonNullGraphType<IdGraphType>)).Description("Id property");
 			Field(x => x.Name, type: typeof(NonNullGraphType<StringGraphType>)).Description("Name of food");
 
-			Field(x => x.CategoryIds, type: typeof(ListGraphType<NonNullGraphType<IntGraphType>>)).Description("Category IDs of food");
-			Field(x => x.SideIds, type: typeof(ListGraphType<NonNullGraphType<IntGraphType>>)).Description("Side dish IDs of food");
+			Field(x => x.CategoryIds, type: typeof(ListGraphType<NonNullGraphType<IntGraphType>>))
+				.Description("Category IDs of food");
+			Field(x => x.SideIds, type: typeof(ListGraphType<NonNullGraphType<IntGraphType>>))
+				.Description("Side dish IDs of food");
 			Field(x => x.Type, type: typeof(NonNullGraphType<FoodTypeEnum>)).Description("Type of food");
 			Field(x => x.GlutenFree, type: typeof(NonNullGraphType<BooleanGraphType>)).Description("Is gluten free");
 

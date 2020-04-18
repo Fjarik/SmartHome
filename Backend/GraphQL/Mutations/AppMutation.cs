@@ -34,19 +34,27 @@ namespace Backend.GraphQL.Mutations
 			_httpContextAccessor = httpContextAccessor;
 			_foodService = foodService;
 			Field<AuthUserType, AuthUser>("login")
-				.Argument<NonNullGraphType<StringGraphType>>("googleToken", "")
+				.Argument<NonNullGraphType<StringGraphType>>("googleToken", "Google token to login")
 				.Resolve(this.Login);
 			Field<BooleanGraphType, bool>("logout")
 				.Argument<BooleanGraphType>("logoutAll", "Should logout from all devices")
 				.Resolve(this.Logout);
+			
+			// Meal
 			Field<MealType, Meal>("createMeal")
-				.Argument<NonNullGraphType<MealInputType>>("meal", "")
+				.Argument<NonNullGraphType<MealInputType>>("meal", "Meal to create")
 				.Resolve(this.CreateMeal);
+
+			// Food
 			Field<FoodType, Food>("createFood")
-				.Argument<NonNullGraphType<FoodInputType>>("food", "")
+				.Argument<NonNullGraphType<FoodInputType>>("food", "Food to create")
 				.Resolve(this.CreateFood);
+			Field<FoodType, Food>("updateFood")
+				.Argument<NonNullGraphType<IntGraphType>>("foodId", "Original food ID")
+				.Argument<NonNullGraphType<FoodInputType>>("food", "Variables to update")
+				.Resolve(this.UpdateFood);
 			Field<NonNullGraphType<BooleanGraphType>, bool>("removeFood")
-				.Argument<NonNullGraphType<IdGraphType>>("id", "")
+				.Argument<NonNullGraphType<IdGraphType>>("id", "Food to remove")
 				.Resolve(this.RemoveFood);
 		}
 
@@ -109,6 +117,34 @@ namespace Backend.GraphQL.Mutations
 			}
 
 			var res = this._foodService.Create(input);
+			if (!res.IsSuccess) {
+				ctx.Errors.Add(new ExecutionError(res.GetStatusMessage()));
+				return null;
+			}
+
+			return res.Content;
+		}
+
+		private Food UpdateFood(ResolveFieldContext<object> ctx)
+		{
+			if (!(this._authManager.Authorize(_httpContextAccessor, ctx))) {
+				return null;
+			}
+
+			var foodId = ctx.GetArgument<int>("foodId");
+			var input = ctx.GetArgument<FoodInput>("food");
+
+			if (input == null) {
+				ctx.Errors.Add(new ExecutionError("Input is empty"));
+				return null;
+			}
+
+			if (foodId < 1) {
+				ctx.Errors.Add(new ExecutionError("Food ID is not valid"));
+				return null;
+			}
+
+			var res = this._foodService.Update(foodId, input);
 			if (!res.IsSuccess) {
 				ctx.Errors.Add(new ExecutionError(res.GetStatusMessage()));
 				return null;

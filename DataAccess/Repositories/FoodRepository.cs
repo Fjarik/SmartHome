@@ -20,9 +20,14 @@ namespace DataAccess.Repositories
 											 .Include(x => x.FoodCategories)
 											 .Include(x => x.FoodSideFoods);
 
+		public override Food GetById(int id)
+		{
+			return this._all.FirstOrDefault(x => x.Id == id);
+		}
+
 		public override List<Food> GetAll()
 		{
-			return _all.ToList();
+			return this._all.ToList();
 		}
 
 		public bool Exists(string name)
@@ -82,6 +87,20 @@ namespace DataAccess.Repositories
 					   .ToList();
 		}
 
+		public bool RemoveFoodCategories(int foodId, List<int> categoryIds)
+		{
+			if (!categoryIds.Any()) {
+				return false;
+			}
+
+			var res = this.DbContext.FoodCategories
+						  .Where(x => x.FoodId == foodId &&
+									  categoryIds.Contains(x.CategoryId))
+						  .DeleteFromQuery();
+
+			return res > 0;
+		}
+
 		public List<FoodSide> CreateFoodSides(int foodId, List<int> sideIds)
 		{
 			if (!sideIds.Any()) {
@@ -100,6 +119,21 @@ namespace DataAccess.Repositories
 					   .FoodSides
 					   .Where(x => x.FoodId == foodId)
 					   .ToList();
+		}
+
+		public bool RemoveFoodSides(int foodId, List<int> sideIds)
+		{
+			if (!sideIds.Any()) {
+				return false;
+			}
+
+			var res = this.DbContext
+						  .FoodSides
+						  .Where(x => x.FoodId == foodId &&
+									  sideIds.Contains(x.SideId))
+						  .DeleteFromQuery();
+
+			return res > 0;
 		}
 	}
 }
