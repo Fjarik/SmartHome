@@ -1,14 +1,26 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent } from "react";
 import { getAllFoods } from "../../../src/graphql/queries";
 import CenterLoading from "../../Loading/CenterLoading";
-import { Container, TableContainer, Table, Paper, TableHead, TableRow, TableCell, TableBody, Grid, ButtonGroup, Typography } from "@material-ui/core";
+import { Container, Grid, Button } from "@material-ui/core";
 import { useQuery } from "react-apollo";
-import { allFoods, allFoods_foods } from "../../../src/graphql/types/allFoods";
+import { allFoods } from "../../../src/graphql/types/allFoods";
 import { FoodTypeEnum } from "../../../src/graphql/graphql-global-types";
 import FoodTable from "./Foods/FoodTable";
+import { useRouter } from "next/router";
+import customUrls from "../../../utils/customUrls";
 
 const FoodPage: FunctionComponent = () => {
     const { data, loading, error } = useQuery<allFoods>(getAllFoods);
+    const { app: { projectsUrls: { meals: { mealsIndex, addMeal } } } } = customUrls;
+    const router = useRouter();
+
+    const handleMealIndex = () => {
+        router.push(mealsIndex);
+    };
+
+    const handleAddMeal = () => {
+        router.push(addMeal);
+    };
 
     if (loading || !data) {
         return <CenterLoading text="Načítání" />;
@@ -30,8 +42,15 @@ const FoodPage: FunctionComponent = () => {
         <Container>
             <Grid container justify="space-between" style={{ marginBottom: "1rem" }}>
                 <Grid item>
+                    <Button onClick={handleMealIndex}>
+                        Zpět na výpis
+                    </Button>
                 </Grid>
                 <Grid item>
+                    <Button color="primary"
+                        onClick={handleAddMeal}>
+                        Nastavit obědy
+                    </Button>
                 </Grid>
             </Grid>
             <Grid container justify="center" spacing={2}>
@@ -48,7 +67,6 @@ const FoodPage: FunctionComponent = () => {
                     <FoodTable inputData={deserts} type={FoodTypeEnum.DESERT} categories={categories} title="Dezerty" />
                 </Grid>
             </Grid>
-
         </Container>
     );
 };
