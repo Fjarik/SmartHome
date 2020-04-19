@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { FoodTypeEnum } from "./../graphql-global-types";
+import { FoodInput, FoodTypeEnum } from "./../graphql-global-types";
 
 // ====================================================
 // GraphQL mutation operation: createFood
@@ -38,9 +38,5 @@ export interface createFood {
 }
 
 export interface createFoodVariables {
-  name: string;
-  type: FoodTypeEnum;
-  categoryIds?: string[] | null;
-  sideIds?: string[] | null;
-  glutenFree?: boolean | null;
+  food: FoodInput;
 }

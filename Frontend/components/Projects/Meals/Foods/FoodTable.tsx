@@ -3,11 +3,12 @@ import { allFoods_foods, allFoods_categories } from "../../../../src/graphql/typ
 import MaterialTable, { Column, Localization } from "material-table";
 import { Chip, Grid, Select, MenuItem, Input, Checkbox, ListItemText, InputLabel, FormControl } from "@material-ui/core";
 import { createFoodVariables, createFood } from "../../../../src/graphql/types/createFood";
-import { FoodTypeEnum } from "../../../../src/graphql/graphql-global-types";
+import { FoodTypeEnum, FoodInput } from "../../../../src/graphql/graphql-global-types";
 import { useApolloClient } from "react-apollo";
-import { createFoodMutation, removeFoodMutation } from "../../../../src/graphql/mutations";
+import { createFoodMutation, removeFoodMutation, updateFoodMutation } from "../../../../src/graphql/mutations";
 import { useRouter } from "next/router";
 import { removeFood, removeFoodVariables } from "../../../../src/graphql/types/removeFood";
+import { updateFood, updateFoodVariables } from "../../../../src/graphql/types/updateFood";
 
 interface FoodTableProps {
     inputData: allFoods_foods[];
@@ -162,9 +163,19 @@ const FoodTable: FunctionComponent<FoodTableProps> = ({ inputData, type, categor
         header: {
             actions: "Akce"
         },
+        body: {
+            emptyDataSourceMessage: "Žádná data k zobrazení",
+            addTooltip: "Přidat",
+            editTooltip: "Upravit",
+            deleteTooltip: "Smazat",
+        },
         toolbar: {
             searchPlaceholder: "Vyhledat",
             searchTooltip: "Vyhledat",
+        },
+        pagination: {
+            labelRowsSelect: "řádků",
+            labelDisplayedRows: "{from}-{to} ze {count}",
         }
     };
 
@@ -174,9 +185,34 @@ const FoodTable: FunctionComponent<FoodTableProps> = ({ inputData, type, categor
         }
     };
 
+    const areSame = (one: allFoods_foods, two: allFoods_foods): boolean => {
+        if (one === two) {
+            return true;
+        }
+        if (one.name !== two.name) {
+            return false;
+        }
+        if (one.type !== two.type) {
+            return false;
+        }
+        if (!arraysAreSame(one.categoryIds, two.categoryIds)) {
+            return false;
+        }
+        if (!arraysAreSame(one.sideIds, two.sideIds)) {
+            return false;
+        }
+        return true;
+    };
+
+    const arraysAreSame = (one: Array<any>, two: Array<any>): boolean => {
+        one = one.sort();
+        two = two.sort();
+        return JSON.stringify(one) === JSON.stringify(two);
+    };
+
     const onAdd = async (newData: allFoods_foods): Promise<any> => {
 
-        const vars: createFoodVariables = {
+        const vars: FoodInput = {
             name: newData.name,
             type: type,
             categoryIds: newData?.categoryIds?.map(x => x.toString()) ?? [],
@@ -185,11 +221,11 @@ const FoodTable: FunctionComponent<FoodTableProps> = ({ inputData, type, categor
 
         const { data: { createFood }, errors } = await mutate<createFood, createFoodVariables>({
             mutation: createFoodMutation,
-            variables: vars
+            variables: { food: vars }
         });
 
         if (errors) {
-            console.log(errors);
+            console.error(errors);
         }
         if (createFood) {
             setData([
@@ -206,6 +242,10 @@ const FoodTable: FunctionComponent<FoodTableProps> = ({ inputData, type, categor
             variables: { id: id }
         });
 
+        if (errors) {
+            console.error(errors);
+        }
+
         if (success) {
             setData([
                 ...data.filter(x => x.id !== id),
@@ -215,9 +255,51 @@ const FoodTable: FunctionComponent<FoodTableProps> = ({ inputData, type, categor
     };
 
     const onUpdate = async (newData: allFoods_foods, oldData?: allFoods_foods): Promise<any> => {
-        console.log("Old: ", oldData);
-        console.log("New: ", newData);
-        checkSides();
+        // console.log("Old: ", oldData);
+        // console.log("New: ", newData);
+        // console.log("Same: ", areSame(newData, oldData));
+
+        if (!newData || !oldData) {
+            return;
+        }
+
+        if (areSame(newData, oldData)) {
+            return;
+        }
+
+        const id = newData.id;
+
+        if (!id) {
+            return;
+        }
+
+        const vars: FoodInput = {
+            name: newData.name,
+            type: newData.type,
+            categoryIds: newData.categoryIds.map(x => x.toString()),
+            sideIds: newData.sideIds.map(x => x.toString()),
+        };
+
+        const { data: { updateFood }, errors } = await mutate<updateFood, updateFoodVariables>({
+            mutation: updateFoodMutation,
+            variables: {
+                foodId: id,
+                food: vars
+            }
+        });
+
+        if (errors) {
+            console.error(errors);
+        }
+
+        if (updateFood) {
+            setData([
+                newData,
+                ...data.filter(x => x.id !== id),
+            ]);
+
+            checkSides();
+        }
     };
 
 

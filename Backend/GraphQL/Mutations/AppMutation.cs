@@ -50,7 +50,7 @@ namespace Backend.GraphQL.Mutations
 				.Argument<NonNullGraphType<FoodInputType>>("food", "Food to create")
 				.Resolve(this.CreateFood);
 			Field<FoodType, Food>("updateFood")
-				.Argument<NonNullGraphType<IntGraphType>>("foodId", "Original food ID")
+				.Argument<NonNullGraphType<IdGraphType>>("foodId", "Original food ID")
 				.Argument<NonNullGraphType<FoodInputType>>("food", "Variables to update")
 				.Resolve(this.UpdateFood);
 			Field<NonNullGraphType<BooleanGraphType>, bool>("removeFood")

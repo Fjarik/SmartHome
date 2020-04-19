@@ -37,6 +37,14 @@ export enum MealTypeEnum {
   RESTAURANT = "RESTAURANT",
 }
 
+export interface FoodInput {
+  name: string;
+  type: FoodTypeEnum;
+  categoryIds?: string[] | null;
+  sideIds?: string[] | null;
+  glutenFree?: boolean | null;
+}
+
 //==============================================================
 // END Enums and Input Objects
 //==============================================================

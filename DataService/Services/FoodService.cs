@@ -166,84 +166,49 @@ namespace DataService.Services
 			if (original == null) {
 				return new HomeResult<Food>(StatusCode.NotFound);
 			}
+
+			var changed = false;
+
 			if (original.Name != name) {
 				original.Name = name;
+				changed = true;
 			}
 			if (original.TypeId != typeId) {
 				original.TypeId = typeId;
+				changed = true;
 			}
 			if (original.GlutenFree != glutenFree) {
 				original.GlutenFree = glutenFree;
+				changed = true;
 			}
 
-			this.Repository.Save(original);
+			if (changed) {
+				this.Repository.Save(original);
+			}
 
 			var foodId = original.Id;
-			var diff = original.CategoryIds.Except(categoryIds).ToList();
 
-			if (diff.Count > 0) {
-				this.UpdateCategories(foodId,
-									  original.CategoryIds,
-									  diff);
+			// Categories
+			var toRemove = original.CategoryIds.Except(categoryIds).ToList();
+			var toAdd = categoryIds.Except(original.CategoryIds).ToList();
+			if (toRemove.Count > 0) {
+				this.Repository.RemoveFoodCategories(foodId, toRemove);
+			}
+			if (toAdd.Count > 0) {
+				this.Repository.CreateFoodCategories(foodId, toAdd);
 			}
 
-			diff = original.SideIds.Except(sideIds).ToList();
-			if (diff.Count > 0) {
-				this.UpdateSides(foodId,
-								 original.SideIds,
-								 diff);
+			// Side dishes
+			toRemove = original.SideIds.Except(sideIds).ToList();
+			toAdd = sideIds.Except(original.SideIds).ToList();
+			if (toRemove.Count > 0) {
+				this.Repository.RemoveFoodSides(foodId, toRemove);
+			}
+			if (toAdd.Count > 0) {
+				this.Repository.CreateFoodSides(foodId, toAdd);
 			}
 
 			return this.GetById(foodId);
-		}
-
-		private void UpdateCategories(int foodId,
-									  IEnumerable<int> categoryIds,
-									  IEnumerable<int> diff)
-		{
-			this.UpdateRelated(foodId,
-							   categoryIds.ToList(),
-							   diff,
-							   create: this.Repository.CreateFoodCategories,
-							   remove: this.Repository.RemoveFoodCategories);
-		}
-
-		private void UpdateSides(int foodId,
-								 IEnumerable<int> sideIds,
-								 IEnumerable<int> diff)
-		{
-			this.UpdateRelated(foodId,
-							   sideIds.ToList(),
-							   diff,
-							   create: this.Repository.CreateFoodSides,
-							   remove: this.Repository.RemoveFoodSides);
-		}
-
-		private void UpdateRelated(int foodId,
-								   ICollection<int> originalIds,
-								   IEnumerable<int> diff,
-								   Func<int, List<int>, object> create,
-								   Func<int, List<int>, bool> remove)
-		{
-			var toRemove = new List<int>();
-			var toAdd = new List<int>();
-
-			foreach (var d in diff) {
-				if (originalIds.Contains(d)) {
-					// original contains id --> Remove
-					toRemove.Add(d);
-				} else {
-					// original does NOT contains --> Add
-					toAdd.Add(d);
-				}
-			}
-
-			if (toRemove.Count > 0) {
-				remove(foodId, toRemove);
-			}
-			if (toAdd.Count > 0) {
-				create(foodId, toAdd);
-			}
 		}
 
 #endregion

@@ -905,7 +905,7 @@
             "args": [
               {
                 "name": "food",
-                "description": null,
+                "description": "Food to create",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
@@ -932,7 +932,7 @@
             "args": [
               {
                 "name": "meal",
-                "description": null,
+                "description": "Meal to create",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
@@ -959,7 +959,7 @@
             "args": [
               {
                 "name": "googleToken",
-                "description": null,
+                "description": "Google token to login",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
@@ -1009,7 +1009,7 @@
             "args": [
               {
                 "name": "id",
-                "description": null,
+                "description": "Food to remove",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
@@ -1030,6 +1030,47 @@
                 "name": "Boolean",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "updateFood",
+            "description": null,
+            "args": [
+              {
+                "name": "foodId",
+                "description": "Original food ID",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "food",
+                "description": "Variables to update",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "FoodInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "FoodType",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

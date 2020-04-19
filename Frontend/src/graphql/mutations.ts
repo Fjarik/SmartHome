@@ -20,20 +20,10 @@ export const logoutMutation = gql`
 
 export const createFoodMutation = gql`
   mutation createFood(
-    $name: String!
-    $type: FoodTypeEnum!
-    $categoryIds: [ID!] = null
-    $sideIds: [ID!] = null
-    $glutenFree: Boolean = true
+    $food: FoodInput!
   ) {
     createFood(
-      food: {
-        name: $name
-        type: $type
-        categoryIds: $categoryIds
-        sideIds: $sideIds
-        glutenFree: $glutenFree
-      }
+      food: $food
     ) {
       id
       name
@@ -71,6 +61,14 @@ export const createMealMutation = gql`
         soupId: $soupId
       }
     ) {
+      id
+    }
+  }
+`;
+
+export const updateFoodMutation = gql`
+  mutation updateFood($foodId: ID!, $food: FoodInput!) {
+    updateFood(foodId: $foodId, food: $food) {
       id
     }
   }
