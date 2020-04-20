@@ -27,6 +27,21 @@ namespace DataAccess.Repositories
 			return this.DbSet.Where(x => x.Date.Date == date.Date).ToList();
 		}
 
+		public List<int> GetRealtedMealIds(int originalMealId)
+		{
+			return this.DbSet
+					   .Where(x => x.OriginalMealId == originalMealId)
+					   .Select(x => x.Id)
+					   .ToList();
+		}
+
+		public List<Meal> GetRealtedMeals(int originalMealId)
+		{
+			return this.DbSet
+					   .Where(x => x.OriginalMealId == originalMealId)
+					   .ToList();
+		}
+
 		public EntityEntry<Meal> Create(DateTime date, short typeId, short timeId,
 										int? foodId = null, int? soupId = null,
 										int? sideId = null, int? originalMealId = null)
@@ -42,6 +57,14 @@ namespace DataAccess.Repositories
 			};
 
 			return this.Create(m);
+		}
+
+		public bool RemoveRelatedMeals(int originalMealId)
+		{
+			this.DbSet.Where(x => x.OriginalMealId == originalMealId)
+				.DeleteFromQuery();
+
+			return true;
 		}
 	}
 }

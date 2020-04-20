@@ -36,6 +36,9 @@ namespace DataAccess.Models
 
 		[NotMapped]
 		public MealTimes Time => (MealTimes) this.TimeId;
+
+		[NotMapped]
+		public bool IsRemoveable => this.OriginalMealId != null;
 	}
 
 	public partial class Token : IDbEntity

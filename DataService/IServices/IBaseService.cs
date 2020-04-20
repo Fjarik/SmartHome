@@ -19,5 +19,6 @@ namespace DataService.IServices
 		ILookup<int, TEntity> GetLookupByIds(IEnumerable<int> ids);
 		List<TEntity> GetAll();
 		bool Delete(int id);
+		bool Delete(TEntity entity);
 	}
 }

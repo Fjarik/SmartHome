@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime;
 using System.Text;
 using DataAccess.IRepositories;
 using DataAccess.Models;
@@ -17,6 +18,8 @@ namespace DataService.Services
 		{
 			return this.Repository.GetByDate(date);
 		}
+
+#region Create
 
 		public HomeResult<Meal> Create(MealInput input)
 		{
@@ -60,5 +63,42 @@ namespace DataService.Services
 
 			return new HomeResult<Meal>(StatusCode.OK, m.Entity);
 		}
+
+		public bool Remove(int mealId, bool incRelated)
+		{
+			if (mealId < 1) {
+				return false;
+			}
+			if (incRelated) {
+				var removeRes = this.Repository.RemoveRelatedMeals(mealId);
+				if (!removeRes) {
+					return false;
+				}
+			}
+
+			var res = this.GetById(mealId);
+			if (!res.IsSuccess) {
+				return false;
+			}
+			return this.Remove(res.Content, incRelated);
+		}
+
+		public bool Remove(Meal entity, bool incRelated)
+		{
+			if (entity == null) {
+				return false;
+			}
+			if (!incRelated && entity.IsRemoveable) {
+				return false;
+			}
+			return this.Delete(entity);
+		}
+
+		public override bool Delete(int id)
+		{
+			throw new AmbiguousImplementationException("Use 'Remove' method instead");
+		}
+
+#endregion
 	}
 }

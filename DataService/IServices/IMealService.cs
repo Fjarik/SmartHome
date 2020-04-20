@@ -11,6 +11,9 @@ namespace DataService.IServices
 	public interface IMealService : IBaseService<Meal, IMealRepository>
 	{
 		List<Meal> GetByDate(DateTime date);
+
+#region Create
+
 		HomeResult<Meal> Create(MealInput input);
 
 		HomeResult<Meal> Create(DateTime date, MealTypes type, MealTimes time,
@@ -20,5 +23,15 @@ namespace DataService.IServices
 		HomeResult<Meal> Create(DateTime date, short typeId, short timeId,
 								int? foodId = null, int? soupId = null,
 								int? sideId = null, int? originalMealId = null);
+
+		#endregion
+
+#region Remove
+
+		// Including related meals
+		bool Remove(int mealId, bool incRelated);
+		bool Remove(Meal entity, bool incRelated);
+
+#endregion
 	}
 }

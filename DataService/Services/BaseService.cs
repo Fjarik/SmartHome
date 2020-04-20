@@ -25,7 +25,7 @@ namespace DataService.Services
 			this.Repository = repository;
 		}
 
-		public HomeResult<TEntity> GetById(int id)
+		public virtual HomeResult<TEntity> GetById(int id)
 		{
 			if (id < 1) {
 				return new HomeResult<TEntity>(StatusCode.NotValidId);
@@ -50,7 +50,15 @@ namespace DataService.Services
 			if (!res.IsSuccess) {
 				return false;
 			}
-			return this.Repository.Delete(res.Content);
+			return this.Delete(res.Content);
+		}
+
+		public virtual bool Delete(TEntity entity)
+		{
+			if (entity == null) {
+				return false;
+			}
+			return this.Repository.Delete(entity);
 		}
 	}
 }

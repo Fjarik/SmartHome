@@ -33,17 +33,23 @@ namespace Backend.GraphQL.Mutations
 			_mealService = mealService;
 			_httpContextAccessor = httpContextAccessor;
 			_foodService = foodService;
+
+			// Account
 			Field<AuthUserType, AuthUser>("login")
 				.Argument<NonNullGraphType<StringGraphType>>("googleToken", "Google token to login")
 				.Resolve(this.Login);
 			Field<BooleanGraphType, bool>("logout")
 				.Argument<BooleanGraphType>("logoutAll", "Should logout from all devices")
 				.Resolve(this.Logout);
-			
+
 			// Meal
 			Field<MealType, Meal>("createMeal")
 				.Argument<NonNullGraphType<MealInputType>>("meal", "Meal to create")
 				.Resolve(this.CreateMeal);
+			Field<NonNullGraphType<BooleanGraphType>, bool>("removeMeal")
+				.Argument<NonNullGraphType<IdGraphType>>("id", "Meal id to remove")
+				.Argument<NonNullGraphType<BooleanGraphType>, bool>("incRelated", "Remove related meals")
+				.Resolve(this.RemoveMeal);
 
 			// Food
 			Field<FoodType, Food>("createFood")
@@ -54,7 +60,7 @@ namespace Backend.GraphQL.Mutations
 				.Argument<NonNullGraphType<FoodInputType>>("food", "Variables to update")
 				.Resolve(this.UpdateFood);
 			Field<NonNullGraphType<BooleanGraphType>, bool>("removeFood")
-				.Argument<NonNullGraphType<IdGraphType>>("id", "Food to remove")
+				.Argument<NonNullGraphType<IdGraphType>>("id", "Food id to remove")
 				.Resolve(this.RemoveFood);
 		}
 
@@ -74,7 +80,7 @@ namespace Backend.GraphQL.Mutations
 			if (!(this._authManager.Authorize(_httpContextAccessor, ctx))) {
 				return false;
 			}
-			var everywhere = ctx.GetArgument<bool?>("logoutAll") ?? false;
+			var everywhere = ctx.GetArgument("logoutAll", false);
 
 			var t = this._httpContextAccessor.GetToken();
 
@@ -101,6 +107,23 @@ namespace Backend.GraphQL.Mutations
 			}
 
 			return res.Content;
+		}
+
+		private bool RemoveMeal(ResolveFieldContext<object> ctx)
+		{
+			if (!(this._authManager.Authorize(_httpContextAccessor, ctx))) {
+				return false;
+			}
+
+			var mealId = ctx.GetArgument<int>("id");
+			var incRelated = ctx.GetArgument<bool>("incRelated");
+
+			if (mealId < 1) {
+				ctx.Errors.Add(new ExecutionError("ID is < 1"));
+				return false;
+			}
+
+			return this._mealService.Remove(mealId, incRelated);
 		}
 
 		private Food CreateFood(ResolveFieldContext<object> ctx)

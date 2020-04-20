@@ -26,6 +26,7 @@ namespace Backend.GraphQL.Types
 			Field(x => x.Date, type: typeof(NonNullGraphType<DateGraphType>)).Description("Name of food");
 			Field(x => x.Type, type: typeof(NonNullGraphType<MealTypeEnum>)).Description("Meal type");
 			Field(x => x.Time, type: typeof(NonNullGraphType<MealTimeEnum>)).Description("Meal time");
+			Field(x => x.IsRemoveable, type: typeof(NonNullGraphType<BooleanGraphType>)).Description("Can be removed");
 
 			Field(x => x.OriginalMealId, type: typeof(IdGraphType), nullable: true).Description("Original meal id");
 			Field(x => x.SoupId, type: typeof(IdGraphType), nullable: true).Description("Id of soup property");

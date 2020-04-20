@@ -92,7 +92,7 @@ namespace DataAccess.Contexts
                     .HasConstraintName("FK_Meals_Foods");
 
                 entity.HasOne(d => d.OriginalMeal)
-                    .WithMany(p => p.InverseOriginalMeal)
+                    .WithMany(p => p.RelatedMeals)
                     .HasForeignKey(d => d.OriginalMealId)
                     .HasConstraintName("FK_Meals_OriginalMeals");
 

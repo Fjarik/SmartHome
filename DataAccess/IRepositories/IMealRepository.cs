@@ -10,8 +10,13 @@ namespace DataAccess.IRepositories
 	{
 		List<Meal> GetByDate(DateTime date);
 
+		List<int> GetRealtedMealIds(int originalMealId);
+		List<Meal> GetRealtedMeals(int originalMealId);
+
 		EntityEntry<Meal> Create(DateTime date, short typeId, short timeId,
 								 int? foodId = null, int? soupId = null,
 								 int? sideId = null, int? originalMealId = null);
+
+		bool RemoveRelatedMeals(int originalMealId);
 	}
 }
