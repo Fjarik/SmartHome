@@ -13,7 +13,7 @@ const setTheme = (theme: string) => {
     new Cookies().set(ThemeCookieKey, theme, { path: "/", maxAge: 60 * 60 * 24 * 10 /* seconds -> 10 days*/ });
 };
 
-const switchTheme = () => {
+const switchTheme = (): void => {
     const current = getThemeString();
     let newTheme = "dark";
     if (current === newTheme) {

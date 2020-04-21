@@ -14,11 +14,11 @@ const FoodPage: FunctionComponent = () => {
     const { app: { projectsUrls: { meals: { mealsIndex, addMeal } } } } = customUrls;
     const router = useRouter();
 
-    const handleMealIndex = () => {
+    const handleMealIndex = (): void => {
         router.push(mealsIndex);
     };
 
-    const handleAddMeal = () => {
+    const handleAddMeal = (): void => {
         router.push(addMeal);
     };
 

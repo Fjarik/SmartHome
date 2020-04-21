@@ -75,17 +75,17 @@ const Header: FunctionComponent = () => {
         };
     }, []);
 
-    const getImgSrc = () => {
+    const getImgSrc = (): string => {
         return isDarkTheme ? "/images/logos/MainWhite.png" : "/images/logos/Main.png";
     };
 
-    const changeTheme = () => {
+    const changeTheme = (): void => {
         switchTheme();
 
         router.reload();
     };
 
-    const getLink = () => {
+    const getLink = (): string => {
         return user ? appUrl : indexUrl;
     };
 

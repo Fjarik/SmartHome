@@ -18,6 +18,7 @@ export const getMealsBasic = gql`
       date
       type
       time
+      isRemoveable
       food {
         id
         name

@@ -52,6 +52,10 @@ export interface getBasicMeals_meals {
    */
   time: MealTimeEnum;
   /**
+   * Can be removed
+   */
+  isRemoveable: boolean;
+  /**
    * Food
    */
   food: getBasicMeals_meals_food | null;

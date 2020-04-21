@@ -21,13 +21,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const HomePage: FunctionComponent<{}> = () => {
     const { user } = useContext(ReactAuthContext);
-    const isLoggedIn = () => !!user;
+    const isLoggedIn = (): boolean => !!user;
 
     const c = useStyles();
 
     const { app: { appUrl }, account: { loginUrl } } = customUrls;
 
-    const getLink = () => {
+    const getLink = (): string => {
         return isLoggedIn() ? appUrl : loginUrl;
     };
 

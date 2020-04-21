@@ -24,7 +24,7 @@ const FoodTable: FunctionComponent<FoodTableProps> = ({ inputData, type, categor
     const router = useRouter();
     const [data, setData] = useState<allFoods_foods[]>(inputData);
 
-    const getChips = (food: allFoods_foods) => food.sideIds.map((x, i) => {
+    const getSideChips = (food: allFoods_foods) => food.sideIds.map((x, i) => {
         const side = sides.find(s => s.id === x.toString());
         const primary = i % 2 === 0;
         return (
@@ -113,7 +113,7 @@ const FoodTable: FunctionComponent<FoodTableProps> = ({ inputData, type, categor
             // eslint-disable-next-line react/display-name
             render: (food) => (
                 <Grid container spacing={1}>
-                    {getChips(food)}
+                    {getSideChips(food)}
                 </Grid>
             ),
             // eslint-disable-next-line react/display-name
@@ -302,13 +302,9 @@ const FoodTable: FunctionComponent<FoodTableProps> = ({ inputData, type, categor
         }
     };
 
-
-    if (data.length < 1) {
-        // TODO
-    }
-
     if (data.filter(x => x.type !== type).length > 0) {
         // TODO - error
+        return <p>Vstupní data obsahují špatný druh jídel</p>;
     }
 
     return (
@@ -319,8 +315,8 @@ const FoodTable: FunctionComponent<FoodTableProps> = ({ inputData, type, categor
             // style={{ height: "100%" }}
             localization={locs}
             editable={{
-                isEditable: (data) => true,
-                isDeletable: (data) => true,
+                isEditable: () => true,
+                isDeletable: () => type !== FoodTypeEnum.SIDE_DISH,
                 onRowAdd: onAdd,
                 onRowDelete: onDelete,
                 onRowUpdate: onUpdate,

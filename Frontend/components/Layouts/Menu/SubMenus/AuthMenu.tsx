@@ -23,11 +23,11 @@ const AuthMenu: FunctionComponent<IAuthMenuProps> = ({ user, logout }) => {
         setAnchorAuthMenu(event.currentTarget);
     };
 
-    const handleClose = () => {
+    const handleClose = (): void => {
         setAnchorAuthMenu(null);
     };
 
-    const redirect = (url: string) => {
+    const redirect = (url: string): void => {
         router.push(url);
     };
 

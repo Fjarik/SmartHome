@@ -25,20 +25,20 @@ const NewMealsButton: FunctionComponent = () => {
     const anchorRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
 
-    const handleMainClick = () => {
+    const handleMainClick = (): void => {
         router.push(getAddMeal(MealTimeEnum.LUNCH));
     };
 
-    const handleMenuItemClick = (url: string) => {
+    const handleMenuItemClick = (url: string): void => {
         router.push(url);
         setOpen(false);
     };
 
-    const handleToggle = () => {
+    const handleToggle = (): void => {
         setOpen((prev) => !prev);
     };
 
-    const handleClose = (event: React.MouseEvent<Document, MouseEvent>) => {
+    const handleClose = (event: React.MouseEvent<Document, MouseEvent>): void => {
         if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
             return;
         }
