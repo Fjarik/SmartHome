@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint . --ext .tsx,.ts",
     "schema": "apollo client:download-schema --endpoint=https://domov.azurewebsites.net/graphql/ ./src/graphql/graphql-schema.json",
-    "generate": "apollo client:codegen --localSchemaFile=./src/graphql/graphql-schema.json --target=typescript --includes=./src/graphql/**/*.ts --tagName=gql --addTypename --globalTypesFile=./src/graphql/graphql-global-types.ts types"
+    "generate": "apollo client:codegen --localSchemaFile=./src/graphql/graphql-schema.json --target=typescript --includes=./src/graphql/**/*.ts --tagName=gql --addTypename --globalTypesFile=./src/graphql/graphql-global-types.ts types",
+    "ui": "yarn upgrade-interactive"
   },
   "dependencies": {
     "@apollo/react-ssr": "^3.1.4",
