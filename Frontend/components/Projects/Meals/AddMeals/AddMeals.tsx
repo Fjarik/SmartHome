@@ -1,5 +1,5 @@
 import { FunctionComponent, ReactNode, useState, ChangeEvent } from "react";
-import { Paper, Tabs, Tab, Container, Typography, makeStyles, Theme, createStyles, Grid } from "@material-ui/core";
+import { Paper, Tabs, Tab, Container, Typography, makeStyles, Theme, createStyles, Grid, Switch } from "@material-ui/core";
 import AddLunch from "./AddLunch";
 import { MealTimeEnum } from "../../../../src/graphql/graphql-global-types";
 import { KeyboardDatePicker } from "@material-ui/pickers";
@@ -36,6 +36,7 @@ interface IAddMealsProps {
 const AddMeals: FunctionComponent<IAddMealsProps> = ({ time = MealTimeEnum.LUNCH }) => {
     const [value, setValue] = useState<MealTimeEnum>(time);
     const [selectedDate, setSelectedDate] = useState<DateTime>();
+    const [isBox, setIsBox] = useState<boolean>(false);
 
     const handleChange = (event: ChangeEvent<{}>, newValue: MealTimeEnum) => {
         setValue(newValue);
@@ -43,6 +44,10 @@ const AddMeals: FunctionComponent<IAddMealsProps> = ({ time = MealTimeEnum.LUNCH
 
     const onDateChange = (date: DateTime): void => {
         setSelectedDate(date);
+    };
+
+    const onBoxChange = (event: ChangeEvent<HTMLInputElement>): void => {
+        setIsBox(event.target.checked);
     };
 
     return (
@@ -63,6 +68,26 @@ const AddMeals: FunctionComponent<IAddMealsProps> = ({ time = MealTimeEnum.LUNCH
                         value={selectedDate}
                         onChange={onDateChange} />
                 </Grid>
+                {value === MealTimeEnum.LUNCH &&
+                    <Grid item>
+                        <Typography component="div">
+                            <Grid container component="label" alignItems="center" spacing={1}>
+                                <Grid item>
+                                    Normální jídlo
+                                </Grid>
+                                <Grid item>
+                                    <Switch
+                                        checked={isBox}
+                                        onChange={onBoxChange}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    Krabička
+                                </Grid>
+                            </Grid>
+                        </Typography>
+                    </Grid>
+                }
                 <Grid item style={{ alignSelf: "stretch" }}>
                     <Paper square>
                         <Tabs
@@ -83,7 +108,7 @@ const AddMeals: FunctionComponent<IAddMealsProps> = ({ time = MealTimeEnum.LUNCH
                         ToDo
                     </TabPanel>
                     <TabPanel value={value} index={MealTimeEnum.LUNCH}>
-                        <AddLunch selectedDate={selectedDate} />
+                        <AddLunch selectedDate={selectedDate} isBox={isBox} />
                     </TabPanel>
                     <TabPanel value={value} index={MealTimeEnum.DINNER}>
                         ToDo

@@ -7,7 +7,6 @@ import { useQuery } from "react-apollo";
 import NewMealsButton from "./AddMeals/NewMealsButton";
 import customUrls from "../../../utils/customUrls";
 import { useRouter } from "next/router";
-import { groupBy, toArray } from "lodash";
 import MealsTable from "./MealComps/MealsTable";
 
 const MealPage: FunctionComponent = () => {
@@ -29,8 +28,6 @@ const MealPage: FunctionComponent = () => {
 
     const { meals } = data;
 
-    const groups = groupBy(meals, x => x.date);
-
     return (
         <Container>
             <Grid container justify="space-between" alignItems="center" style={{ marginBottom: "1rem" }}>
@@ -43,7 +40,7 @@ const MealPage: FunctionComponent = () => {
                     <NewMealsButton />
                 </Grid>
             </Grid>
-            <MealsTable meals={toArray(groups)} />
+            <MealsTable meals={meals} />
         </Container>
     );
 };

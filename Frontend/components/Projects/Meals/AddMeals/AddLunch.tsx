@@ -55,9 +55,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface AddLunchProps {
     selectedDate: DateTime;
+    isBox: boolean;
 }
 
-const AddLunch: FunctionComponent<AddLunchProps> = ({ selectedDate }) => {
+const AddLunch: FunctionComponent<AddLunchProps> = ({ selectedDate, isBox }) => {
     const dayCount = 5;
 
     const c = useStyles();
@@ -187,7 +188,7 @@ const AddLunch: FunctionComponent<AddLunchProps> = ({ selectedDate }) => {
         const mainMealId = await createMealAsync({
             foodId: food,
             date: date,
-            type: MealTypeEnum.NORMAL,
+            type: isBox ? MealTypeEnum.FOOD_BOX : MealTypeEnum.NORMAL,
             time: MealTimeEnum.LUNCH,
             sideDishId: side,
             soupId: soup,

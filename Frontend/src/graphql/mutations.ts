@@ -34,6 +34,14 @@ export const createFoodMutation = gql`
   }
 `;
 
+export const updateFoodMutation = gql`
+  mutation updateFood($foodId: ID!, $food: FoodInput!) {
+    updateFood(foodId: $foodId, food: $food) {
+      id
+    }
+  }
+`;
+
 export const removeFoodMutation = gql`
   mutation removeFood($id: ID!) {
     removeFood(id: $id)
@@ -66,10 +74,11 @@ export const createMealMutation = gql`
   }
 `;
 
-export const updateFoodMutation = gql`
-  mutation updateFood($foodId: ID!, $food: FoodInput!) {
-    updateFood(foodId: $foodId, food: $food) {
-      id
-    }
+export const removeMealMutation = gql`
+  mutation removeMeal(
+    $id: ID!
+    $incRelated: Boolean!
+  ) {
+    removeMeal(id: $id, incRelated: $incRelated )
   }
 `;
