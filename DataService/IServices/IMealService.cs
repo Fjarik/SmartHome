@@ -11,6 +11,7 @@ namespace DataService.IServices
 	public interface IMealService : IBaseService<Meal, IMealRepository>
 	{
 		List<Meal> GetByDate(DateTime date);
+		List<Meal> GetByDate(DateTime date, int daysBefore, int daysAfter);
 
 #region Create
 
@@ -24,7 +25,7 @@ namespace DataService.IServices
 								int? foodId = null, int? soupId = null,
 								int? sideId = null, int? originalMealId = null);
 
-		#endregion
+#endregion
 
 #region Remove
 

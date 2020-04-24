@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import { getBasicMeals } from "../../../src/graphql/types/getBasicMeals";
+import { getBasicMeals, getBasicMealsVariables } from "../../../src/graphql/types/getBasicMeals";
 import { getMealsBasic } from "../../../src/graphql/queries";
 import CenterLoading from "../../Loading/CenterLoading";
 import { Container, Grid, Button } from "@material-ui/core";
@@ -10,7 +10,14 @@ import { useRouter } from "next/router";
 import MealsTable from "./MealComps/MealsTable";
 
 const MealPage: FunctionComponent = () => {
-    const { data, loading, error } = useQuery<getBasicMeals>(getMealsBasic, { ssr: false });
+    const { data, loading, error } = useQuery<getBasicMeals, getBasicMealsVariables>(getMealsBasic, {
+        variables: {
+            date: "",
+            daysAfter: 4,
+            daysBefore: 1
+        },
+        ssr: false
+    });
     const { app: { projectsUrls: { meals: { foodsIndex } } } } = customUrls;
     const router = useRouter();
 

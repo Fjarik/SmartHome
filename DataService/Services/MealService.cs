@@ -16,7 +16,18 @@ namespace DataService.Services
 
 		public List<Meal> GetByDate(DateTime date)
 		{
-			return this.Repository.GetByDate(date);
+			return this.GetByDate(date, 0, 0);
+		}
+
+		public List<Meal> GetByDate(DateTime date, int daysBefore, int daysAfter)
+		{
+			if (daysAfter < 0 || daysBefore < 0) {
+				return new List<Meal>();
+			}
+			var minDate = date.AddDays(daysBefore * -1);
+			var maxDate = date.AddDays(daysAfter);
+
+			return this.Repository.GetByDate(minDate, maxDate);
 		}
 
 #region Create

@@ -12,8 +12,16 @@ export const getLoggedUser = gql`
 `;
 
 export const getMealsBasic = gql`
-  query getBasicMeals{
-    meals {
+  query getBasicMeals(
+    $date: Date!
+    $daysBefore: Int!
+    $daysAfter: Int!
+  ){
+    meals(
+      date: $date
+      daysBefore: $daysBefore
+      daysAfter: $daysAfter
+    ) {
       id
       date
       type

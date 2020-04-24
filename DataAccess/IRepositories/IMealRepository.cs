@@ -9,6 +9,7 @@ namespace DataAccess.IRepositories
 	public interface IMealRepository : IBaseRepository<Meal>
 	{
 		List<Meal> GetByDate(DateTime date);
+		List<Meal> GetByDate(DateTime minDate, DateTime maxDate);
 
 		List<int> GetRealtedMealIds(int originalMealId);
 		List<Meal> GetRealtedMeals(int originalMealId);

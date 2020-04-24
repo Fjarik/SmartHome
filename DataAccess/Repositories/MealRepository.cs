@@ -14,17 +14,25 @@ namespace DataAccess.Repositories
 	{
 		public MealRepository(MainContext dbContext) : base(dbContext) { }
 
+		private IQueryable<Meal> _all => this.DbSet
+											 .Include(x => x.MealCategories)
+											 .Include(x => x.Food); // TODO: Edit
+
 		public override List<Meal> GetAll()
 		{
-			return this.DbSet
-					   .Include(x => x.MealCategories)
-					   .Include(x => x.Food) // TODO: Edit
-					   .ToList();
+			return _all.ToList();
 		}
 
 		public List<Meal> GetByDate(DateTime date)
 		{
-			return this.DbSet.Where(x => x.Date.Date == date.Date).ToList();
+			return this.GetByDate(date, date);
+		}
+
+		public List<Meal> GetByDate(DateTime minDate, DateTime maxDate)
+		{
+			return _all.Where(x => x.Date >= minDate &&
+								   x.Date <= maxDate)
+					   .ToList();
 		}
 
 		public List<int> GetRealtedMealIds(int originalMealId)

@@ -15,16 +15,16 @@ export const getToken = (): string | null => new Cookies().get(UserTokenCookieKe
 
 export interface IAuthContext {
     token: null | string;
-    user: getLogged_logged | undefined;
+    user: getLogged_logged | null;
     login: (googleToken: string) => Promise<string> | undefined;
     logout: () => Promise<void> | undefined;
 }
 
 const defaultContext: IAuthContext = {
     token: null,
-    user: undefined,
-    login: () => undefined,
-    logout: () => undefined,
+    user: null,
+    login: () => null,
+    logout: () => null,
 };
 
 export const ReactAuthContext = createContext<IAuthContext>(defaultContext);

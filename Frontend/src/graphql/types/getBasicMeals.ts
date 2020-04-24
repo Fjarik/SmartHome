@@ -68,3 +68,9 @@ export interface getBasicMeals_meals {
 export interface getBasicMeals {
   meals: getBasicMeals_meals[] | null;
 }
+
+export interface getBasicMealsVariables {
+  date: any;
+  daysBefore: number;
+  daysAfter: number;
+}
