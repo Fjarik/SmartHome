@@ -12,7 +12,7 @@ import MealsTable from "./MealComps/MealsTable";
 const MealPage: FunctionComponent = () => {
     const { data, loading, error } = useQuery<getBasicMeals, getBasicMealsVariables>(getMealsBasic, {
         variables: {
-            date: "",
+            date: "2020-4-24",
             daysAfter: 4,
             daysBefore: 1
         },

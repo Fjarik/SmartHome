@@ -94,11 +94,11 @@ const LoginPageComponent: FunctionComponent = () => {
                         <div style={{ display: "flex", marginTop: "2rem" }}>
                             <Typography variant="body2" style={{ marginRight: "0.25em" }}>
                                 Nemáte účet?
-                                </Typography>
+                            </Typography>
                             <Link href={loginUrl}>
                                 <Typography variant="body2" color="secondary">
                                     Použijte tlačítko výše.
-                                    </Typography>
+                                </Typography>
                             </Link>
                         </div>
                     </div>

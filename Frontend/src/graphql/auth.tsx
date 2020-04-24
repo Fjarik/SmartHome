@@ -14,10 +14,10 @@ import { useSnackbar } from "notistack";
 export const getToken = (): string | null => new Cookies().get(UserTokenCookieKey);
 
 export interface IAuthContext {
-    token: null | string;
+    token: string | null;
     user: getLogged_logged | null;
-    login: (googleToken: string) => Promise<string> | undefined;
-    logout: () => Promise<void> | undefined;
+    login: (googleToken: string) => Promise<string> | null;
+    logout: () => Promise<void> | null;
 }
 
 const defaultContext: IAuthContext = {
@@ -65,7 +65,6 @@ const AuthContextProvider: FunctionComponent<{}> = ({ children }) => {
             if (!res) {
                 console.log("Logout returned: ", res);
             }
-            // eslint-disable-next-line no-empty
         } catch (error) {
             console.log("Error when logging out: ", error);
         }
@@ -103,8 +102,8 @@ const AuthContextProvider: FunctionComponent<{}> = ({ children }) => {
 
     const getLocalUser = (): getLogged_logged => {
         if (window) {
-            var u = window.localStorage.getItem("user");
-            return JSON.parse(u) as getLogged_logged;
+            const uString = window.localStorage.getItem("user");
+            return JSON.parse(uString) as getLogged_logged;
         }
         return null;
     };
