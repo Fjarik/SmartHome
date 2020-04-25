@@ -152,6 +152,10 @@ namespace DataService.Services
 			if (t == null) {
 				return new HomeResult<bool>(StatusCode.NotFound);
 			}
+
+			if (!t.IsValid) {
+				return new HomeResult<bool>(StatusCode.Expired);
+			}
 			return new HomeResult<bool>(StatusCode.OK, t.IsValid);
 		}
 

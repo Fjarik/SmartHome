@@ -120,14 +120,6 @@ namespace Backend
 					ValidAudience = appSettings.Audience,
 					IssuerSigningKey = new SymmetricSecurityKey(key),
 				};
-				options.Events = new JwtBearerEvents {
-					OnAuthenticationFailed = ctx => {
-						if (ctx.Exception is SecurityTokenExpiredException) {
-							ctx.Response.Headers.Add("Token-Expired", "true");
-						}
-						return Task.CompletedTask;
-					}
-				};
 			});
 
 			// Auth

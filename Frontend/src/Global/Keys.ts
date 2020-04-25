@@ -1,4 +1,6 @@
 const UserTokenCookieKey: string = "Authorization";
 const ThemeCookieKey: string = "Theme";
+const TokenInfoKey: string = "TokenInfo";
+const UserKey: string = "UserInfo";
 
-export { UserTokenCookieKey, ThemeCookieKey };
+export { UserTokenCookieKey, TokenInfoKey, ThemeCookieKey, UserKey };

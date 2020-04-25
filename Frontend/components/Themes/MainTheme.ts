@@ -10,7 +10,7 @@ const isBrowserDark = (): boolean => {
 };
 
 const setTheme = (theme: string) => {
-    new Cookies().set(ThemeCookieKey, theme, { path: "/", maxAge: 60 * 60 * 24 * 10 /* seconds -> 10 days*/ });
+    new Cookies().set(ThemeCookieKey, theme, { path: "/", maxAge: 60 * 60 * 24 * 100 /* seconds -> 100 days*/ });
 };
 
 const switchTheme = (): void => {

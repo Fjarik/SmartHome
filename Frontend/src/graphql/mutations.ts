@@ -3,11 +3,25 @@ import gql from "graphql-tag";
 export const loginMutation = gql`
   mutation login($googleToken: String!) {
     login(googleToken:$googleToken){
-      authToken
+      authToken{
+        accessToken
+        expiration
+        refreshToken
+      }
       id
       firstname
       lastname
       createdAt
+    }
+  }
+`;
+
+export const refreshTokenMutation = gql`
+  mutation refreshToken($refreshToken: String!) {
+    refreshToken(refreshToken: $refreshToken) {
+      accessToken
+      expiration
+      refreshToken
     }
   }
 `;

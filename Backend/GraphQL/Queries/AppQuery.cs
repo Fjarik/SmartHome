@@ -54,7 +54,7 @@ namespace Backend.GraphQL.Queries
 				.Argument<NonNullGraphType<IntGraphType>, int>("daysBefore", "How many days to select before DATE",
 															   1)
 				.Argument<NonNullGraphType<IntGraphType>, int>("daysAfter", "How many days to select after DATE", 5)
-				.Argument<NonNullGraphType<DateGraphType>, DateTime>("date", "Get meals by date", DateTime.Today)
+				.Argument<NonNullGraphType<DateGraphType>, DateTime>("date", "Get meals by date")
 				.Resolve(GetMeals);
 			Field<ListGraphType<NonNullGraphType<MealType>>, List<Meal>>("allMeals")
 				.Resolve(GetAllMeals);

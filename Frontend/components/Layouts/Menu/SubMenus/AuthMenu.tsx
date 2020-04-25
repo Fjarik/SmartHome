@@ -31,6 +31,10 @@ const AuthMenu: FunctionComponent<IAuthMenuProps> = ({ user, logout }) => {
         router.push(url);
     };
 
+    const handleLogout = async (): Promise<void> => {
+        await logout();
+    };
+
     return (
         <>
             <Button
@@ -63,7 +67,7 @@ const AuthMenu: FunctionComponent<IAuthMenuProps> = ({ user, logout }) => {
                     </Typography>
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={async () => await logout()}>
+                <MenuItem onClick={handleLogout}>
                     <ListItemIcon>
                         <PowerSettingsNewIcon fontSize="small" />
                     </ListItemIcon>

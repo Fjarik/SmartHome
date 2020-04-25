@@ -58,7 +58,6 @@ namespace Backend.Managers
 						ctx.Errors.Add(new ExecutionError("Check exception", res.Exception));
 						break;
 					case StatusCode.Expired:
-						httpContext.HttpContext.Response.Headers.Add("Token-Expired", "true");
 						ctx.Errors.Add(new ExecutionError("Token is expired"));
 						break;
 					default:

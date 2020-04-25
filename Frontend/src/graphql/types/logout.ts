@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface logout {
-  logout: boolean | null;
+  logout: boolean;
 }
 
 export interface logoutVariables {

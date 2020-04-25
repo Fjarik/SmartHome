@@ -7,12 +7,28 @@
 // GraphQL mutation operation: login
 // ====================================================
 
+export interface login_login_authToken {
+  __typename: "AuthTokenType";
+  /**
+   * Access token
+   */
+  accessToken: string;
+  /**
+   * Expiration of token
+   */
+  expiration: any;
+  /**
+   * Refresh token
+   */
+  refreshToken: string;
+}
+
 export interface login_login {
   __typename: "AuthUserType";
   /**
    * Token
    */
-  authToken: string;
+  authToken: login_login_authToken;
   /**
    * Id property
    */
