@@ -18,9 +18,11 @@ namespace DataService.IServices
 
 		ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
 		byte[] GenerateRefreshToken();
-		
 		Token GetToken(User u);
-		HomeResult<bool> ValidateToken(string token);
+
+		Token GetByToken(string token);
+
+		HomeResult<bool> ValidateToken(string token, bool validateExpiration = true);
 		HomeResult<bool> IsValid(string token);
 
 		int GetUserId(string token);

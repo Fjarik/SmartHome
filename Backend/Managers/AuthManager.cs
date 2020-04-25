@@ -39,9 +39,14 @@ namespace Backend.Managers
 
 #region Validation
 
+		public string GetToken(IHttpContextAccessor httpContext)
+		{
+			return httpContext.GetToken();
+		}
+
 		public bool Authorize(IHttpContextAccessor httpContext, ResolveFieldContext<object> ctx)
 		{
-			var token = httpContext.GetToken();
+			var token = this.GetToken(httpContext);
 			if (string.IsNullOrWhiteSpace(token)) {
 				ctx.Errors.Add(new ExecutionError("You are not logged"));
 				return false;
@@ -76,13 +81,68 @@ namespace Backend.Managers
 
 #endregion
 
+#region Refresh
+
+		public AuthToken RefreshToken(string oldToken, string refreshToken, ResolveFieldContext<object> ctx)
+		{
+			var oldRes = this._tokenService.ValidateToken(oldToken, false);
+			if (!oldRes.IsSuccess) {
+				ctx.Errors.Add(new ExecutionError("Old token is not valid"));
+				return null;
+			}
+
+			var old = this._tokenService.GetByToken(oldToken);
+			if (old == null) {
+				ctx.Errors.Add(new ExecutionError("Old token not found"));
+				return null;
+			}
+
+			var del = this._tokenService.Delete(oldToken);
+			if (!del) {
+				ctx.Errors.Add(new ExecutionError("Old token was not deleted"));
+			}
+
+			return this.RefreshToken(old, refreshToken, ctx);
+		}
+
+		private AuthToken RefreshToken(Token old, string refreshToken, ResolveFieldContext<object> ctx)
+		{
+			if (old.RefreshToken != refreshToken) {
+				ctx.Errors.Add(new ExecutionError("Refresh token is not valid"));
+				return null;
+			}
+
+			var uRes = this._userService.GetById(old.UserId);
+			if (!uRes.IsSuccess) {
+				ctx.Errors.Add(new ExecutionError("User: " + uRes.GetStatusMessage()));
+				return null;
+			}
+
+			return this.RefreshToken(uRes.Content, ctx);
+		}
+
+		private AuthToken RefreshToken(User u, ResolveFieldContext<object> ctx)
+		{
+			var auth = this.Login(u, ctx);
+			if (auth == null) {
+				ctx.Errors.Add(new ExecutionError("Could not login"));
+				return null;
+			}
+
+			return auth.AuthToken;
+		}
+
+#endregion
+
 		public HomeResult<User> GetLogged(string token, ResolveFieldContext<object> ctx)
 		{
 			if (string.IsNullOrWhiteSpace(token)) {
+				ctx.Errors.Add(new ExecutionError("You are not logged"));
 				return null;
 			}
 			var id = this._tokenService.GetUserId(token);
 			if (id < 1) {
+				ctx.Errors.Add(new ExecutionError("User not found"));
 				return null;
 			}
 			return this._userService.GetById(id);

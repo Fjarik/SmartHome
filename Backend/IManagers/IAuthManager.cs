@@ -13,10 +13,14 @@ namespace Backend.IManagers
 {
 	public interface IAuthManager
 	{
+		string GetToken(IHttpContextAccessor httpContext);
 		bool Authorize(IHttpContextAccessor httpContext, ResolveFieldContext<object> ctx);
-		AuthUser Login(string googleToken, ResolveFieldContext<object> ctx);
-		HomeResult<User> GetLogged(string token, ResolveFieldContext<object> ctx);
 		HomeResult<bool> VerifyToken(string token);
+
+		AuthToken RefreshToken(string oldToken, string refreshToken, ResolveFieldContext<object> ctx);
+
+		HomeResult<User> GetLogged(string token, ResolveFieldContext<object> ctx);
+		AuthUser Login(string googleToken, ResolveFieldContext<object> ctx);
 		bool Logout(string token, bool everywhere = false);
 	}
 }

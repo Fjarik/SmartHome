@@ -50,20 +50,17 @@ namespace DataAccess.Repositories
 
 		public bool Delete(string token)
 		{
-			var t = this.GetByToken(token);
-			if (t == null) {
-				return false;
-			}
-			this.DbSet.Remove(t);
-			this.Save();
+			this.DbSet
+				.Where(x => x.AccessToken == token)
+				.DeleteFromQuery();
 			return true;
 		}
 
 		public bool DeleteByUserId(int userId)
 		{
-			var tokens = this.DbSet.Where(x => x.UserId == userId);
-			this.DbSet.RemoveRange(tokens);
-			this.Save();
+			this.DbSet
+				.Where(x => x.UserId == userId)
+				.DeleteFromQuery();
 			return true;
 		}
 	}

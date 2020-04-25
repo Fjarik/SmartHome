@@ -102,9 +102,18 @@ namespace DataService.Services
 
 #endregion
 
+		public Token GetByToken(string token)
+		{
+			if (string.IsNullOrWhiteSpace(token)) {
+				return null;
+			}
+
+			return this.Repository.GetByToken(token);
+		}
+
 #region Validation
 
-		public HomeResult<bool> ValidateToken(string token)
+		public HomeResult<bool> ValidateToken(string token, bool validateExpiration = true)
 		{
 			var handler = new JwtSecurityTokenHandler();
 			var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -118,6 +127,7 @@ namespace DataService.Services
 					ValidIssuer = _appSettings.Issuer,
 					ValidAudience = _appSettings.Audience,
 					IssuerSigningKey = cred,
+					ValidateLifetime = validateExpiration,
 				}, out SecurityToken validatedToken);
 				if (!(validatedToken is JwtSecurityToken t)) {
 					return new HomeResult<bool>(StatusCode.InvalidInput);
@@ -138,7 +148,7 @@ namespace DataService.Services
 			if (string.IsNullOrWhiteSpace(token)) {
 				return new HomeResult<bool>(StatusCode.InvalidInput);
 			}
-			var t = this.Repository.GetByToken(token);
+			var t = this.GetByToken(token);
 			if (t == null) {
 				return new HomeResult<bool>(StatusCode.NotFound);
 			}

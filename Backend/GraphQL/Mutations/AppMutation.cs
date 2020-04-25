@@ -10,6 +10,7 @@ using DataAccess.Models;
 using DataAccess.Other;
 using DataService.IServices;
 using GraphQL;
+using GraphQL.Execution;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -36,9 +37,10 @@ namespace Backend.GraphQL.Mutations
 
 			// Account
 			Field<AuthUserType, AuthUser>("login")
-				.Argument<NonNullGraphType<StringGraphType>>("googleToken", "Google token to login")
+				.Argument<NonNullGraphType<StringGraphType>, string>("googleToken", "Google token to login")
 				.Resolve(this.Login);
 			Field<AuthTokenType, AuthToken>("refreshToken")
+				.Argument<NonNullGraphType<StringGraphType>, string>("refreshToken", "Refresh token")
 				.Resolve(this.RefreshToken);
 			Field<NonNullGraphType<BooleanGraphType>, bool>("logout")
 				.Argument<BooleanGraphType>("logoutAll", "Should logout from all devices")
@@ -71,7 +73,7 @@ namespace Backend.GraphQL.Mutations
 			var googleToken = ctx.GetArgument<string>("googleToken");
 
 			if (string.IsNullOrWhiteSpace(googleToken)) {
-				ctx.Errors.Add(new ExecutionError("Google token is empty"));
+				ctx.Errors.Add(new InvalidValueException(nameof(googleToken), "Google token is empty"));
 				return null;
 			}
 			return _authManager.Login(googleToken, ctx);
@@ -79,7 +81,19 @@ namespace Backend.GraphQL.Mutations
 
 		private AuthToken RefreshToken(ResolveFieldContext<object> ctx)
 		{
-			return null;
+			var token = this._authManager.GetToken(_httpContextAccessor);
+			if (string.IsNullOrWhiteSpace(token)) {
+				ctx.Errors.Add(new InvalidValueException(nameof(token), "Access token is empty"));
+				return null;
+			}
+
+			var refreshToken = ctx.GetArgument<string>("refreshToken");
+			if (string.IsNullOrWhiteSpace(refreshToken)) {
+				ctx.Errors.Add(new InvalidValueException(nameof(refreshToken), "Refresh token is empty"));
+				return null;
+			}
+
+			return this._authManager.RefreshToken(token, refreshToken, ctx);
 		}
 
 		private bool Logout(ResolveFieldContext<object> ctx)
@@ -154,7 +168,7 @@ namespace Backend.GraphQL.Mutations
 
 			return res.Content;
 		}
-		
+
 		private Food UpdateFood(ResolveFieldContext<object> ctx)
 		{
 			if (!(this._authManager.Authorize(_httpContextAccessor, ctx))) {
