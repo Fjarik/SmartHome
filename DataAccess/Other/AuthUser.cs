@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 using DataAccess.Models;
+using SharedLibrary.Interfaces;
+using SharedLibrary.Objects;
 
 namespace DataAccess.Other
 {
 	public class AuthUser : User
 	{
-		public string AuthToken { get; set; }
+		public AuthToken AuthToken { get; set; }
 
 		public AuthUser() { }
 
-		public AuthUser(User u)
+		public AuthUser(User u, IAuthToken token)
 		{
 			this.Id = u.Id;
 			this.GoogleId = u.GoogleId;
@@ -19,7 +21,7 @@ namespace DataAccess.Other
 			this.Firstname = u.Firstname;
 			this.Lastname = u.Lastname;
 			this.CreatedAt = u.CreatedAt;
-			this.Tokens = u.Tokens;
+			this.AuthToken = new AuthToken(token);
 		}
 	}
 }

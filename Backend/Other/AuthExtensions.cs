@@ -17,17 +17,16 @@ namespace Backend.Other
 {
 	public static class AuthExtensions
 	{
-		public static string GetAuthHeader(this IHeaderDictionary headers)
+		private static string GetAuthHeader(this IHeaderDictionary headers)
 		{
-			var auth = headers.TryGetValue("Authorization", out var token);
-			if (!auth) {
-				return "";
+			if (!headers.TryGetValue("Authorization", out var token)) {
+				return string.Empty;
 			}
 
 			var t = token.FirstOrDefault();
-
-			if (string.IsNullOrEmpty(t))
-				return "";
+			if (string.IsNullOrWhiteSpace(t)) {
+				return string.Empty;
+			}
 
 
 			if (t.StartsWith("Bearer ")) {

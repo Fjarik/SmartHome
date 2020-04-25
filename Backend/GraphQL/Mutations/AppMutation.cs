@@ -38,7 +38,9 @@ namespace Backend.GraphQL.Mutations
 			Field<AuthUserType, AuthUser>("login")
 				.Argument<NonNullGraphType<StringGraphType>>("googleToken", "Google token to login")
 				.Resolve(this.Login);
-			Field<BooleanGraphType, bool>("logout")
+			Field<AuthTokenType, AuthToken>("refreshToken")
+				.Resolve(this.RefreshToken);
+			Field<NonNullGraphType<BooleanGraphType>, bool>("logout")
 				.Argument<BooleanGraphType>("logoutAll", "Should logout from all devices")
 				.Resolve(this.Logout);
 
@@ -73,6 +75,11 @@ namespace Backend.GraphQL.Mutations
 				return null;
 			}
 			return _authManager.Login(googleToken, ctx);
+		}
+
+		private AuthToken RefreshToken(ResolveFieldContext<object> ctx)
+		{
+			return null;
 		}
 
 		private bool Logout(ResolveFieldContext<object> ctx)
@@ -147,7 +154,7 @@ namespace Backend.GraphQL.Mutations
 
 			return res.Content;
 		}
-
+		
 		private Food UpdateFood(ResolveFieldContext<object> ctx)
 		{
 			if (!(this._authManager.Authorize(_httpContextAccessor, ctx))) {

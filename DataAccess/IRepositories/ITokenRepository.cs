@@ -12,7 +12,7 @@ namespace DataAccess.IRepositories
 	{
 		int GetUserId(string token);
 		Token GetByToken(string token);
-		EntityEntry<Token> Create(string token, int userId, DateTime expiration);
+		EntityEntry<Token> Create(string token, int userId, DateTime expiration, byte[] refreshToken);
 		bool Delete(string token);
 		bool DeleteByUserId(int userId);
 	}

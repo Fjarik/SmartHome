@@ -14,6 +14,7 @@ using GraphQL.Types;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using SharedLibrary.Enums;
 using SharedLibrary.Objects;
 
 namespace Backend.Managers
@@ -36,6 +37,8 @@ namespace Backend.Managers
 			_environment = environment;
 		}
 
+#region Validation
+
 		public bool Authorize(IHttpContextAccessor httpContext, ResolveFieldContext<object> ctx)
 		{
 			var token = httpContext.GetToken();
@@ -43,21 +46,56 @@ namespace Backend.Managers
 				ctx.Errors.Add(new ExecutionError("You are not logged"));
 				return false;
 			}
-			var isValid = this.VerifyToken(token);
-			if (!isValid) {
-				ctx.Errors.Add(new ExecutionError("Token is not valid"));
+			var res = this.VerifyToken(token);
+			if (!res.IsSuccess) {
+				switch (res.Status) {
+					case StatusCode.SeeException:
+						ctx.Errors.Add(new ExecutionError("Check exception", res.Exception));
+						break;
+					case StatusCode.Expired:
+						httpContext.HttpContext.Response.Headers.Add("Token-Expired", "true");
+						ctx.Errors.Add(new ExecutionError("Token is expired"));
+						break;
+					default:
+						ctx.Errors.Add(new ExecutionError(res.GetStatusMessage()));
+						break;
+				}
 				return false;
 			}
 			return true;
 		}
+
+		public HomeResult<bool> VerifyToken(string token)
+		{
+			var res = this._tokenService.ValidateToken(token);
+			if (!res.IsSuccess) {
+				return res;
+			}
+			return this._tokenService.IsValid(token);
+		}
+
+#endregion
+
+		public HomeResult<User> GetLogged(string token, ResolveFieldContext<object> ctx)
+		{
+			if (string.IsNullOrWhiteSpace(token)) {
+				return null;
+			}
+			var id = this._tokenService.GetUserId(token);
+			if (id < 1) {
+				return null;
+			}
+			return this._userService.GetById(id);
+		}
+
+#region Login
 
 		public AuthUser Login(string googleToken, ResolveFieldContext<object> ctx)
 		{
 			Userinfo userInfo;
 			try {
 				userInfo = _authService.GetGoogleUser(googleToken);
-			} catch (Exception e) {
-				Console.WriteLine(e);
+			} catch {
 				if (_environment.IsDevelopment()) {
 					throw;
 				}
@@ -72,46 +110,12 @@ namespace Backend.Managers
 			var firstname = userInfo.GivenName;
 			var lastname = userInfo.FamilyName;
 
-			return this.Login(email, googleId, firstname, lastname, ctx);
+			return this.LoginOrRegister(email, googleId, firstname, lastname, ctx);
 		}
 
-		public HomeResult<User> GetLogged(string token, ResolveFieldContext<object> ctx)
-		{
-			if (string.IsNullOrWhiteSpace(token)) {
-				return null;
-			}
-			var id = this._tokenService.GetUserId(token);
-			if (id < 1) {
-				return null;
-			}
-			return this._userService.GetById(id);
-		}
-
-		public bool VerifyToken(string token)
-		{
-			var res = this._tokenService.ValidateToken(token);
-			if (!res) {
-				return false;
-			}
-			return this._tokenService.IsValid(token);
-		}
-
-		public bool Logout(string token, bool everywhere = false)
-		{
-			if (string.IsNullOrWhiteSpace(token)) {
-				return false;
-			}
-			if (!everywhere) {
-				return this._tokenService.Delete(token);
-			}
-
-			var userId = this._tokenService.GetUserId(token);
-
-			return this._tokenService.DeleteByUserId(userId);
-		}
-
-		private AuthUser Login(string email, string googleId, string firstname, string lastname,
-							   ResolveFieldContext<object> ctx)
+		private AuthUser LoginOrRegister(string email, string googleId,
+										 string firstname, string lastname,
+										 ResolveFieldContext<object> ctx)
 		{
 			if (string.IsNullOrWhiteSpace(email) ||
 				string.IsNullOrWhiteSpace(googleId) ||
@@ -144,22 +148,38 @@ namespace Backend.Managers
 		private AuthUser Login(User u, ResolveFieldContext<object> ctx)
 		{
 			var token = _tokenService.GetToken(u);
-			if (string.IsNullOrWhiteSpace(token.TokenString)) {
+			if (string.IsNullOrWhiteSpace(token.AccessToken)) {
+				ctx.Errors.Add(new ExecutionError("Could not generate token"));
 				return null;
 			}
 
 			token = _tokenService.RegisterToken(token);
 			if (token == null) {
+				ctx.Errors.Add(new ExecutionError("Could not register token"));
 				return null;
 			}
-			if (string.IsNullOrWhiteSpace(token.TokenString)) {
+			if (string.IsNullOrWhiteSpace(token.AccessToken)) {
+				ctx.Errors.Add(new ExecutionError("Token is too long"));
 				return null;
 			}
-			var authUser = new AuthUser(u) {
-				AuthToken = token.TokenString
-			};
 
-			return authUser;
+			return new AuthUser(u, token);
+		}
+
+#endregion
+
+		public bool Logout(string token, bool everywhere = false)
+		{
+			if (string.IsNullOrWhiteSpace(token)) {
+				return false;
+			}
+			if (!everywhere) {
+				return this._tokenService.Delete(token);
+			}
+
+			var userId = this._tokenService.GetUserId(token);
+
+			return this._tokenService.DeleteByUserId(userId);
 		}
 	}
 }

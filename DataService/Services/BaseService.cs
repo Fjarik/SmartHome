@@ -28,7 +28,7 @@ namespace DataService.Services
 		public virtual HomeResult<TEntity> GetById(int id)
 		{
 			if (id < 1) {
-				return new HomeResult<TEntity>(StatusCode.NotValidId);
+				return new HomeResult<TEntity>(StatusCode.InvalidId);
 			}
 			var ent = this.Repository.GetById(id);
 			return new HomeResult<TEntity>(StatusCode.OK, ent);

@@ -41,10 +41,13 @@ namespace DataAccess.Models
 		public bool IsRemoveable => this.OriginalMealId != null;
 	}
 
-	public partial class Token : IDbEntity
+	public partial class Token : IDbEntity, IAuthToken
 	{
 		[NotMapped]
 		public bool IsValid => this.Expiration > DateTime.Now;
+
+		[NotMapped]
+		public string RefreshToken => Convert.ToBase64String(this.RefreshTokenBytes);
 	}
 
 	public partial class User : IDbEntity { }

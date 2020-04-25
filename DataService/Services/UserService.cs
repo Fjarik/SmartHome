@@ -18,7 +18,7 @@ namespace DataService.Services
 		public HomeResult<User> GetByGoogleId(string googleId)
 		{
 			if (string.IsNullOrWhiteSpace(googleId)) {
-				return new HomeResult<User>(StatusCode.NotValidId);
+				return new HomeResult<User>(StatusCode.InvalidId);
 			}
 			googleId = this.NormalizeGoogleId(googleId);
 			var u = this.Repository.GetByGoogleId(googleId);
@@ -42,13 +42,13 @@ namespace DataService.Services
 										 string firstname,
 										 string lastname)
 		{
-			if (string.IsNullOrEmpty(email) ||
-				string.IsNullOrEmpty(firstname) ||
-				string.IsNullOrEmpty(lastname)) {
+			if (string.IsNullOrWhiteSpace(email) ||
+				string.IsNullOrWhiteSpace(firstname) ||
+				string.IsNullOrWhiteSpace(lastname)) {
 				return new HomeResult<User>(StatusCode.InvalidInput);
 			}
 			if (string.IsNullOrWhiteSpace(googleId)) {
-				return new HomeResult<User>(StatusCode.NotValidId);
+				return new HomeResult<User>(StatusCode.InvalidId);
 			}
 			googleId = this.NormalizeGoogleId(googleId);
 

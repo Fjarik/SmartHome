@@ -38,7 +38,7 @@ namespace DataService.Services
 				return new HomeResult<Meal>(StatusCode.InvalidInput);
 			}
 			if (!input.IsValid) {
-				return new HomeResult<Meal>(StatusCode.NotValidId);
+				return new HomeResult<Meal>(StatusCode.InvalidId);
 			}
 			return this.Create(input.Date, input.Type, input.Time,
 							   input.FoodId, input.SoupId,
@@ -57,14 +57,14 @@ namespace DataService.Services
 									   int? sideId = null, int? originalMealId = null)
 		{
 			if (typeId < 1) {
-				return new HomeResult<Meal>(StatusCode.NotValidId);
+				return new HomeResult<Meal>(StatusCode.InvalidId);
 			}
 
 			if ((foodId != null && foodId < 1) ||
 				(soupId != null && soupId < 1) ||
 				(originalMealId != null && originalMealId < 1) ||
 				(sideId != null && sideId < 1)) {
-				return new HomeResult<Meal>(StatusCode.NotValidId);
+				return new HomeResult<Meal>(StatusCode.InvalidId);
 			}
 
 			var m = this.Repository.Create(date, typeId, timeId, foodId, soupId, sideId, originalMealId);

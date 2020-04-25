@@ -35,8 +35,8 @@ namespace DataService.Services
 
 		public HomeResult<Category> Create(string name, string description, bool isHealthy = false)
 		{
-			if (string.IsNullOrEmpty(name) ||
-				string.IsNullOrEmpty(description)) {
+			if (string.IsNullOrWhiteSpace(name) ||
+				string.IsNullOrWhiteSpace(description)) {
 				return new HomeResult<Category>(StatusCode.InvalidInput);
 			}
 

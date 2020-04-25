@@ -1,4 +1,5 @@
 using System.Text;
+using System.Threading.Tasks;
 using Backend.GraphQL.Schemas;
 using Backend.IManagers;
 using Backend.Other;
@@ -117,7 +118,15 @@ namespace Backend
 					RequireExpirationTime = true,
 					ValidIssuer = appSettings.Issuer,
 					ValidAudience = appSettings.Audience,
-					IssuerSigningKey = new SymmetricSecurityKey(key)
+					IssuerSigningKey = new SymmetricSecurityKey(key),
+				};
+				options.Events = new JwtBearerEvents {
+					OnAuthenticationFailed = ctx => {
+						if (ctx.Exception is SecurityTokenExpiredException) {
+							ctx.Response.Headers.Add("Token-Expired", "true");
+						}
+						return Task.CompletedTask;
+					}
 				};
 			});
 

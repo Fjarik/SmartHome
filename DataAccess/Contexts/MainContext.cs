@@ -8,7 +8,7 @@ namespace DataAccess.Contexts
 {
     public partial class MainContext : DbContext
     {
-		public virtual DbSet<Category> Categories { get; set; }
+      public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Food> Foods { get; set; }
         public virtual DbSet<FoodCategory> FoodCategories { get; set; }
         public virtual DbSet<FoodSide> FoodSides { get; set; }
@@ -130,6 +130,8 @@ namespace DataAccess.Contexts
             modelBuilder.Entity<Token>(entity =>
             {
                 entity.Property(e => e.Created).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.RefreshTokenBytes).IsFixedLength();
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Tokens)

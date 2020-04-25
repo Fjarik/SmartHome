@@ -15,11 +15,14 @@ namespace DataAccess.Models
         public int UserId { get; set; }
         [Required]
         [StringLength(500)]
-        public string TokenString { get; set; }
+        public string AccessToken { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime Created { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime Expiration { get; set; }
+        [Required]
+        [MaxLength(32)]
+        public byte[] RefreshTokenBytes { get; set; }
 
         [ForeignKey(nameof(UserId))]
         [InverseProperty("Tokens")]

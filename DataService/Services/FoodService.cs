@@ -85,15 +85,15 @@ namespace DataService.Services
 			}
 
 			if (typeId < 1) {
-				return new HomeResult<Food>(StatusCode.NotValidId, nameof(typeId));
+				return new HomeResult<Food>(StatusCode.InvalidId, nameof(typeId));
 			}
 
 			if (categoryIds.Any(x => x < 1)) {
-				return new HomeResult<Food>(StatusCode.NotValidId, nameof(categoryIds));
+				return new HomeResult<Food>(StatusCode.InvalidId, nameof(categoryIds));
 			}
 
 			if (sideIds.Any(x => x < 1)) {
-				return new HomeResult<Food>(StatusCode.NotValidId, nameof(sideIds));
+				return new HomeResult<Food>(StatusCode.InvalidId, nameof(sideIds));
 			}
 
 			if (this.Exists(name)) {
@@ -145,7 +145,7 @@ namespace DataService.Services
 									   bool glutenFree)
 		{
 			if (foodId < 1) {
-				return new HomeResult<Food>(StatusCode.NotValidId);
+				return new HomeResult<Food>(StatusCode.InvalidId);
 			}
 			var res = this.GetById(foodId);
 			if (!res.IsSuccess) {

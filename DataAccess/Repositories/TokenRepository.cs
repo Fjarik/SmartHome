@@ -19,17 +19,17 @@ namespace DataAccess.Repositories
 		public int GetUserId(string token)
 		{
 			return this.DbSet
-					   .Where(x => x.TokenString == token)
+					   .Where(x => x.AccessToken == token)
 					   .Select(x => x.UserId)
 					   .FirstOrDefault();
 		}
 
 		public Token GetByToken(string token)
 		{
-			return this.DbSet.FirstOrDefault(x => x.TokenString == token);
+			return this.DbSet.FirstOrDefault(x => x.AccessToken == token);
 		}
 
-		public EntityEntry<Token> Create(string token, int userId, DateTime expiration)
+		public EntityEntry<Token> Create(string token, int userId, DateTime expiration, byte[] refreshToken)
 		{
 			if (string.IsNullOrWhiteSpace(token) ||
 				userId < 1 ||
@@ -39,9 +39,10 @@ namespace DataAccess.Repositories
 
 			var t = new Token {
 				UserId = userId,
-				TokenString = token,
+				AccessToken = token,
 				Expiration = expiration,
 				Created = DateTime.Now,
+				RefreshTokenBytes = refreshToken,
 			};
 
 			return this.Create(t);
