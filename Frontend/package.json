@@ -32,6 +32,7 @@
     "luxon": "^1.23.0",
     "material-table": "^1.57.2",
     "next": "9.3.2",
+    "next-cookies": "^2.0.3",
     "notistack": "^0.9.9",
     "now": "^18.0.0",
     "react": "16.13.1",

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import Head from "next/head";
 import { ApolloClient } from "apollo-client";
 import { InMemoryCache, NormalizedCacheObject } from "apollo-cache-inmemory";
@@ -12,21 +12,26 @@ import { refreshTokenVariables, refreshToken } from "../src/graphql/types/refres
 import { refreshTokenMutation } from "../src/graphql/mutations";
 import { NextPage } from "next";
 import Observable from "zen-observable-ts";
+import { AppContextType } from "next/dist/next-server/lib/utils";
+import Cookies from "universal-cookie";
+import { UserTokenCookieKey } from "../src/Global/Keys";
 
 const endpoint = "https://domov.azurewebsites.net/graphql";
 // const endpoint = "http://localhost:20436/graphql";
 // https://domov.azurewebsites.net/ui/playground
 
+interface PageProps {
+    apolloClient: ApolloClient<NormalizedCacheObject>,
+    apolloState: any,
+}
+
 /**
  * Creates and provides the apolloContext
  * to a next.js PageTree. Use it by wrapping
  * your PageComponent via HOC pattern.
- * @param {Function|Class} PageComponent
- * @param {Object} [config]
- * @param {Boolean} [config.ssr=true]
  */
 export const withApollo = (PageComponent: any, { ssr = true } = {}) => {
-    const WithApollo: NextPage<any> = ({ apolloClient, apolloState, ...pageProps }: any) => {
+    const WithApollo: NextPage<PageProps> = ({ apolloClient, apolloState, ...pageProps }) => {
 
         const client = apolloClient || initApolloClient(apolloState);
         return <PageComponent {...pageProps} apolloClient={client} />;
@@ -50,12 +55,15 @@ export const withApollo = (PageComponent: any, { ssr = true } = {}) => {
         WithApollo.getInitialProps = async (ctx: any) => {
             const {
                 AppTree,
-                ctx: { res }
-            } = ctx;
+                ctx: { res, req }
+            } = ctx as AppContextType;
+
+            const cookies = new Cookies(req?.headers?.cookie);
+            const token = cookies.get(UserTokenCookieKey);
 
             // Run all GraphQL queries in the component tree
             // and extract the resulting data
-            const apolloClient = (ctx.ctx.apolloClient = initApolloClient({}));
+            const apolloClient = (ctx.ctx.apolloClient = initApolloClient({ token }));
 
             const pageProps = PageComponent.getInitialProps
                 ? await PageComponent.getInitialProps(ctx)
@@ -136,6 +144,7 @@ const initApolloClient = (initState: any) => {
 const createApolloClient = (initState: any): ApolloClient<NormalizedCacheObject> => {
     let isRefreshing = false;
     let pendingRequest = [];
+    const token = initState.token;
 
     const resolvePendingRequests = (): void => {
         pendingRequest.map(c => c());
@@ -174,7 +183,6 @@ const createApolloClient = (initState: any): ApolloClient<NormalizedCacheObject>
     });
 
     const authLink = setContext((_request, { headers }) => {
-        const token = getToken();
         return {
             headers: {
                 ...headers,

@@ -57,6 +57,36 @@ const Dashboard: FunctionComponent = () => {
                         </Card>
                     </Grid>
                 ))}
+                <Grid item xs={12} sm={6} md={4} xl={3}>
+                    <Card className={c.customCard}>
+                        <CardHeader
+                            title="Jídelníček"
+                            avatar={<RestaurantIcon />}
+                            subheader="Aktuální jídla"
+                        />
+                        <CardContent>
+                            <Typography variant="body1">
+                                Oběd:
+                            </Typography>
+                            <Grid container justify="space-between">
+                                <Grid item>
+                                    Polévka
+                                </Grid>
+                                <Grid item>
+                                    Oběd
+                                </Grid>
+                                <Grid item>
+                                    Příloha
+                                </Grid>
+                            </Grid>
+                        </CardContent>
+                        <CardActions>
+                            <Link href={mealsIndex} >
+                                <Button>Přejít do aplikace</Button>
+                            </Link>
+                        </CardActions>
+                    </Card>
+                </Grid>
             </Grid>
         </Container>
     );

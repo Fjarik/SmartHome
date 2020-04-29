@@ -11,6 +11,7 @@ import { useApolloClient } from "react-apollo";
 import customUrls from "../../utils/customUrls";
 import { useSnackbar } from "notistack";
 import { refreshTokenVariables, refreshToken } from "./types/refreshToken";
+import { ApolloClient } from "apollo-client";
 
 export interface IAuthToken {
     /**
@@ -67,6 +68,15 @@ export const setTokenInfo = (token: IAuthToken): void => {
     window.localStorage.setItem(TokenInfoKey, JSON.stringify(toJson));
 };
 
+export const getDbUser = async (client: ApolloClient<any>): Promise<getLogged_logged | null> => {
+    const { data: { logged }, errors } = await client.query<getLogged>({ query: getLoggedUser });
+    if (errors?.length > 0) {
+        console.log(errors);
+        return null;
+    }
+    return logged;
+};
+
 export interface IAuthContext {
     token: string | null;
     user: getLogged_logged | null;
@@ -85,9 +95,9 @@ const defaultContext: IAuthContext = {
 
 export const ReactAuthContext = createContext<IAuthContext>(defaultContext);
 
-const AuthContextProvider: FunctionComponent<{}> = ({ children }) => {
+const AuthContextProvider: FunctionComponent<{ user: getLogged_logged }> = ({ children, user }) => {
 
-    const [currentUser, setCurrentUser] = useState<getLogged_logged | null>(defaultContext.user);
+    const [currentUser, setCurrentUser] = useState<getLogged_logged | null>(user);
     const [currentToken, setCurrentToken] = useState<string | null>(getToken());
     const client = useApolloClient();
     const { enqueueSnackbar } = useSnackbar();
@@ -95,7 +105,7 @@ const AuthContextProvider: FunctionComponent<{}> = ({ children }) => {
 
     const clearAll = (): void => {
         setToken(null);
-        setUser(null);
+        // setUser(null);
         setCurrentToken(null);
         setTokenInfo(null);
     };
@@ -112,13 +122,20 @@ const AuthContextProvider: FunctionComponent<{}> = ({ children }) => {
         const { accessToken } = authToken;
 
         setToken(accessToken);
-        setUser({
+        setCurrentUser({
             __typename: "UserType",
             id,
             firstname,
             lastname,
             createdAt,
         });
+        // setUser({
+        //     __typename: "UserType",
+        //     id,
+        //     firstname,
+        //     lastname,
+        //     createdAt,
+        // });
 
         setTokenInfo(authToken);
 
@@ -182,60 +199,51 @@ const AuthContextProvider: FunctionComponent<{}> = ({ children }) => {
         setTokenCookie(token);
     };
 
-    const getDbUser = async (): Promise<getLogged_logged | null> => {
-        const { data: { logged }, errors } = await client.query<getLogged>({ query: getLoggedUser });
-        if (errors?.length > 0) {
-            console.log(errors);
-            return null;
-        }
-        return logged;
-    };
+    // const getLocalUser = (): getLogged_logged | null => {
+    //     if (window) {
+    //         const uString = window.localStorage.getItem("user");
+    //         return JSON.parse(uString) as getLogged_logged;
+    //     }
+    //     return null;
+    // };
 
-    const getLocalUser = (): getLogged_logged | null => {
-        if (window) {
-            const uString = window.localStorage.getItem("user");
-            return JSON.parse(uString) as getLogged_logged;
-        }
-        return null;
-    };
+    // const checkSession = async (): Promise<void> => {
+    //     try {
+    //         const user = await getDbUser(client);
+    //         if (!user) {
+    //             await logout();
+    //             return;
+    //         }
+    //         setUser(user);
+    //     } catch (e) {
+    //         setToken(null);
+    //     }
+    // };
 
-    const checkSession = async (): Promise<void> => {
-        try {
-            const user = await getDbUser();
-            if (!user) {
-                await logout();
-                return;
-            }
-            setUser(user);
-        } catch (e) {
-            setToken(null);
-        }
-    };
+    // const setUser = (user: getLogged_logged): void => {
+    //     if (!window) {
+    //         return;
+    //     }
+    //     if (!user) {
+    //         window.localStorage.removeItem(UserKey);
+    //         setCurrentUser(null);
+    //         return;
+    //     }
+    //     window.localStorage.setItem(UserKey, JSON.stringify(user));
+    //     setCurrentUser(user);
+    // };
 
-    const setUser = (user: getLogged_logged): void => {
-        if (!window) {
-            return;
-        }
-        if (!user) {
-            window.localStorage.removeItem(UserKey);
-            setCurrentUser(null);
-            return;
-        }
-        window.localStorage.setItem(UserKey, JSON.stringify(user));
-        setCurrentUser(user);
-    };
-
-    useEffect(() => {
-        if (currentToken) {
-            const logged = getLocalUser();
-            setCurrentUser(logged);
-            if (!logged) {
-                checkSession();
-            }
-        }
-        return () => {
-        };
-    }, []);
+    // useEffect(() => {
+    //     if (currentToken) {
+    //         const logged = getLocalUser();
+    //         setCurrentUser(logged);
+    //         if (!logged) {
+    //             checkSession();
+    //         }
+    //     }
+    //     return () => {
+    //     };
+    // }, []);
 
     // useEffect(() => {
     //     if (currentToken) {

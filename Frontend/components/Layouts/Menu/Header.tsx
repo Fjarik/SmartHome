@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import AuthMenu from "./SubMenus/AuthMenu";
 import SubMenu from "./SubMenus/SubMenu";
 import customUrls from "../../../utils/customUrls";
+import useAuth from "../../../lib/useAuth";
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -61,7 +62,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Header: FunctionComponent = () => {
     const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false);
-    const { user, logout } = useContext(ReactAuthContext);
+    const { user, logout } = useAuth();
     const { indexUrl, app: { appUrl }, account: { loginUrl } } = customUrls;
 
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.up("sm"));
