@@ -11,7 +11,7 @@ declare module "classNames" {
         (...classes: ClassValue[]): string;
     }
 
-    declare var classNames: ClassNamesFn;
+    declare const classNames: ClassNamesFn;
 
     export default classNames;
 }

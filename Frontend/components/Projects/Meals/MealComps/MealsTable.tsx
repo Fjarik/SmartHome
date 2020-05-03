@@ -31,8 +31,8 @@ const MealsTable: FunctionComponent<IMealsTableProps> = ({ meals }) => {
     const { enqueueSnackbar } = useSnackbar();
 
     const sorted = data.sort((a, b) => {
-        var one = fromISO(a.date);
-        var two = fromISO(b.date);
+        const one = fromISO(a.date);
+        const two = fromISO(b.date);
         if (one === two) {
             return 0;
         }

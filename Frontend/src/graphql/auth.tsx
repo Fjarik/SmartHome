@@ -41,14 +41,14 @@ export const setTokenCookie = (token: string | null) => {
 };
 
 export const getTokenInfo = (): IAuthToken | null => {
-    if (!window) {
-        return null;
+    if (window) {
+        const json = window.localStorage.getItem(TokenInfoKey);
+        if (!json) {
+            return null;
+        }
+        return JSON.parse(json) as IAuthToken;
     }
-    var json = window.localStorage.getItem(TokenInfoKey);
-    if (!json) {
-        return null;
-    }
-    return JSON.parse(json) as IAuthToken;
+    return null;
 };
 
 export const setTokenInfo = (token: IAuthToken): void => {
