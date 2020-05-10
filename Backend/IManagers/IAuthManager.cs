@@ -17,10 +17,10 @@ namespace Backend.IManagers
 		bool Authorize(IHttpContextAccessor httpContext, ResolveFieldContext<object> ctx);
 		HomeResult<bool> VerifyToken(string token);
 
-		AuthToken RefreshToken(string oldToken, string refreshToken, ResolveFieldContext<object> ctx);
+		AuthToken RefreshToken(string oldToken, string refreshToken, ResolveFieldContext<object> ctx, IHttpContextAccessor httpContext);
 
 		HomeResult<User> GetLogged(string token, ResolveFieldContext<object> ctx);
-		AuthUser Login(string googleToken, ResolveFieldContext<object> ctx);
+		AuthUser Login(string googleToken, ResolveFieldContext<object> ctx, IHttpContextAccessor httpContext);
 		bool Logout(string token, bool everywhere = false);
 	}
 }

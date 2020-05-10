@@ -10,14 +10,6 @@
 export interface login_login_authToken {
   __typename: "AuthTokenType";
   /**
-   * Access token
-   */
-  accessToken: string;
-  /**
-   * Expiration of token
-   */
-  expiration: any;
-  /**
    * Refresh token
    */
   refreshToken: string;

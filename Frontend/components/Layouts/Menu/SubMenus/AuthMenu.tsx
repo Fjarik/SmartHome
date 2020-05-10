@@ -4,12 +4,12 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import PersonIcon from "@material-ui/icons/Person";
 import SettingsIcon from "@material-ui/icons/Settings";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
-import { getLogged_logged } from "../../../../src/graphql/types/getLogged";
 import { useRouter } from "next/router";
 import customUrls from "../../../../utils/customUrls";
+import { IUser } from "../../../../src/IUser";
 
 interface IAuthMenuProps {
-    user: getLogged_logged;
+    user: IUser;
     logout: () => Promise<void>;
 }
 

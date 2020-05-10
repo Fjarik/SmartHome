@@ -8,16 +8,20 @@ import NewMealsButton from "./AddMeals/NewMealsButton";
 import customUrls from "../../../utils/customUrls";
 import { useRouter } from "next/router";
 import MealsTable from "./MealComps/MealsTable";
+import { DateTime } from "luxon";
 
 const MealPage: FunctionComponent = () => {
+    const date: string = DateTime.local().toISODate();
+
     const { data, loading, error } = useQuery<getBasicMeals, getBasicMealsVariables>(getMealsBasic, {
         variables: {
-            date: "2020-4-24",
+            date,
             daysAfter: 4,
-            daysBefore: 1
+            daysBefore: 2
         },
         ssr: false
     });
+
     const { app: { projectsUrls: { meals: { foodsIndex } } } } = customUrls;
     const router = useRouter();
 

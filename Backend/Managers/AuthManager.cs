@@ -82,7 +82,8 @@ namespace Backend.Managers
 
 #region Refresh
 
-		public AuthToken RefreshToken(string oldToken, string refreshToken, ResolveFieldContext<object> ctx)
+		public AuthToken RefreshToken(string oldToken, string refreshToken, ResolveFieldContext<object> ctx,
+									  IHttpContextAccessor httpContext)
 		{
 			var oldRes = this._tokenService.ValidateToken(oldToken, false);
 			if (!oldRes.IsSuccess) {
@@ -101,10 +102,11 @@ namespace Backend.Managers
 				ctx.Errors.Add(new ExecutionError("Old token was not deleted"));
 			}
 
-			return this.RefreshToken(old, refreshToken, ctx);
+			return this.RefreshToken(old, refreshToken, ctx, httpContext);
 		}
 
-		private AuthToken RefreshToken(Token old, string refreshToken, ResolveFieldContext<object> ctx)
+		private AuthToken RefreshToken(Token old, string refreshToken, ResolveFieldContext<object> ctx,
+									   IHttpContextAccessor httpContext)
 		{
 			if (old.RefreshToken != refreshToken) {
 				ctx.Errors.Add(new ExecutionError("Refresh token is not valid"));
@@ -117,12 +119,12 @@ namespace Backend.Managers
 				return null;
 			}
 
-			return this.RefreshToken(uRes.Content, ctx);
+			return this.RefreshToken(uRes.Content, ctx, httpContext);
 		}
 
-		private AuthToken RefreshToken(User u, ResolveFieldContext<object> ctx)
+		private AuthToken RefreshToken(User u, ResolveFieldContext<object> ctx, IHttpContextAccessor httpContext)
 		{
-			var auth = this.Login(u, ctx);
+			var auth = this.Login(u, ctx, httpContext);
 			if (auth == null) {
 				ctx.Errors.Add(new ExecutionError("Could not login"));
 				return null;
@@ -149,7 +151,7 @@ namespace Backend.Managers
 
 #region Login
 
-		public AuthUser Login(string googleToken, ResolveFieldContext<object> ctx)
+		public AuthUser Login(string googleToken, ResolveFieldContext<object> ctx, IHttpContextAccessor httpContext)
 		{
 			Userinfo userInfo;
 			try {
@@ -169,12 +171,13 @@ namespace Backend.Managers
 			var firstname = userInfo.GivenName;
 			var lastname = userInfo.FamilyName;
 
-			return this.LoginOrRegister(email, googleId, firstname, lastname, ctx);
+			return this.LoginOrRegister(email, googleId, firstname, lastname, ctx, httpContext);
 		}
 
 		private AuthUser LoginOrRegister(string email, string googleId,
 										 string firstname, string lastname,
-										 ResolveFieldContext<object> ctx)
+										 ResolveFieldContext<object> ctx,
+										 IHttpContextAccessor httpContext)
 		{
 			if (string.IsNullOrWhiteSpace(email) ||
 				string.IsNullOrWhiteSpace(googleId) ||
@@ -201,10 +204,12 @@ namespace Backend.Managers
 				_userService.SaveUser(u);
 			}
 
-			return this.Login(u, ctx);
+			return this.Login(u, ctx, httpContext);
 		}
 
-		private AuthUser Login(User u, ResolveFieldContext<object> ctx)
+		private AuthUser Login(User u,
+							   ResolveFieldContext<object> ctx,
+							   IHttpContextAccessor httpContext)
 		{
 			var token = _tokenService.GetToken(u);
 			if (string.IsNullOrWhiteSpace(token.AccessToken)) {
@@ -221,6 +226,8 @@ namespace Backend.Managers
 				ctx.Errors.Add(new ExecutionError("Token is too long"));
 				return null;
 			}
+
+			httpContext.CreateTokenCookie(token.AccessToken);
 
 			return new AuthUser(u, token);
 		}

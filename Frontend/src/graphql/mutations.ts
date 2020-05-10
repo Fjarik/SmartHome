@@ -4,8 +4,6 @@ export const loginMutation = gql`
   mutation login($googleToken: String!) {
     login(googleToken:$googleToken){
       authToken{
-        accessToken
-        expiration
         refreshToken
       }
       id
@@ -19,8 +17,6 @@ export const loginMutation = gql`
 export const refreshTokenMutation = gql`
   mutation refreshToken($refreshToken: String!) {
     refreshToken(refreshToken: $refreshToken) {
-      accessToken
-      expiration
       refreshToken
     }
   }

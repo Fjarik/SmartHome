@@ -17,9 +17,11 @@ namespace Backend.Other
 {
 	public static class AuthExtensions
 	{
+		private const string AuthKey = "Authorization";
+
 		private static string GetAuthHeader(this IHeaderDictionary headers)
 		{
-			if (!headers.TryGetValue("Authorization", out var token)) {
+			if (!headers.TryGetValue(AuthKey, out var token)) {
 				return string.Empty;
 			}
 
@@ -38,7 +40,26 @@ namespace Backend.Other
 
 		public static string GetToken(this IHttpContextAccessor context)
 		{
-			return context.HttpContext?.Request?.Headers?.GetAuthHeader();
+			if (context?.HttpContext?.Request == null) {
+				return string.Empty;
+			}
+			var request = context.HttpContext.Request;
+			if (request.Cookies.TryGetValue(AuthKey, out string token)) {
+				return token;
+			}
+
+			return request.Headers?.GetAuthHeader();
+		}
+
+		public static void CreateTokenCookie(this IHttpContextAccessor context, string token)
+		{
+			context?.HttpContext?.Response?.Cookies.Append(AuthKey, token, new CookieOptions {
+				Secure = true,
+				SameSite = SameSiteMode.None,
+				Expires = DateTimeOffset.UtcNow.AddYears(1),
+				HttpOnly = true,
+				Path = "/"
+			});
 		}
 	}
 }

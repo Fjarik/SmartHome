@@ -76,7 +76,7 @@ namespace Backend.GraphQL.Mutations
 				ctx.Errors.Add(new InvalidValueException(nameof(googleToken), "Google token is empty"));
 				return null;
 			}
-			return _authManager.Login(googleToken, ctx);
+			return _authManager.Login(googleToken, ctx, _httpContextAccessor);
 		}
 
 		private AuthToken RefreshToken(ResolveFieldContext<object> ctx)
@@ -93,7 +93,7 @@ namespace Backend.GraphQL.Mutations
 				return null;
 			}
 
-			return this._authManager.RefreshToken(token, refreshToken, ctx);
+			return this._authManager.RefreshToken(token, refreshToken, ctx, _httpContextAccessor);
 		}
 
 		private bool Logout(ResolveFieldContext<object> ctx)

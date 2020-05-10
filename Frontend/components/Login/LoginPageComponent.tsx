@@ -1,5 +1,4 @@
 import { FunctionComponent, useEffect, useContext, useState } from "react";
-import { ReactAuthContext } from "../../src/graphql/auth";
 import Router from "next/router";
 import { Grid, makeStyles, Theme, createStyles, Paper, Typography } from "@material-ui/core";
 import { GoogleLogin, GoogleLoginResponse } from "react-google-login";
@@ -7,6 +6,7 @@ import Link from "next/link";
 import CenterLoading from "../Loading/CenterLoading";
 import customUrls from "../../utils/customUrls";
 import { useSnackbar } from "notistack";
+import useAuth from "../../lib/useAuth";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }));
 
 const LoginPageComponent: FunctionComponent = () => {
-    const { login, token } = useContext(ReactAuthContext);
+    const { login, user } = useAuth();
     const [loading, setLoading] = useState<boolean>(false);
     const [autoLogin, setAutoLogin] = useState<boolean>(false);
     const { enqueueSnackbar } = useSnackbar();
@@ -31,7 +31,7 @@ const LoginPageComponent: FunctionComponent = () => {
     const c = useStyles();
 
     useEffect(() => {
-        if (token) {
+        if (user) {
             enqueueSnackbar("Již jste přihlášen/a", { variant: "warning" });
             Router.push(appUrl);
         }

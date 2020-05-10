@@ -1,4 +1,3 @@
-import React from "react";
 import Head from "next/head";
 import { ApolloClient } from "apollo-client";
 import { InMemoryCache, NormalizedCacheObject } from "apollo-cache-inmemory";
@@ -7,18 +6,14 @@ import { setContext } from "apollo-link-context";
 import fetch from "isomorphic-unfetch";
 import { onError } from "apollo-link-error";
 import { ApolloLink, fromPromise } from "apollo-link";
-import { getToken, IAuthToken, getTokenInfo, setTokenInfo, setTokenCookie } from "../src/graphql/auth";
-import { refreshTokenVariables, refreshToken } from "../src/graphql/types/refreshToken";
-import { refreshTokenMutation } from "../src/graphql/mutations";
+import { refreshTokenAsync, setRefreshToken } from "./auth/authService";
 import { NextPage } from "next";
 import Observable from "zen-observable-ts";
 import { AppContextType } from "next/dist/next-server/lib/utils";
-import Cookies from "universal-cookie";
-import { UserTokenCookieKey } from "../src/Global/Keys";
 
 const endpoint = "https://domov.azurewebsites.net/graphql";
 // const endpoint = "http://localhost:20436/graphql";
-// https://domov.azurewebsites.net/ui/playground
+// https://domov.azurewebsites.net/
 
 interface PageProps {
     apolloClient: ApolloClient<NormalizedCacheObject>,
@@ -34,6 +29,7 @@ export const withApollo = (PageComponent: any, { ssr = true } = {}) => {
     const WithApollo: NextPage<PageProps> = ({ apolloClient, apolloState, ...pageProps }) => {
 
         const client = apolloClient || initApolloClient(apolloState);
+
         return <PageComponent {...pageProps} apolloClient={client} />;
     };
 
@@ -58,12 +54,9 @@ export const withApollo = (PageComponent: any, { ssr = true } = {}) => {
                 ctx: { res, req }
             } = ctx as AppContextType;
 
-            const cookies = new Cookies(req?.headers?.cookie);
-            const token = cookies.get(UserTokenCookieKey);
-
             // Run all GraphQL queries in the component tree
             // and extract the resulting data
-            const apolloClient = (ctx.ctx.apolloClient = initApolloClient({ token }));
+            const apolloClient = (ctx.ctx.apolloClient = initApolloClient({}));
 
             const pageProps = PageComponent.getInitialProps
                 ? await PageComponent.getInitialProps(ctx)
@@ -144,36 +137,10 @@ const initApolloClient = (initState: any) => {
 const createApolloClient = (initState: any): ApolloClient<NormalizedCacheObject> => {
     let isRefreshing = false;
     let pendingRequest = [];
-    const token = initState.token;
 
     const resolvePendingRequests = (): void => {
         pendingRequest.map(c => c());
         pendingRequest = [];
-    };
-
-    const refreshTokenAsync = async (): Promise<IAuthToken | null> => {
-        const rToken = getTokenInfo();
-        if (!rToken || !rToken.refreshToken) {
-            return null;
-        }
-        console.info("Refreshing token");
-        const { data, errors } = await apolloClient.mutate<refreshToken, refreshTokenVariables>({
-            mutation: refreshTokenMutation,
-            variables: {
-                refreshToken: rToken.refreshToken
-            }
-        });
-
-        if (errors) {
-            console.error(errors);
-            return null;
-        }
-
-        const { refreshToken } = data;
-
-        setTokenCookie(refreshToken.accessToken);
-        setTokenInfo(refreshToken);
-        return refreshToken;
     };
 
     const httpLink = new HttpLink({
@@ -184,10 +151,13 @@ const createApolloClient = (initState: any): ApolloClient<NormalizedCacheObject>
 
     const authLink = setContext((_request, { headers }) => {
         return {
+            fetchOptions: {
+                credentials: "include"
+            },
             headers: {
                 ...headers,
-                authorization: token ? `Bearer ${token}` : ""
-            }
+                cookie: headers && headers.cookie,
+            },
         };
     });
 
@@ -198,6 +168,8 @@ const createApolloClient = (initState: any): ApolloClient<NormalizedCacheObject>
                 if (message === "Token is expired") {
                     // console.info("Token is expired");
                     expired = true;
+                } else if (message.includes("You are not logged")) {
+                    setRefreshToken(null);
                 } else {
                     console.error(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
                 }
@@ -216,14 +188,16 @@ const createApolloClient = (initState: any): ApolloClient<NormalizedCacheObject>
             } else {
                 isRefreshing = true;
                 forward$ = fromPromise(
-                    refreshTokenAsync()
+                    refreshTokenAsync(apolloClient)
                         .then(res => {
                             operation.setContext(({ headers }) => {
                                 return {
+                                    fetchOptions: {
+                                        credentials: "include"
+                                    },
                                     headers: {
+                                        cookie: headers && headers.cookie,
                                         ...headers,
-                                        authorization: res ? `Bearer ${res.accessToken}` : "",
-
                                     }
                                 };
                             });

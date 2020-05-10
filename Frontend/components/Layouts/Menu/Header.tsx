@@ -1,6 +1,5 @@
-import { FunctionComponent, useState, useEffect, useContext } from "react";
-import { Button, Toolbar, Theme, Link, IconButton, makeStyles, colors, Typography, Container, Divider, useMediaQuery } from "@material-ui/core";
-import { ReactAuthContext } from "../../../src/graphql/auth";
+import { FunctionComponent, useState, useEffect } from "react";
+import { Button, Theme, Link, IconButton, makeStyles, Typography, Container, Divider, useMediaQuery } from "@material-ui/core";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import { switchTheme, getThemeString } from "../../Themes/MainTheme";

@@ -1,8 +1,8 @@
 import { FunctionComponent, useContext } from "react";
 import Link from "next/link";
-import { ReactAuthContext } from "../../src/graphql/auth";
 import { Grid, Button, makeStyles, Theme, Typography } from "@material-ui/core";
 import customUrls from "../../utils/customUrls";
+import useAuth from "../../lib/useAuth";
 
 const useStyles = makeStyles((theme: Theme) =>
     ({
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }));
 
 const HomePage: FunctionComponent<{}> = () => {
-    const { user } = useContext(ReactAuthContext);
+    const { user } = useAuth();
     const isLoggedIn = (): boolean => !!user;
 
     const c = useStyles();
