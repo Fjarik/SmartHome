@@ -7,7 +7,7 @@ export const getRelativeDateString = (date: string): string => {
 
     const i = d >= now ? d.diffNow("days") : now.diff(d, "days");
     const days = Math.abs(i.days);
-    if (days > 2) {
+    if (days > 3) {
         const r = d.setLocale("cz").toFormat("ccc DDD");
         return capitalize(r);
     }

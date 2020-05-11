@@ -11,7 +11,7 @@ const withUser = (Component: NextPage) => {
         const router = useRouter();
         const { enqueueSnackbar } = useSnackbar();
         const { account: { loginUrl } } = customUrls;
-        const { user, loading } = useAuth();
+        const { user, loading, logout } = useAuth();
 
         useEffect(() => {
             if (loading) {
@@ -20,6 +20,7 @@ const withUser = (Component: NextPage) => {
 
             if (!user) {
                 enqueueSnackbar("Pro přístup na tuto stránku musíte být přihlášen/a", { variant: "warning" });
+                logout();
                 router.push(loginUrl);
                 return;
             }

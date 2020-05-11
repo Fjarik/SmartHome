@@ -112,8 +112,8 @@ const AuthContextProvider: FunctionComponent<{}> = ({ children }) => {
             if (!logged) {
                 checkSession();
             }
-            setIsLoading(false);
         }
+        setIsLoading(false);
         return () => {
         };
     }, []);
