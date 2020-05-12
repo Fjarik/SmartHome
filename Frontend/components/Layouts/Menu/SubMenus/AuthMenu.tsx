@@ -5,8 +5,8 @@ import PersonIcon from "@material-ui/icons/Person";
 import SettingsIcon from "@material-ui/icons/Settings";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 import { useRouter } from "next/router";
-import customUrls from "../../../../utils/customUrls";
-import { IUser } from "../../../../src/IUser";
+import customUrls from "utils/customUrls";
+import { IUser } from "src/IUser";
 
 interface IAuthMenuProps {
     user: IUser;

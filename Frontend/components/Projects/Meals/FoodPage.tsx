@@ -1,13 +1,13 @@
 import { FunctionComponent } from "react";
-import { getAllFoods } from "../../../src/graphql/queries";
+import { getAllFoods } from "src/graphql/queries";
 import CenterLoading from "../../Loading/CenterLoading";
 import { Container, Grid, Button } from "@material-ui/core";
 import { useQuery } from "react-apollo";
-import { allFoods } from "../../../src/graphql/types/allFoods";
-import { FoodTypeEnum } from "../../../src/graphql/graphql-global-types";
+import { allFoods } from "src/graphql/types/allFoods";
+import { FoodTypeEnum } from "src/graphql/graphql-global-types";
 import FoodTable from "./Foods/FoodTable";
 import { useRouter } from "next/router";
-import customUrls from "../../../utils/customUrls";
+import customUrls from "utils/customUrls";
 
 const FoodPage: FunctionComponent = () => {
     const { data, loading, error } = useQuery<allFoods>(getAllFoods);

@@ -1,8 +1,8 @@
 import { FunctionComponent, useContext } from "react";
 import Link from "next/link";
 import { Grid, Button, makeStyles, Theme, Typography } from "@material-ui/core";
-import customUrls from "../../utils/customUrls";
-import useAuth from "../../lib/useAuth";
+import customUrls from "utils/customUrls";
+import useAuth from "lib/useAuth";
 
 const useStyles = makeStyles((theme: Theme) =>
     ({

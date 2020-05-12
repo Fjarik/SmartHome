@@ -6,8 +6,8 @@ import { switchTheme, getThemeString } from "../../Themes/MainTheme";
 import { useRouter } from "next/router";
 import AuthMenu from "./SubMenus/AuthMenu";
 import SubMenu from "./SubMenus/SubMenu";
-import customUrls from "../../../utils/customUrls";
-import useAuth from "../../../lib/useAuth";
+import customUrls from "utils/customUrls";
+import useAuth from "lib/useAuth";
 
 
 const useStyles = makeStyles((theme: Theme) => ({

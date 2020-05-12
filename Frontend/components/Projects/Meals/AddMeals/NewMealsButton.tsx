@@ -1,9 +1,9 @@
 import React, { FunctionComponent, useState, useRef } from "react";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import { ButtonGroup, Button, Popper, Grow, ClickAwayListener, MenuList, MenuItem, Paper } from "@material-ui/core";
-import customUrls from "../../../../utils/customUrls";
+import customUrls from "utils/customUrls";
 import { useRouter } from "next/router";
-import { MealTimeEnum } from "../../../../src/graphql/graphql-global-types";
+import { MealTimeEnum } from "src/graphql/graphql-global-types";
 
 const { app: { projectsUrls: { meals: { getAddMeal } } } } = customUrls;
 

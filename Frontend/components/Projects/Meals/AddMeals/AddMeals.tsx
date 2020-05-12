@@ -1,7 +1,7 @@
 import { FunctionComponent, ReactNode, useState, ChangeEvent } from "react";
 import { Paper, Tabs, Tab, Container, Typography, makeStyles, Theme, createStyles, Grid, Switch } from "@material-ui/core";
 import AddLunch from "./AddLunch";
-import { MealTimeEnum } from "../../../../src/graphql/graphql-global-types";
+import { MealTimeEnum } from "src/graphql/graphql-global-types";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import { DateTime } from "luxon";
 

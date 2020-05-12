@@ -1,9 +1,9 @@
 import Cookies from "universal-cookie";
-import { TokenInfoKey, UserKey } from "../../src/Global/Keys";
-import { refreshTokenVariables, refreshToken } from "../../src/graphql/types/refreshToken";
+import { TokenInfoKey, UserKey } from "src/Global/Keys";
+import { refreshTokenVariables, refreshToken } from "src/graphql/types/refreshToken";
 import { ApolloClient } from "apollo-client";
-import { refreshTokenMutation } from "../../src/graphql/mutations";
-import { IUser } from "../../src/IUser";
+import { refreshTokenMutation } from "src/graphql/mutations";
+import { IUser } from "src/IUser";
 
 export const clearTokenCookie = () => {
     const cookies = new Cookies();

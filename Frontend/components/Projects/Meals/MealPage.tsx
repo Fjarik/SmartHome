@@ -1,11 +1,11 @@
 import { FunctionComponent } from "react";
-import { getBasicMeals, getBasicMealsVariables } from "../../../src/graphql/types/getBasicMeals";
-import { getMealsBasic } from "../../../src/graphql/queries";
+import { getBasicMeals, getBasicMealsVariables } from "src/graphql/types/getBasicMeals";
+import { getMealsBasic } from "src/graphql/queries";
 import CenterLoading from "../../Loading/CenterLoading";
 import { Container, Grid, Button } from "@material-ui/core";
 import { useQuery } from "react-apollo";
 import NewMealsButton from "./AddMeals/NewMealsButton";
-import customUrls from "../../../utils/customUrls";
+import customUrls from "utils/customUrls";
 import { useRouter } from "next/router";
 import MealsTable from "./MealComps/MealsTable";
 import { DateTime } from "luxon";

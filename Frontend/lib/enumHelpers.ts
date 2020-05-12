@@ -1,4 +1,4 @@
-import { MealTypeEnum, MealTimeEnum } from "../src/graphql/graphql-global-types";
+import { MealTypeEnum, MealTimeEnum } from "src/graphql/graphql-global-types";
 
 export const getTypeString = (type: MealTypeEnum): string => {
     switch (type) {

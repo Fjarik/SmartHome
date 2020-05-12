@@ -1,6 +1,6 @@
 import { NextPage } from "next";
-import Layout from "../../../../components/Layouts/Layout";
-import withUser from "../../../../lib/withUser";
+import Layout from "components/Layouts/Layout";
+import withUser from "lib/withUser";
 
 const index: NextPage = () => {
     return (

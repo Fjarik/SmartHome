@@ -1,7 +1,7 @@
 import { FunctionComponent, useEffect } from "react";
 import Head from "next/head";
 import Router from "next/router";
-import customUrls from "../../utils/customUrls";
+import customUrls from "utils/customUrls";
 
 const HeadComponent: FunctionComponent = ({ children }) => {
     const { account: { loginUrl } } = customUrls;

@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import { Grid, Typography, makeStyles, Theme, createStyles, IconButton } from "@material-ui/core";
-import { getRelativeDateString } from "../../../../lib/dateUtils";
+import { getRelativeDateString } from "lib/dateUtils";
 import AddIcon from "@material-ui/icons/Add";
 
 const useStyles = makeStyles((theme: Theme) =>

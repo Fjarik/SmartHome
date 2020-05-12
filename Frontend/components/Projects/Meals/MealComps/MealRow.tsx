@@ -1,7 +1,7 @@
 import { FunctionComponent, MouseEvent, useState } from "react";
 import { Grid, makeStyles, Theme, createStyles, Typography, IconButton, Menu, MenuItem, ListItemIcon, ListItemText } from "@material-ui/core";
-import { getBasicMeals_meals } from "../../../../src/graphql/types/getBasicMeals";
-import { getTypeString, getTimeString } from "../../../../lib/enumHelpers";
+import { getBasicMeals_meals } from "src/graphql/types/getBasicMeals";
+import { getTypeString, getTimeString } from "lib/enumHelpers";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import DeleteIcon from "@material-ui/icons/Delete";
 

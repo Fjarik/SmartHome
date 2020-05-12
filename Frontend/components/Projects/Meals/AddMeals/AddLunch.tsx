@@ -1,16 +1,16 @@
 import { FunctionComponent, useState, ChangeEvent, useEffect } from "react";
 import { makeStyles, Theme, createStyles, Select, MenuItem, Table, TableCell, TableHead, TableRow, TableBody, Checkbox, TableContainer, Grid, Button, FormControl, InputLabel, ListSubheader, FormHelperText, Container } from "@material-ui/core";
 import { useQuery, useApolloClient } from "react-apollo";
-import { getBasicFoods } from "../../../../src/graphql/types/getBasicFoods";
-import { getFoodsBasic } from "../../../../src/graphql/queries";
+import { getBasicFoods } from "src/graphql/types/getBasicFoods";
+import { getFoodsBasic } from "src/graphql/queries";
 import { DateTime } from "luxon";
 import CenterLoading from "../../../Loading/CenterLoading";
-import { FoodTypeEnum, MealTypeEnum, MealTimeEnum } from "../../../../src/graphql/graphql-global-types";
-import { createMeal, createMealVariables } from "../../../../src/graphql/types/createMeal";
-import { createMealMutation } from "../../../../src/graphql/mutations";
+import { FoodTypeEnum, MealTypeEnum, MealTimeEnum } from "src/graphql/graphql-global-types";
+import { createMeal, createMealVariables } from "src/graphql/types/createMeal";
+import { createMealMutation } from "src/graphql/mutations";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/router";
-import customUrls from "../../../../utils/customUrls";
+import customUrls from "utils/customUrls";
 
 class Day {
     ActualDate: DateTime;

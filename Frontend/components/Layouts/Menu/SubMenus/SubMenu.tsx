@@ -2,7 +2,7 @@ import { FunctionComponent } from "react";
 import { Link, makeStyles, Theme, createStyles, Typography } from "@material-ui/core";
 import { useRouter } from "next/router";
 import classNames from "classnames";
-import customUrls from "../../../../utils/customUrls";
+import customUrls from "utils/customUrls";
 
 interface SubMenuItem {
     text: string,

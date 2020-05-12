@@ -1,13 +1,13 @@
 import { FunctionComponent, useState, Fragment } from "react";
-import { getBasicMeals_meals } from "../../../../src/graphql/types/getBasicMeals";
+import { getBasicMeals_meals } from "src/graphql/types/getBasicMeals";
 import { Grid, makeStyles, Theme, createStyles } from "@material-ui/core";
 import MealRow from "./MealRow";
 import MealHeader from "./MealHeader";
 import { groupBy, toArray } from "lodash";
 import { DateTime } from "luxon";
 import { useApolloClient } from "react-apollo";
-import { removeMeal, removeMealVariables } from "../../../../src/graphql/types/removeMeal";
-import { removeMealMutation } from "../../../../src/graphql/mutations";
+import { removeMeal, removeMealVariables } from "src/graphql/types/removeMeal";
+import { removeMealMutation } from "src/graphql/mutations";
 import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme: Theme) =>

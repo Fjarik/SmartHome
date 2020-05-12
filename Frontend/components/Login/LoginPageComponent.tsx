@@ -1,12 +1,12 @@
-import { FunctionComponent, useEffect, useContext, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import Router from "next/router";
 import { Grid, makeStyles, Theme, createStyles, Paper, Typography } from "@material-ui/core";
 import { GoogleLogin, GoogleLoginResponse } from "react-google-login";
 import Link from "next/link";
 import CenterLoading from "../Loading/CenterLoading";
-import customUrls from "../../utils/customUrls";
+import customUrls from "utils/customUrls";
 import { useSnackbar } from "notistack";
-import useAuth from "../../lib/useAuth";
+import useAuth from "lib/useAuth";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -71,6 +71,10 @@ const LoginPageComponent: FunctionComponent = () => {
         console.log(error);
     };
 
+    const onLoadFinish = (successLogin: boolean): void => {
+        console.log(successLogin);
+    };
+
     if (loading) {
         return (
             <CenterLoading text={"Probíhá přihlašování"} />
@@ -90,6 +94,7 @@ const LoginPageComponent: FunctionComponent = () => {
                             onSuccess={googleLoginSuccess}
                             onFailure={onExternalLoginFail}
                             cookiePolicy={"single_host_origin"}
+                            onAutoLoadFinished={onLoadFinish}
                         />
                         <div style={{ display: "flex", marginTop: "2rem" }}>
                             <Typography variant="body2" style={{ marginRight: "0.25em" }}>

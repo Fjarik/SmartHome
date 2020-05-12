@@ -1,16 +1,16 @@
 import React, { createContext, FunctionComponent, useState, useEffect } from "react";
-import { login, loginVariables } from "../../src/graphql/types/login";
-import { loginMutation, logoutMutation } from "../../src/graphql/mutations";
-import { getLogged } from "../../src/graphql/types/getLogged";
-import { getLoggedUser } from "../../src/graphql/queries";
+import { login, loginVariables } from "src/graphql/types/login";
+import { loginMutation, logoutMutation } from "src/graphql/mutations";
+import { getLogged } from "src/graphql/types/getLogged";
+import { getLoggedUser } from "src/graphql/queries";
 import Router from "next/router";
-import { logout, logoutVariables } from "../../src/graphql/types/logout";
+import { logout, logoutVariables } from "src/graphql/types/logout";
 import { useApolloClient } from "react-apollo";
-import customUrls from "../../utils/customUrls";
+import customUrls from "utils/customUrls";
 import { useSnackbar } from "notistack";
 import { ApolloClient } from "apollo-client";
 import { clearTokenCookie, setRefreshToken, setLocalUser, getLocalUser, getRefreshToken } from "./authService";
-import { IUser } from "../../src/IUser";
+import { IUser } from "src/IUser";
 
 export interface IAuthContext {
     user: IUser | null;

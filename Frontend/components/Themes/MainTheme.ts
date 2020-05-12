@@ -1,5 +1,5 @@
 import { createMuiTheme, Theme } from "@material-ui/core";
-import { ThemeCookieKey } from "../../src/Global/Keys";
+import { ThemeCookieKey } from "src/Global/Keys";
 import Cookies from "universal-cookie";
 import { PaletteOptions } from "@material-ui/core/styles/createPalette";
 

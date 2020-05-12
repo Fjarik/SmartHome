@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import { Container, makeStyles, Theme, createStyles, Grid, Card, CardHeader, CardContent, Typography, CardActions, Link, Button } from "@material-ui/core";
-import customUrls from "../../utils/customUrls";
+import customUrls from "utils/customUrls";
 import EventNoteIcon from "@material-ui/icons/EventNote";
 import RestaurantIcon from "@material-ui/icons/Restaurant";
 

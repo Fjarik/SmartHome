@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect } from "react";
 import { useRouter } from "next/router";
-import customUrls from "../utils/customUrls";
+import customUrls from "utils/customUrls";
 import { NextPage } from "next";
 import { useSnackbar } from "notistack";
 import useAuth from "./useAuth";

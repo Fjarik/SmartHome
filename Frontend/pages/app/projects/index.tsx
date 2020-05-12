@@ -1,7 +1,7 @@
 import { NextPage } from "next";
-import Layout from "../../../components/Layouts/Layout";
-import withUser from "../../../lib/withUser";
-import Projects from "../../../components/Projects/Projects";
+import Layout from "components/Layouts/Layout";
+import withUser from "lib/withUser";
+import Projects from "components/Projects/Projects";
 
 const ProjectsPage: NextPage = () => {
     return (

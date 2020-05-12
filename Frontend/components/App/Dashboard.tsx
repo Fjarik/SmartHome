@@ -2,7 +2,7 @@ import { FunctionComponent } from "react";
 import { Grid, Typography, Container, Card, CardContent, CardActions, Button, Link, CardHeader, makeStyles, Theme, createStyles } from "@material-ui/core";
 import EventNoteIcon from "@material-ui/icons/EventNote";
 import RestaurantIcon from "@material-ui/icons/Restaurant";
-import customUrls from "../../utils/customUrls";
+import customUrls from "utils/customUrls";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     customCard: {

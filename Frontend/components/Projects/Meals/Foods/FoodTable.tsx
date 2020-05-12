@@ -1,14 +1,14 @@
 import { FunctionComponent, useState } from "react";
-import { allFoods_foods, allFoods_categories } from "../../../../src/graphql/types/allFoods";
+import { allFoods_foods, allFoods_categories } from "src/graphql/types/allFoods";
 import MaterialTable, { Column, Localization } from "material-table";
 import { Chip, Grid, Select, MenuItem, Input, Checkbox, ListItemText, InputLabel, FormControl } from "@material-ui/core";
-import { createFoodVariables, createFood } from "../../../../src/graphql/types/createFood";
-import { FoodTypeEnum, FoodInput } from "../../../../src/graphql/graphql-global-types";
+import { createFoodVariables, createFood } from "src/graphql/types/createFood";
+import { FoodTypeEnum, FoodInput } from "src/graphql/graphql-global-types";
 import { useApolloClient } from "react-apollo";
-import { createFoodMutation, removeFoodMutation, updateFoodMutation } from "../../../../src/graphql/mutations";
+import { createFoodMutation, removeFoodMutation, updateFoodMutation } from "src/graphql/mutations";
 import { useRouter } from "next/router";
-import { removeFood, removeFoodVariables } from "../../../../src/graphql/types/removeFood";
-import { updateFood, updateFoodVariables } from "../../../../src/graphql/types/updateFood";
+import { removeFood, removeFoodVariables } from "src/graphql/types/removeFood";
+import { updateFood, updateFoodVariables } from "src/graphql/types/updateFood";
 
 interface FoodTableProps {
     inputData: allFoods_foods[];

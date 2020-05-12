@@ -1,4 +1,4 @@
-import { MealTimeEnum } from "../src/graphql/graphql-global-types";
+import { MealTimeEnum } from "src/graphql/graphql-global-types";
 
 const appUrl = "/app";
 const projectsUrl = appUrl + "/projects";

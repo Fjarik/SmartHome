@@ -1,16 +1,16 @@
 import App from "next/app";
-import HeadComponent from "../components/Layouts/HeadComponent";
+import HeadComponent from "components/Layouts/HeadComponent";
 import { ApolloProvider } from "react-apollo";
 import fetch from "node-fetch";
 import { ThemeProvider, CssBaseline } from "@material-ui/core";
-import { getTheme } from "../components/Themes/MainTheme";
-import { withApollo } from "../lib/apollo";
+import { getTheme } from "components/Themes/MainTheme";
+import { withApollo } from "lib/apollo";
 import { SnackbarProvider } from "notistack";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import LuxonAdapter from "@date-io/luxon";
 import { ApolloClient } from "apollo-client";
 import { NormalizedCacheObject } from "apollo-cache-inmemory";
-import { AuthContext } from "../lib/auth/authContext";
+import { AuthContext } from "lib/auth/authContext";
 
 interface AppProps {
     apolloClient: ApolloClient<NormalizedCacheObject>,
